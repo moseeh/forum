@@ -2,6 +2,6 @@ project = Forum
 
 # Default target
 run:
-	@go run web/server/main.go
+	@go run ./web/server/
 
 
