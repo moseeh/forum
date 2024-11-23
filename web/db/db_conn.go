@@ -3,9 +3,11 @@ package db
 import (
 	"database/sql"
 	"log"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
-const PROJECT_DATABSE = "forum.db"
+const PROJECT_DATABSE = "./forum.db"
 
 type ForumDB struct {
 	db *sql.DB
@@ -15,7 +17,7 @@ func NewConnection() *ForumDB {
 	return &ForumDB{db: nil}
 }
 
-func (conn *ForumDB) db_connection() {
+func (conn *ForumDB) Connect() {
 	db, err := sql.Open("sqlite3", PROJECT_DATABSE)
 	if err != nil {
 		log.Println(err)
@@ -23,4 +25,14 @@ func (conn *ForumDB) db_connection() {
 	}
 	//
 	conn.db = db
+}
+
+func (conn ForumDB) InitTables() {
+	for _, statement := range statements {
+		stmt, err := conn.db.Prepare(statement)
+		if err != nil {
+			log.Println(err)
+		}
+		stmt.Exec()
+	}
 }
