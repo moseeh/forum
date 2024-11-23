@@ -9,10 +9,6 @@ import (
 
 const PROJECT_DATABSE = "./forum.db"
 
-type ForumDB struct {
-	db *sql.DB
-}
-
 func NewConnection() *ForumDB {
 	return &ForumDB{db: nil}
 }
@@ -30,6 +26,7 @@ func (conn *ForumDB) Connect() {
 func (conn ForumDB) InitTables() {
 	for _, statement := range statements {
 		stmt, err := conn.db.Prepare(statement)
+		defer stmt.Close()
 		if err != nil {
 			log.Println(err)
 		}
