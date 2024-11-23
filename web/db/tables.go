@@ -20,7 +20,7 @@ const POSTS_TABLE = `CREATE TABLE
         FOREIGN KEY (author_id) REFERENCES USERS (user_id)
     );`
 
-const POST_UPDATE_TRIGGER = `CREATE TRIGGER update_post_timestamp AFTER
+const POST_UPDATE_TRIGGER = `CREATE TRIGGER IF NOT EXISTS update_post_timestamp AFTER
     UPDATE ON POSTS FOR EACH ROW BEGIN
     UPDATE POSTS
     SET
