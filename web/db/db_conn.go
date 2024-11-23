@@ -2,22 +2,25 @@ package db
 
 import (
 	"database/sql"
+	"log"
 )
 
 const PROJECT_DATABSE = "forum.db"
 
 type ForumDB struct {
-	connection *sql.DB
+	db *sql.DB
 }
 
 func NewConnection() *ForumDB {
-	return &ForumDB{connection: nil}
+	return &ForumDB{db: nil}
 }
 
-func connection(db_name string) (*sql.DB, error) {
-	db, err := sql.Open("sqlite3", db_name)
+func (conn *ForumDB) db_connection() {
+	db, err := sql.Open("sqlite3", PROJECT_DATABSE)
 	if err != nil {
-		return nil, err
+		log.Println(err)
+		return
 	}
-	return db, nil
+	//
+	conn.db = db
 }
