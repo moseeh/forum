@@ -2,15 +2,16 @@ package main
 
 import (
 	"fmt"
-	"forum/web/db"
-	"forum/web/server/routes"
 	"log"
 	"net/http"
 	"path/filepath"
+
+	"forum/web/db"
+	"forum/web/server/routes"
 )
 
 func main() {
-	//Databases initialization
+	// Databases initialization
 	// db instance
 
 	database := db.NewConnection()
@@ -32,7 +33,7 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	log.Printf("Serving static files from %s on http://localhost:8080/static/", absStaticDir)
-	http.HandleFunc("/", routes.HomeRoute)
+	http.HandleFunc("/", routes.Routes)
 	fmt.Println("Server running on http://localhost:8080")
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal("ListenAndServe error:", err)
