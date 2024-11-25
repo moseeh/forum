@@ -1,8 +1,8 @@
 CREATE TABLE
     IF NOT EXISTS USERS (
         user_id VARCHAR(255) PRIMARY KEY NOT NULL UNIQUE,
-        username varchar(20),
-        email VARCHAR(255),
+        username varchar(20) NOT NULL UNIQUE,
+        email VARCHAR(255) NOT NULL UNIQUE,
         password VARCHAR(255),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
