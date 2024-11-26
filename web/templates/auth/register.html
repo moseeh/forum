@@ -8,12 +8,56 @@
 </head>
 
 <body>
-    <form action="">
-        <input type="text" name="username" id="username">
-        <input type="email" name="username" id="username">
-        <input type="password" name="username" id="username">
-        <input type="password" name="password" id="password">
-        <input type="password" name="confirm password" id="confirm">
+    <form action="/register" method="post">
+        <div>
+            {{if .Errors.username}}
+            {{ range .Errors.username}}
+            <p>{{.}}</p>
+            {{end}}
+            {{else}}
+            <p>username</p>
+            {{ end }}
+            <input type="text" name="username" id="username" />
+        </div>
+        <div>
+            {{if .Errors.email}}
+            {{range .Errors.email}}
+            <p>{{.}}</p>
+            {{end}}
+            {{else}}
+            <p>email</p>
+            {{end}}
+            <input type="email" name="email" id="email">
+        </div>
+
+
+        <div>
+            {{if .Errors.password}}
+            {{range .Errors.password}}
+            <p>{{.}}</p>
+            {{end}}
+            {{else}}
+            <p>Password</p>
+            {{end}}
+            <input type="password" name="password" id="password" />
+        </div>
+
+        <div>
+            {{if .Errors.confirm}}
+            {{range .Errors.confirm}}
+            <p>{{.}}</p>
+            {{end}}
+            {{else}}
+            <p>confirm password</p>
+            {{end}}
+            <input type="password" name="confirm" id="confirm" />
+        </div>
+        </br>
+        </br>
+        </br>
+        <div>
+            <input type="submit" value="Register">
+        </div>
     </form>
 </body>
 
