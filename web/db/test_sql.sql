@@ -4,6 +4,7 @@ CREATE TABLE
         username varchar(20) NOT NULL UNIQUE,
         email VARCHAR(255) NOT NULL UNIQUE,
         password VARCHAR(255),
+        session_token TEXT UNIQUE,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 
@@ -17,6 +18,16 @@ CREATE TABLE
         author_id VARCHAR(255),
         FOREIGN KEY (author_id) REFERENCES USERS (user_id)
     );
+
+
+CREATE TABLE IF NOT EXISTS TOKENS(
+    id VARCHAR(255) PRIMARY KEY NOT NULL UNIQUE,
+    session_token VARCHAR(255) NOT NULL,
+    csrf_token VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    expires_at TIMESTAMP NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES USERS(id)
+) 
 
 CREATE TRIGGER IF NOT EXISTS update_post_timestamp AFTER
 UPDATE ON POSTS FOR EACH ROW BEGIN
@@ -44,3 +55,9 @@ VALUES
         'first post content',
         'a'
     );
+
+
+SELECT (1) FROM USERS WHERE username="aa" OR email="test@email.com";
+
+
+DROP USERS;

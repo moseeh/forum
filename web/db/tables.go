@@ -6,6 +6,7 @@ const USERS_TABLE string = `CREATE TABLE
         username varchar(20) NOT NULL UNIQUE,
         email VARCHAR(255) NOT NULL UNIQUE,
         password VARCHAR(255),
+        session_token VARCHAR(255),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );`
 
