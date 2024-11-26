@@ -14,10 +14,9 @@ func main() {
 	// Databases initialization
 	// db instance
 
-	database := db.NewConnection()
-	database.Connect()
-	database.InitTables()
-	database.Insert(db.USER_INSERT, "c", "aaochieng", "test@gmail.com", "encrypted")
+	dbInstance := db.NewConnection()
+	dbInstance.Connect()
+	dbInstance.InitTables()
 
 	// Define the path to the static files
 	staticDir := "./web/static/" // Relative path from `server/main.go` to `web/static`
@@ -33,7 +32,7 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	log.Printf("Serving static files from %s on http://localhost:8080/static/", absStaticDir)
-	http.HandleFunc("/", routes.Routes)
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) { routes.Routes(w, r, dbInstance) })
 	fmt.Println("Server running on http://localhost:8080")
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal("ListenAndServe error:", err)
