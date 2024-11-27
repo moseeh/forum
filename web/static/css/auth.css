@@ -84,7 +84,7 @@ body {
     font-size: 1rem;
 }
 
-.form button {
+.form .btn {
     height: 55px;
     width: 100%;
     color: #fff;
@@ -98,7 +98,7 @@ body {
     border-radius: 0.25rem;
 }
 
-.form button:hover {
+.form .btn:hover {
     background: rgb(88, 56, 250);
 }
 
