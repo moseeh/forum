@@ -1,11 +1,19 @@
-/* Import Google font - Poppins */
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+:root {
+    --primary-color: #4158D0;
+    --secondary-color: #C850C0;
+    --accent-color: #FFCC70;
+    --bg-color: #0a0b1e;
+    --text-color: #ffffff;
+    --card-bg: #1a1b3a;
+    --border-radius: 16px;
+    --text-muted: #a0a0c0;
+}
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Poppins", sans-serif;
+    font-family: 'Arial', sans-serif;
 }
 
 body {
@@ -14,122 +22,137 @@ body {
     align-items: center;
     justify-content: center;
     padding: 20px;
-    background: rgb(255, 255, 255);
+    background: linear-gradient(45deg, var(--bg-color), #4f519e);
+    background-attachment: fixed;
+    color: var(--text-color);
 }
 
 .container {
     position: relative;
     max-width: 700px;
     width: 100%;
-    background: #fff;
-    padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 .container header {
-    font-size: 1.5rem;
-    color: #333;
-    font-weight: 500;
     text-align: center;
+    margin-bottom: 2rem;
 }
 
-.container .form {
-    margin-top: 30px;
+.container header h1 {
+    font-size: 2rem;
+    color: var(--accent-color);
+    margin-bottom: 0.5rem;
+}
+
+.container header p {
+    color: var(--text-muted);
 }
 
 .form .input-box {
-    width: 100%;
-    margin-top: 20px;
+    margin-bottom: 1.5rem;
 }
 
 .input-box label {
-    color: #333;
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
 }
 
-.form :where(.input-box input, .select-box) {
-    position: relative;
-    height: 50px;
+.input-box input {
     width: 100%;
-    outline: none;
+    padding: 0.75rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--border-radius);
+    color: var(--text-color);
     font-size: 1rem;
-    color: #707070;
-    margin-top: 8px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 0 15px;
 }
 
 .input-box input:focus {
-    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
-}
-
-.form .column {
-    display: flex;
-    column-gap: 15px;
-}
-
-
-
-.address :where(input, .select-box) {
-    margin-top: 15px;
-}
-
-.select-box select {
-    height: 100%;
-    width: 100%;
     outline: none;
+    border-color: var(--primary-color);
+}
+
+.error-text {
+    color: #ff6b6b;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.social-login {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 50%;
+    padding: 0.75rem;
     border: none;
-    color: #707070;
-    font-size: 1rem;
+    border-radius: var(--border-radius);
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.social-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.social-btn img {
+    width: 24px;
+    height: 24px;
 }
 
 .form .btn {
-    height: 55px;
     width: 100%;
-    color: #fff;
-    font-size: 1rem;
-    font-weight: 400;
-    margin-top: 30px;
+    padding: 0.75rem;
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    color: var(--text-color);
     border: none;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    font-weight: bold;
     cursor: pointer;
-    transition: all 0.2s ease;
-    background: rgb(88, 56, 250);
-    border-radius: 0.25rem;
+    transition: opacity 0.2s;
 }
 
 .form .btn:hover {
-    background: rgb(88, 56, 250);
+    opacity: 0.9;
 }
 
-.social {
-    height: 2.15rem;
+.register-link {
+    margin-top: 1.5rem;
+    text-align: center;
+    color: var(--text-muted);
 }
 
-.input-social {
-    margin-top: 1rem;
-    display: flex;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    width: 100%;
-    padding-top: .65rem;
-    padding-bottom: .65rem;
-    align-items: center;
-    justify-content: space-evenly;
+.register-link a {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: 500;
 }
 
-.spacer {
-    justify-content: space-between;
+.register-link a:hover {
+    text-decoration: underline;
 }
 
-
-/*Responsive*/
-@media screen and (max-width: 500px) {
-    .form .column {
-        flex-wrap: wrap;
+@media (max-width: 768px) {
+    .container {
+        padding: 1.5rem;
     }
-
-    .form :where(.gender-option, .gender) {
-        row-gap: 15px;
+    
+    .social-login {
+        flex-direction: column;
     }
 }

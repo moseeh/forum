@@ -20,7 +20,7 @@ body {
   background-color: var(--bg-color);
   color: var(--text-color);
   line-height: 1.6;
-  background: linear-gradient(45deg, var(--bg-color), #1a1b3a);
+  background: linear-gradient(45deg, var(--bg-color), #4f519e);
   background-attachment: fixed;
 }
 
