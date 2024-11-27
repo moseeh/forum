@@ -59,9 +59,9 @@ func loginhandler(w http.ResponseWriter, r *http.Request, dbInstance *db.ForumDB
 		session_token := utils.TokenGen(32)
 
 		http.SetCookie(w, &http.Cookie{
-			Name:    "session token",
-			Value:   session_token,
-			Expires: time.Now().Add(24 * time.Hour),
+			Name:     "session token",
+			Value:    session_token,
+			Expires:  time.Now().Add(24 * time.Hour),
 			HttpOnly: true,
 		})
 
