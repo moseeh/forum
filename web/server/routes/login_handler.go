@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"fmt"
 	"forum/web/db"
 	"forum/web/server/utils"
 	"net/http"
@@ -28,7 +29,7 @@ func loginhandler(w http.ResponseWriter, r *http.Request, dbInstance *db.ForumDB
 		email := r.FormValue("email")
 		password := r.FormValue("password")
 
-		if err := utils.ValidateEmail(email); err != true {
+		if err := utils.ValidateEmail(email); !err {
 			form_errors["email"] = append(form_errors["email"], "Invalid email address")
 		}
 
@@ -43,10 +44,15 @@ func loginhandler(w http.ResponseWriter, r *http.Request, dbInstance *db.ForumDB
 		}
 
 		//Get password hash
-		password_hash, _ := dbInstance.GetStringValue(db.PASSWORD_HASH, email, password)
+		password_hash, err := dbInstance.GetStringValue(db.PASSWORD_HASH, email)
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println(password_hash)
 
 		// compare password hash
-		if !utils.CompareHash(password_hash, password) {
+		val := utils.CompareHash(password_hash, password)
+		if !val {
 			form_errors["password"] = append(form_errors["password"], "Incorrect password")
 		}
 
@@ -54,17 +60,39 @@ func loginhandler(w http.ResponseWriter, r *http.Request, dbInstance *db.ForumDB
 			tmpl.Execute(w, map[string]interface{}{
 				"Errors": form_errors,
 			})
+			return
 		}
 
-		session_token := utils.TokenGen(32)
+		//get user id
+		user_id, err := dbInstance.GetStringValue(db.USER_ID, email)
+		if err != nil {
+			fmt.Println(err)
+		}
 
+		fmt.Printf("User id : %s\n", user_id)
+		session_token := utils.TokenGen(32)
+		csrf_token := utils.TokenGen(32)
+		expires := time.Now().Add(24 * time.Hour)
+
+		// set session token
 		http.SetCookie(w, &http.Cookie{
-			Name:     "session token",
+			Name:     "session_token",
 			Value:    session_token,
-			Expires:  time.Now().Add(24 * time.Hour),
+			Expires:  expires,
 			HttpOnly: true,
 		})
 
+		//set csfr token
+		http.SetCookie(w, &http.Cookie{
+			Name:     "csrf_token",
+			Value:    csrf_token,
+			Expires:  expires,
+			HttpOnly: false,
+		})
+		fmt.Printf("Session token: %s\nCSRF Token: %s\nExpires: %s\n", session_token, csrf_token, expires.Format("2024-11-28 11:13:29"))
+		// store the tokens in the db
+		err = dbInstance.Insert(db.INSERT_TOKENS, user_id, session_token, csrf_token, expires.String())
+		http.Redirect(w, r, "/", http.StatusOK)
 		return
 	}
 
