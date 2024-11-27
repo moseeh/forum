@@ -6,7 +6,6 @@ const USERS_TABLE string = `CREATE TABLE
         username varchar(20) NOT NULL UNIQUE,
         email VARCHAR(255) NOT NULL UNIQUE,
         password VARCHAR(255),
-        session_token VARCHAR(255),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );`
 
@@ -31,4 +30,16 @@ const POST_UPDATE_TRIGGER = `CREATE TRIGGER IF NOT EXISTS update_post_timestamp 
 
     END;`
 
-var statements = []string{USERS_TABLE, POSTS_TABLE, POST_UPDATE_TRIGGER}
+const TOKENS = `
+    CREATE TABLE IF NOT EXISTS TOKENS(
+        id INTEGER PRIMARY KEY ,
+        session_token VARCHAR(255) NOT NULL,
+        csrf_token VARCHAR(255) NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        expires_at TIMESTAMP NOT NULL,
+        user_id VARCHAR(255),
+        FOREIGN KEY (user_id) REFERENCES USERS(id)
+    );
+`
+
+var statements = []string{USERS_TABLE, POSTS_TABLE, POST_UPDATE_TRIGGER, TOKENS}

@@ -30,6 +30,8 @@ func (conn ForumDB) InitTables() {
 		if err != nil {
 			log.Println(err)
 		}
-		stmt.Exec()
+		if _, err := stmt.Exec(); err != nil {
+			log.Println(err.Error())
+		}
 	}
 }

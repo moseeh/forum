@@ -12,7 +12,9 @@ func Routes(w http.ResponseWriter, r *http.Request, dbInstance *db.ForumDB) {
 	case "/register":
 		registerhandler(w, r, dbInstance)
 	case "/login":
-		loginhandler(w,r,dbInstance)
+		loginhandler(w, r, dbInstance)
+	case "/protected":
+		protected(w, r, dbInstance)
 	default:
 		http.Error(w, "Page not found", http.StatusNotFound)
 	}

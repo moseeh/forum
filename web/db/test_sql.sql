@@ -21,13 +21,14 @@ CREATE TABLE
 
 
 CREATE TABLE IF NOT EXISTS TOKENS(
-    id VARCHAR(255) PRIMARY KEY NOT NULL UNIQUE,
-    session_token VARCHAR(255) NOT NULL,
-    csrf_token VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    expires_at TIMESTAMP NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES USERS(id)
-) 
+        id INTEGER PRIMARY KEY ,
+        session_token VARCHAR(255) NOT NULL,
+        csrf_token VARCHAR(255) NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        expires_at TIMESTAMP NOT NULL,
+        user_id VARCHAR(255),
+        FOREIGN KEY (user_id) REFERENCES USERS(id)
+    );
 
 CREATE TRIGGER IF NOT EXISTS update_post_timestamp AFTER
 UPDATE ON POSTS FOR EACH ROW BEGIN
@@ -59,5 +60,9 @@ VALUES
 
 SELECT (1) FROM USERS WHERE username="aa" OR email="test@email.com";
 
-
-DROP USERS;
+INSERT INTO TOKENS (user_id, session_token,csrf_token,expires_at) 
+	VALUES (?, ?, ?, ?)
+	ON CONFLICT(user_id) DO UPDATE SET 
+		session_token = excluded.session_token,
+        csrf_token = excluded.csrf_token, 
+		expires_at = excluded.expires_at;
