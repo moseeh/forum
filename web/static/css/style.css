@@ -20,7 +20,7 @@ body {
   background-color: var(--bg-color);
   color: var(--text-color);
   line-height: 1.6;
-  background: linear-gradient(45deg, var(--bg-color), #4f519e);
+  background: linear-gradient(45deg, var(--bg-color), #28294d);
   background-attachment: fixed;
 }
 
@@ -136,7 +136,7 @@ nav {
 /* Main Content Layout */
 main {
   display: grid;
-  grid-template-columns: 250px 1fr 300px;
+  grid-template-columns: 250px 1fr 350px;
   gap: 2rem;
 }
 
@@ -179,6 +179,7 @@ main {
 .sidebar .nav-item.active .nav-link:hover {
   background-color: rgba(255, 255, 255, 0.15);
 }
+
 .recent-communities {
   margin-top: 2rem;
 }
@@ -237,6 +238,16 @@ main {
   gap: 1.5rem;
 }
 
+.trending-topics, .community-invite {
+  padding: 1.5rem;
+}
+
+.trending-topics h3, .community-invite h3 {
+  color: var(--accent-color);
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
 .trending-topics ul {
   list-style: none;
 }
@@ -244,24 +255,48 @@ main {
 .trending-topics li {
   display: flex;
   justify-content: space-between;
-  padding: 0.75rem;
-  background-color: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
-  margin-bottom: 0.5rem;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.trending-topics li:last-child {
+  border-bottom: none;
+}
+
+.trending-topics span {
+  color: var(--text-muted);
+}
+
+.trending-topics span:first-child {
+  color: var(--text-color);
+  font-weight: 500;
 }
 
 .community-invite {
   text-align: center;
-  padding: 1.5rem;    
 }
 
-.community-invite h3 {
-  color: var(--accent-color);
-  margin-bottom: 1rem;
+.community-invite p {
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
 }
 
-.community-invite button {
-  margin-top: 1rem;
+@media (max-width: 1200px) {
+  main {
+    grid-template-columns: 200px 1fr 300px;
+  }
+}
+
+@media (max-width: 992px) {
+  main {
+    grid-template-columns: 200px 1fr;
+  }
+  
+  .trending-sidebar {
+    display: none;
+  }
 }
 
 @media (max-width: 1024px) {
