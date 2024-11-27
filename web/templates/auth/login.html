@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form action="/login" method="post">
+        <div>
+            {{if .Errors.username}}
+            {{ range .Errors.username}}
+            <p>{{.}}</p>
+            {{end}}
+            {{else}}
+            <p>Email Address</p>
+            {{ end }}
+            <input type="email" name="email" id="email" required/>
+        </div>
+        <div>
+            {{if .Errors.password}}
+            {{range .Errors.password}}
+            <p>{{.}}</p>
+            {{end}}
+            {{else}}
+            <p>Password</p>
+            {{end}}
+            <input type="password" name="password" id="password" required/>
+        </div>
+        </br>
+        </br>
+        </br>
+        <div>
+            <input type="submit" value="Login">
+        </div>
+    </form>
+</body>
+
+</html>

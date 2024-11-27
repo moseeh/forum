@@ -6,7 +6,7 @@ import (
 	"text/template"
 )
 
-func HomeRoute(w http.ResponseWriter, r *http.Request) {
+func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("web/templates/index.html")
 	if err != nil {
 		fmt.Println(err)
