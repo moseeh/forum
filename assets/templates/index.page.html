@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Forum</title>
+        <link rel="stylesheet" href="../static/css/style.css" />
+    </head>
+
+    <body>
+        <div id="main-content">
+            <div class="container">
+                <header class="card">
+                    <div class="header-content">
+                        <div class="logo">
+                            <h1>Forum</h1>
+                        </div>
+                        <div class="search-bar">
+                            <input
+                                type="text"
+                                placeholder="Search discussions..."
+                                class="form-input"
+                            />
+                        </div>
+                        <div class="header-actions">
+                            <a href="/login">
+                                <button class="btn" id="create-post-btn">
+                                    Login
+                                </button>
+                            </a>
+                            <div class="user-profile">
+                                <img
+                                    src="/api/placeholder/40/40"
+                                    alt="User Profile"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <main>
+                    <div class="sidebar">
+                        <nav>
+                            <ul class="main-nav">
+                                <li class="nav-item active" data-filter="home">
+                                    <a href="#" class="nav-link">Home</a>
+                                </li>
+                                <li class="nav-item" data-filter="popular">
+                                    <a href="#" class="nav-link">Popular</a>
+                                </li>
+                                <li class="nav-item" data-filter="communities">
+                                    <a href="#" class="nav-link">Communities</a>
+                                </li>
+                            </ul>
+                            <div class="recent-communities">
+                                <h3>Recent Communities</h3>
+                                <ul>
+                                    <li>
+                                        <a href="#" class="community-link"
+                                            >Technology</a
+                                        >
+                                    </li>
+                                    <li>
+                                        <a href="#" class="community-link"
+                                            >Gaming</a
+                                        >
+                                    </li>
+                                    <li>
+                                        <a href="#" class="community-link"
+                                            >Movies</a
+                                        >
+                                    </li>
+                                </ul>
+                            </div>
+                        </nav>
+                    </div>
+
+                    <div class="content">
+                        <div id="create-post-modal" style="display: none">
+                            <form
+                                id="create-post-form"
+                                action="/posts/create"
+                                method="POST"
+                            >
+                                <input
+                                    type="text"
+                                    name="title"
+                                    placeholder="Post Title"
+                                    required
+                                />
+                                <textarea
+                                    name="content"
+                                    placeholder="Post Content"
+                                    required
+                                ></textarea>
+                                <button type="submit" class="btn">
+                                    Submit Post
+                                </button>
+                            </form>
+                        </div>
+                        <div id="posts-container">
+                            <!-- Posts will be dynamically inserted here, matching your GetAllPosts handler -->
+                        </div>
+                    </div>
+
+                    <div class="trending-sidebar">
+                        <div class="card trending-topics">
+                            <h3>Trending Topics</h3>
+                            <ul>
+                                <li>
+                                    <span>#Technology</span>
+                                    <span>2.4k posts</span>
+                                </li>
+                                <li>
+                                    <span>#AI</span>
+                                    <span>1.7k posts</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card community-invite">
+                            <h3>Join Our Community</h3>
+                            <p>
+                                Connect with thousands of people who share your
+                                interests
+                            </p>
+                            <button class="btn" id="join-community-btn">
+                                Sign Up Now
+                            </button>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <script src="../static/js/script.js"></script>
+    </body>
+</html>

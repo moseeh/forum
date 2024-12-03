@@ -1,0 +1,5 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/aaochieng/forum'
+go run ./web/server/
+make: Leaving directory '/home/aaochieng/forum'
+ 
