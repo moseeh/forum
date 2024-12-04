@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="../static/css/auth.css" />
+    <title>Login - Forum</title>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Welcome Back</h1>
+            <p>Login to your account</p>
+        </header>
+        <form action="/login" class="form" method="post">
+            <div class="input-box">
+                <label>Email Address</label>
+                {{ range .Errors.email}}
+                <p class="error-text">{{.}}</p>
+                {{end}}
+                <input type="email" name="email" placeholder="Enter your email" required />
+            </div>
+
+            <div class="input-box">
+                <label>Password</label>
+                {{ range .Errors.password}}
+                <p class="error-text">{{.}}</p>
+                {{end}}
+                <input type="password" name="password" placeholder="Enter your password" required />
+            </div>
+
+            <button type="submit" class="btn">Login</button>
+
+            <div class="social-login">
+                <button type="button" class="social-btn google">
+                    <img src="../../static/svgs/1298745_google_brand_branding_logo_network_icon.svg" alt="Google" />
+                    <span>Login with Google</span>
+                </button>
+                <button type="button" class="social-btn facebook">
+                    <img src="../../static/svgs/5296499_fb_facebook_facebook logo_icon.svg" alt="Facebook" />
+                    <span>Login with Facebook</span>
+                </button>
+            </div>
+            
+            <div class="register-link">
+                <p>Don't have an account? <a href="/register">Register here</a></p>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

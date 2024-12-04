@@ -1,13 +1,12 @@
 package main
 
 import (
-	"forumed/cmd/handlers"
 	"log"
 	"net/http"
 	"path/filepath"
 )
 
-func routes() http.Handler {
+func (app *App) routes() http.Handler {
 	//
 	staticDir := "./assets/static/"
 	absStaticDir, err := filepath.Abs(staticDir)
@@ -21,12 +20,16 @@ func routes() http.Handler {
 
 	///
 	mux.Handle("GET /static/", http.StripPrefix("/static/", fs))
-	mux.HandleFunc("GET /", handlers.HomeHandler)
+	mux.HandleFunc("GET /", app.HomeHandler)
+	mux.HandleFunc("GET /home", app.HomeHandler)
 
 	//
-	mux.HandleFunc("GET /login", handlers.GetLoginHandler)
-	mux.HandleFunc("POST /login", handlers.PostLoginHandler)
+	mux.HandleFunc("GET /login", app.GetLoginHandler)
+	mux.HandleFunc("POST /login", app.PostLoginHandler)
 
 	//
+	mux.HandleFunc("GET /register", app.register_get)
+	mux.HandleFunc("POST /register", app.register_post)
+
 	return mux
 }
