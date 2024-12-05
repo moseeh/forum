@@ -34,5 +34,8 @@ func (app *App) routes() http.Handler {
 	//
 	mux.HandleFunc("GET /logout", app.LogoutHandler)
 
+	//
+	mux.HandleFunc("POST /posts/create", app.PostsHandler)
+
 	return mux
 }
