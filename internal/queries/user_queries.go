@@ -41,7 +41,6 @@ func (m *UserModel) UserExists(email string) (bool, error) {
 	}
 
 	return count > 0, nil
-
 }
 
 func (m *UserModel) GetPassword(email string) (string, error) {
