@@ -1,12 +1,29 @@
 package main
 
 import (
-	"forum/internal"
 	"html/template"
 	"net/http"
+	"time"
+
+	"forum/internal"
 )
 
 func (app *App) register_get(w http.ResponseWriter, r *http.Request) {
+	sessionCookie, err := r.Cookie("session_token")
+	if err == nil {
+		valid, validationErr := app.users.ValidateSession(sessionCookie.Value)
+		if validationErr == nil && valid {
+			http.Redirect(w, r, "/home", http.StatusSeeOther)
+			return
+		}
+		http.SetCookie(w, &http.Cookie{
+			Name:     "session_token",
+			Value:    "",
+			Path:     "/",
+			Expires:  time.Now().Add(-1 * time.Hour),
+			HttpOnly: true,
+		})
+	}
 	tmpl, err := template.ParseFiles("./assets/templates/register.page.html")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -16,7 +33,7 @@ func (app *App) register_get(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *App) register_post(w http.ResponseWriter, r *http.Request) {
-	var tmpl = template.Must(template.ParseFiles("./assets/templates/register.page.html"))
+	tmpl := template.Must(template.ParseFiles("./assets/templates/register.page.html"))
 	form_errors := map[string][]string{}
 	if err := r.ParseForm(); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
