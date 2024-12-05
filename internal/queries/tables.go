@@ -49,7 +49,6 @@ var statements = []string{USERS_TABLE, POSTS_TABLE, POST_UPDATE_TRIGGER, TOKENS}
 func (m *UserModel) InitTables() {
 	for _, statement := range statements {
 		stmt, err := m.DB.Prepare(statement)
-		defer stmt.Close()
 		if err != nil {
 			log.Println(err)
 			return
@@ -57,5 +56,6 @@ func (m *UserModel) InitTables() {
 		if _, err := stmt.Exec(); err != nil {
 			log.Println(err.Error())
 		}
+		stmt.Close()
 	}
 }
