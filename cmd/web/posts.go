@@ -41,4 +41,5 @@ func (app *App) PostsHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Error making post", http.StatusInternalServerError)
 		return
 	}
+	http.Redirect(w, r, "/home", http.StatusFound)
 }
