@@ -3,17 +3,25 @@ package main
 import (
 	"html/template"
 	"net/http"
+
+	db "forum/internal/queries"
 )
 
 type PageData struct {
 	IsLoggedIn bool
 	Username   string
+	Posts      []db.Post
 }
 
 func (app *App) HomeHandler(w http.ResponseWriter, r *http.Request) {
+	posts, err := app.users.GetALlPosts()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 	data := PageData{
 		IsLoggedIn: false,
 		Username:   "",
+		Posts:      posts,
 	}
 
 	sessionCookie, err := r.Cookie("session_token")
