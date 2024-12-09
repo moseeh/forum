@@ -55,7 +55,7 @@ func (app *App) PostLoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	// confirm if a user exists in the database
 	if ok, _ := app.users.UserExists(email); !ok {
-		http.Error(w, "User already exists", http.StatusFound)
+		http.Error(w, "User doesn't exist", http.StatusNotFound)
 		return
 	}
 
