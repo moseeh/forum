@@ -97,7 +97,20 @@
             </div>
             {{end}}
             <div id="posts-container">
-              <!-- Posts will be dynamically inserted here, matching your GetAllPosts handler -->
+              {{range .Posts}}
+              <div class="post card">
+                  <div class="post-header">
+                      <h3 class="post-title">{{.Title}}</h3>
+                      <div class="post-meta">
+                          <span class="post-author">Posted by {{.Username}}</span>
+                          <span class="post-date">{{.CreatedAt.Format "Jan 02, 2006 15:04"}}</span>
+                      </div>
+                  </div>
+                  <div class="post-content">
+                      <p>{{.Content}}</p>
+                  </div>
+              </div>
+              {{end}}
             </div>
           </div>
 
