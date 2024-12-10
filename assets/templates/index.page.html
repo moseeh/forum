@@ -92,6 +92,22 @@
                   placeholder="Post Content"
                   required
                 ></textarea>
+                <div class="categories-section">
+                  <label>Select Categories (Choose one or more):</label>
+                  <div class="categories-grid">
+                    {{range .Categories}}
+                    <div class="category-item">
+                      <input
+                        type="checkbox"
+                        name="categories[]"
+                        value="{{.ID}}"
+                        id="category-{{.ID}}"
+                      />
+                      <label for="category-{{.ID}}">{{.Name}}</label>
+                    </div>
+                    {{end}}
+                  </div>
+                </div>
                 <button type="submit" class="btn">Submit Post</button>
               </form>
             </div>
@@ -99,16 +115,21 @@
             <div id="posts-container">
               {{range .Posts}}
               <div class="post card">
-                  <div class="post-header">
-                      <h3 class="post-title">{{.Title}}</h3>
-                      <div class="post-meta">
-                          <span class="post-author">Posted by {{.Username}}</span>
-                          <span class="post-date">{{.CreatedAt.Format "Jan 02, 2006 15:04"}}</span>
-                      </div>
+                <div class="post-header">
+                  <h3 class="post-title">{{.Title}}</h3>
+                  <div class="post-meta">
+                    <span class="post-author">Posted by {{.Username}}</span>
+                    <span class="post-date">{{.CreatedAt.Format "Jan 02, 2006 15:04"}}</span>
                   </div>
-                  <div class="post-content">
-                      <p>{{.Content}}</p>
+                  <div class="post-categories">
+                    {{range .Categories}}
+                    <span class="category-tag">{{.Name}}</span>
+                    {{end}}
                   </div>
+                </div>
+                <div class="post-content">
+                  <p>{{.Content}}</p>
+                </div>
               </div>
               {{end}}
             </div>
