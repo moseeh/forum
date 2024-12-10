@@ -3,9 +3,10 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	internal "forum/internal/queries"
 	"log"
 	"net/http"
+
+	internal "forum/internal/queries"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -26,7 +27,7 @@ func main() {
 			DB: db,
 		},
 	}
-
+	internal.InsertCategories(db)
 	App.users.InitTables()
 	server := http.Server{
 		Addr:    ":8000",
