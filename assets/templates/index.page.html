@@ -1,141 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Forum</title>
-    <link rel="stylesheet" href="../static/css/style.css" />
-  </head>
 
-  <body>
-    <div id="main-content">
-      <div class="container">
-        <header class="card">
-          <div class="header-content">
-            <div class="logo">
-              <h1>Forum</h1>
-            </div>
-            <div class="search-bar">
-              <input
-                type="text"
-                placeholder="Search discussions..."
-                class="form-input"
-              />
-            </div>
-            <div class="header-actions">
-              {{if .IsLoggedIn}}
-              <div class="user-menu">
-                <span class="username">Welcome, {{.Username}}</span>
-                <button class="btn" id="create-post-btn">Create Post</button>
-                <a href="/logout">
-                  <button class="btn" id="logout-btn">Logout</button>
-                </a>
-                <div class="user-profile">
-                  <img src="/api/placeholder/40/40" alt="User Profile" />
-                </div>
-              </div>
-              {{else}}
-              <a href="/login">
-                <button class="btn" id="login-btn">Login</button>
-              </a>
-              <a href="/register">
-                <button class="btn" id="register-btn">Register</button>
-              </a>
-              {{end}}
-            </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Forum</title>
+  <link rel="stylesheet" href="../static/css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+</head>
+
+<body>
+  <div id="main-content">
+    <div class="container">
+      <header class="card">
+        <div class="header-content">
+          <div class="logo">
+            <h1>Forum</h1>
           </div>
-        </header>
-
-        <main>
-          <div class="sidebar">
-            <nav>
-              <ul class="main-nav">
-                <li class="nav-item active" data-filter="home">
-                  <a href="#" class="nav-link">Home</a>
-                </li>
-                <li class="nav-item" data-filter="popular">
-                  <a href="#" class="nav-link">Popular</a>
-                </li>
-                <li class="nav-item" data-filter="communities">
-                  <a href="#" class="nav-link">Communities</a>
-                </li>
-              </ul>
-              <div class="recent-communities">
-                <h3>Recent Communities</h3>
-                <ul>
-                  <li>
-                    <a href="#" class="community-link">Technology</a>
-                  </li>
-                  <li>
-                    <a href="#" class="community-link">Gaming</a>
-                  </li>
-                  <li>
-                    <a href="#" class="community-link">Movies</a>
-                  </li>
-                </ul>
-              </div>
-            </nav>
+          <div class="search-bar">
+            <input type="text" placeholder="Search discussions..." class="form-input" />
           </div>
-
-          <div class="content">
+          <div class="header-actions">
             {{if .IsLoggedIn}}
-            <div id="create-post-modal" style="display: none">
-              <form id="create-post-form" action="/posts/create" method="POST">
-                <input
-                  type="text"
-                  name="title"
-                  placeholder="Post Title"
-                  required
-                />
-                <textarea
-                  name="content"
-                  placeholder="Post Content"
-                  required
-                ></textarea>
-                <button type="submit" class="btn">Submit Post</button>
-              </form>
+            <div class="user-menu">
+              <span class="username">Welcome, {{.Username}}</span>
+              <button class="btn" id="create-post-btn">Create Post</button>
+              <a href="/logout">
+                <button class="btn" id="logout-btn">Logout</button>
+              </a>
             </div>
+            {{else}}
+            <a href="/login">
+              <button class="btn" id="login-btn">Login</button>
+            </a>
+            <a href="/register">
+              <button class="btn" id="register-btn">Register</button>
+            </a>
             {{end}}
-            <div id="posts-container">
-              <!-- Posts will be dynamically inserted here, matching your GetAllPosts handler -->
-            </div>
           </div>
+        </div>
+      </header>
 
-          <div class="trending-sidebar">
-            <div class="card trending-topics">
-              <h3>Trending Topics</h3>
+      <main>
+        <div class="sidebar card">
+          <nav>
+            <ul class="main-nav">
+              <li class="nav-item active" data-filter="home">
+                <a href="#" class="nav-link">Home</a>
+              </li>
+              <li class="nav-item" data-filter="popular">
+                <a href="#" class="nav-link">Popular</a>
+              </li>
+              <li class="nav-item" data-filter="communities">
+                <a href="#" class="nav-link">Communities</a>
+              </li>
+            </ul>
+            <div class="recent-communities">
+              <h3>Recent Communities</h3>
               <ul>
                 <li>
-                  <span>#Technology</span>
-                  <span>2.4k posts</span>
+                  <a href="#" class="community-link">Technology</a>
                 </li>
                 <li>
-                  <span>#AI</span>
-                  <span>1.7k posts</span>
+                  <a href="#" class="community-link">Gaming</a>
+                </li>
+                <li>
+                  <a href="#" class="community-link">Movies</a>
                 </li>
               </ul>
             </div>
-            <div class="card community-invite">
-              {{if .IsLoggedIn}}
-              <h3>Create Your Community</h3>
-              <p>
-                Start a new community and connect with others who share your
-                interests
-              </p>
-              <button class="btn" id="create-community-btn">
-                Create Community
-              </button>
-              {{else}}
-              <h3>Join Our Community</h3>
-              <p>Connect with thousands of people who share your interests</p>
-              <button class="btn" id="join-community-btn">Sign Up Now</button>
-              {{end}}
-            </div>
-          </div>
-        </main>
-      </div>
-    </div>
+          </nav>
+        </div>
 
-    <script src="../static/js/script.js"></script>
-  </body>
+        <div class="content">
+          <div id="create-post-modal" style="display: none">
+            {{if .IsLoggedIn}}
+            <form id="create-post-form" action="/posts/create" method="POST">
+              <input type="text" name="title" placeholder="Post Title" required />
+              <textarea name="content" placeholder="Post Content" required></textarea>
+              <div class="categories-section">
+
+                {{if len .Categories}}
+
+                <label>Select Categories (Choose one or more):</label>
+                <div class="categories-grid">
+                  {{range .Categories}}
+                  <div class="category-item">
+                    <input type="checkbox" name="categories[]" value="{{.CategoryID}}" id="category-{{.CategoryID}}" />
+                    <label for="category-{{.CategoryID}}">{{.Name}}</label>
+                  </div>
+                  {{end}}
+                </div>
+                {{else}}
+                <p>No categories available</p>
+                {{end}}
+              </div>
+              <button type="submit" class="btn">Submit Post</button>
+            </form>
+            {{end}}
+          </div>
+          <div id="posts-container">
+            {{if len .Posts}} {{range .Posts}}
+            <div class="post-card">
+              <div class="post-header">
+                <div class="post-meta">
+                  <span class="post-author">{{.Username}}</span>
+                  <span class="post-date">{{.CreatedAt.Format "Jan 02, 2006 15:04"}}</span>
+                </div>
+                <h2 class="post-title">{{.Title}}</h2>
+                <div class="post-categories">
+                  {{range .Categories}}
+                  <span class="category-tag">{{.Name}}</span>
+                  {{end}}
+                </div>
+              </div>
+              <div class="post-content">
+                <p>{{.Content}}</p>
+              </div>
+              <div class="post-footer">
+                <button class="btn btn-like">
+                  <i class="fa-regular fa-thumbs-up"></i> 0 Likes
+                </button>
+                <button class="btn btn-like">
+                  <i class="fa-regular fa-thumbs-down"></i> 0 Dislikes
+                </button>
+                <button class="btn btn-comment">
+                  <i class="fa-regular fa-comment"></i> 0 Comments
+                </button>
+              </div>
+              
+            </div>
+            {{end}} {{else}}
+            <div class="post-card">
+              <p>No posts available yet. Be the first to create one!</p>
+            </div>
+            {{end}}
+          </div>
+        </div>
+
+        <div class="trending-sidebar">
+          <div class="card trending-topics">
+            <h3>Trending Topics</h3>
+            <ul>
+              <li>
+                <span>#Technology</span>
+                <span>2.4k posts</span>
+              </li>
+              <li>
+                <span>#AI</span>
+                <span>1.7k posts</span>
+              </li>
+            </ul>
+          </div>
+          <div class="card community-invite">
+            {{if .IsLoggedIn}}
+            <h3>Create Your Community</h3>
+            <p>
+              Start a new community and connect with others who share your
+              interests
+            </p>
+            <button class="btn" id="create-community-btn">
+              Create Community
+            </button>
+            {{else}}
+            <h3>Join Our Community</h3>
+            <p>Connect with thousands of people who share your interests</p>
+            <button class="btn" id="join-community-btn">Sign Up Now</button>
+            {{end}}
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="../static/js/script.js"></script>
+</body>
+
 </html>

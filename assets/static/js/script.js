@@ -18,3 +18,19 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const createPostBtn = document.getElementById('create-post-btn');
+    const createPostModal = document.getElementById('create-post-modal');
+    
+    createPostBtn.addEventListener('click', () => {
+      createPostModal.style.display = 'block';
+    });
+  
+    // Close modal when clicking outside
+    window.addEventListener('click', (e) => {
+      if (e.target === createPostModal) {
+        createPostModal.style.display = 'none';
+      }
+    });
+  });

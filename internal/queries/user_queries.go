@@ -75,3 +75,19 @@ func (m *UserModel) GetUsername(email string) (string, string, error) {
 	}
 	return user_id, username, nil
 }
+
+func (m *UserModel) GetUserID(username string) (string, error) {
+	const USERNAME string = "SELECT user_id FROM USERS WHERE username = ?;"
+	stmt, err := m.DB.Prepare(USERNAME)
+	if err != nil {
+		return "", nil
+	}
+	defer stmt.Close()
+
+	var user_id string
+
+	if err = stmt.QueryRow(username).Scan(&user_id); err != nil {
+		return "", err
+	}
+	return user_id, nil
+}

@@ -3,8 +3,10 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	internal "forum/internal/queries"
+	"log"
 	"net/http"
+
+	internal "forum/internal/queries"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -25,12 +27,17 @@ func main() {
 			DB: db,
 		},
 	}
-
+	internal.InsertCategories(db)
 	App.users.InitTables()
 	server := http.Server{
 		Addr:    ":8000",
 		Handler: App.routes(),
 	}
+	go func() {
+		if err := server.ListenAndServe(); err != nil {
+			log.Println(err)
+		}
+	}()
 	fmt.Printf("Listening on port %s\n", server.Addr)
-	server.ListenAndServe()
+	select {}
 }
