@@ -33,7 +33,54 @@ body {
 .card {
   background-color: var(--card-bg);
   border-radius: var(--border-radius);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 30px rgba(5, 1, 245, 0.2);
+}
+.post-card {
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(5, 1, 245, 0.2);
+}
+.post-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+.post-title {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+
+.post-meta {
+  font-size: 0.9rem;
+  margin-top: 5px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.post-author strong {
+  font-weight: 600;
+}
+
+.post-categories {
+  margin-top: 10px;
+}
+
+.category-tag {
+  display: inline-block;
+  font-size: 0.8rem;
+  padding: 5px 10px;
+  margin-right: 5px;
+  border-radius: 15px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Post Content */
+.post-content p {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0 0 15px 0;
 }
 
 /* Header Styles */
@@ -145,6 +192,7 @@ main {
   background-color: var(--card-bg);
   border-radius: var(--border-radius);
   padding: 1.5rem;
+  max-height: 50%;
 }
 
 .sidebar .main-nav {
@@ -154,6 +202,7 @@ main {
 
 .sidebar .nav-item {
   margin-bottom: 0.5rem;
+ 
 }
 
 .sidebar .nav-link {
