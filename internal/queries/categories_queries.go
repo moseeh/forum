@@ -2,7 +2,6 @@ package db
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 
 	"github.com/gofrs/uuid"
@@ -38,8 +37,6 @@ func InsertCategories(db *sql.DB) {
 		_, err = stmt.Exec(id.String(), category.Name, category.Description)
 		if err != nil {
 			log.Printf("Error inserting category %s: %v\n", category.Name, err)
-		} else {
-			fmt.Printf("Inserted or skipped category: %s\n", category.Name)
 		}
 	}
 }
