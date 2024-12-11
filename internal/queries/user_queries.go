@@ -77,7 +77,6 @@ func (m *UserModel) GetUsername(email string) (string, string, error) {
 }
 
 func (m *UserModel) GetUserID(username string) (string, error) {
-	fmt.Println(username)
 	const USERNAME string = "SELECT user_id FROM USERS WHERE username = ?;"
 	stmt, err := m.DB.Prepare(USERNAME)
 	if err != nil {
