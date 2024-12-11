@@ -118,7 +118,6 @@ func (app *App) PostLoginHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	fmt.Println("passed")
 
 	http.Redirect(w, r, "/home", http.StatusFound)
 }
