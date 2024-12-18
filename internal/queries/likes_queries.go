@@ -16,7 +16,7 @@ func (m *UserModel) UserLikeOnPostExists(postID, userID string) (bool, error) {
 	return exists, nil
 }
 
-func (m *UserModel) InsertLike(postID, userID, likeID string) error {
+func (m *UserModel) InsertLike(likeID, postID, userID string) error {
 	query := `INSERT INTO LIKES (like_id, post_id, user_id) VALUES (?,?,?)`
 
 	stmt, err := m.DB.Prepare(query)
