@@ -27,8 +27,8 @@ func main() {
 			DB: db,
 		},
 	}
-	internal.InsertCategories(db)
 	App.users.InitTables()
+	internal.InsertCategories(db)
 	server := http.Server{
 		Addr:    ":8000",
 		Handler: App.routes(),
