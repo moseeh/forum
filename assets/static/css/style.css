@@ -192,7 +192,7 @@ main {
   background-color: var(--card-bg);
   border-radius: var(--border-radius);
   padding: 1.5rem;
-  max-height: 50%;
+  max-height: 500px;
 }
 
 .sidebar .main-nav {

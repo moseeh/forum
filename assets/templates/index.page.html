@@ -108,12 +108,13 @@
                   <span class="post-author">{{.Username}}</span>
                   <span class="post-date">{{.CreatedAt.Format "Jan 02, 2006 15:04"}}</span>
                 </div>
-                <h2 class="post-title">{{.Title}}</h2>
                 <div class="post-categories">
                   {{range .Categories}}
                   <span class="category-tag">{{.Name}}</span>
                   {{end}}
                 </div>
+                <h2 class="post-title">{{.Title}}</h2>
+              
               </div>
               <div class="post-content">
                 <p>{{.Content}}</p>
