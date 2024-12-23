@@ -34,3 +34,23 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+
+
+  document.addEventListener('DOMContentLoaded', function() {
+    // Handle comment button clicks
+    document.querySelectorAll('.comment-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const postId = this.dataset.postId;
+            const formContainer = document.getElementById(`comment-form-${postId}`);
+            formContainer.style.display = 'block';
+        });
+    });
+
+    // Handle cancel button clicks
+    document.querySelectorAll('.cancel-comment').forEach(button => {
+        button.addEventListener('click', function() {
+            const formContainer = this.closest('.comment-form-container');
+            formContainer.style.display = 'none';
+        });
+    });
+});
