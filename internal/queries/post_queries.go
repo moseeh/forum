@@ -18,6 +18,7 @@ type Post struct {
 	DislikesCount int
 	CommentsCount int
 	IsLiked       bool
+	IsDisliked    bool
 }
 
 type Category struct {
@@ -70,7 +71,11 @@ func (u *UserModel) GetAllPosts(currentUserID string) ([]Post, error) {
             CASE 
                 WHEN l.user_id IS NOT NULL THEN 1 
                 ELSE 0 
-            END as is_liked
+            END as is_liked,
+			CASE 
+                WHEN d.user_id IS NOT NULL THEN 1 
+                ELSE 0 
+            END as is_disliked
         FROM POSTS p
         JOIN USERS u ON p.author_id = u.user_id
         LEFT JOIN LIKES l ON p.post_id = l.post_id AND l.user_id = ?
@@ -91,7 +96,7 @@ func (u *UserModel) GetAllPosts(currentUserID string) ([]Post, error) {
 			&post.PostID, &post.Title, &post.Content,
 			&post.CreatedAt, &post.UpdatedAt, &post.Username,
 			&post.AuthorID, &post.LikesCount, &post.DislikesCount, &post.CommentsCount,
-			&post.IsLiked,
+			&post.IsLiked, &post.IsDisliked,
 		)
 		if err != nil {
 			return nil, err
