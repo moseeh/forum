@@ -7,7 +7,6 @@
   <title>Forum</title>
   <link rel="stylesheet" href="../static/css/style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-
 </head>
 
 <body>
@@ -80,7 +79,6 @@
               <input type="text" name="title" placeholder="Post Title" required />
               <textarea name="content" placeholder="Post Content" required></textarea>
               <div class="categories-section">
-
                 {{if len .Categories}}
 
                 <label>Select Categories (Choose one or more):</label>
@@ -114,23 +112,30 @@
                   {{end}}
                 </div>
                 <h2 class="post-title">{{.Title}}</h2>
-              
               </div>
               <div class="post-content">
                 <p>{{.Content}}</p>
               </div>
               <div class="post-footer">
-                <button class="btn btn-like">
-                  <i class="fa-regular fa-thumbs-up"></i> 0 Likes
-                </button>
-                <button class="btn btn-like">
-                  <i class="fa-regular fa-thumbs-down"></i> 0 Dislikes
-                </button>
-                <button class="btn btn-comment">
-                  <i class="fa-regular fa-comment"></i> 0 Comments
-                </button>
+                <a href="/likes?post_id={{.PostID}}">
+                  <button class="btn btn-like {{if .IsLiked}}liked{{end}}">
+                    <i class="fa-{{if .IsLiked}}solid{{else}}regular{{end}} fa-thumbs-up"></i>
+                    {{.LikesCount}}
+                  </button>
+                </a>
+
+                <a href="/dislike?post_id={{.PostID}}">
+                  <button class="btn btn-like {{if .IsDisliked}}disliked{{end}}">
+                    <i class="fa-{{if .IsDisliked}}solid{{else}}regular{{end}} fa-thumbs-down"></i>
+                    {{.DislikesCount}}
+                  </button>
+                </a>
+                <a href="/comments?post_id={{.PostID}}">
+                  <button class="btn btn-like">
+                    <i class="fa-regular fa-comment"></i> 0
+                  </button>
+                </a>
               </div>
-              
             </div>
             {{end}} {{else}}
             <div class="post-card">

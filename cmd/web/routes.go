@@ -33,6 +33,9 @@ func (app *App) routes() http.Handler {
 
 	//
 	mux.HandleFunc("GET /logout", app.LogoutHandler)
+	mux.HandleFunc("GET /likes", app.LikesHandler)
+	mux.HandleFunc("GET /dislike", app.DislikesHandler)
+
 
 	//
 	mux.HandleFunc("POST /posts/create", app.PostsHandler)

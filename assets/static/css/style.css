@@ -132,7 +132,37 @@ header.card {
   border-radius: 0.5rem;
   cursor: pointer;
   font-weight: bold;
+  transition: all 0.3s ease;
 }
+
+.btn-like {
+  /* Default state - more subtle gradient using your dark theme */
+  background: linear-gradient(45deg, var(--card-bg), #2a2b4a);
+  color: var(--text-muted);
+}
+
+.btn-like.liked {
+  /* Liked state - using your primary colors */
+  background: linear-gradient(45deg, var(--primary-color), #6178FF);
+  color: var(--text-color);
+}
+
+.btn-like.disliked {
+  /* Disliked state - using a complementary gradient to your scheme */
+  background: linear-gradient(45deg, #D04158, #C85085);
+  color: var(--text-color);
+}
+
+.btn-like:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 3px 12px rgba(65, 88, 208, 0.2);
+}
+
+.btn-like:active {
+  transform: translateY(1px);
+}
+
+
 
 .user-profile img {
   width: 40px;

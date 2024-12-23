@@ -12,6 +12,7 @@ import (
 func (app *App) GetLoginHandler(w http.ResponseWriter, r *http.Request) {
 	sessionCookie, err := r.Cookie("session_token")
 	if err == nil {
+
 		valid, validationErr := app.users.ValidateSession(sessionCookie.Value)
 		if validationErr == nil && valid {
 			http.Redirect(w, r, "/home", http.StatusSeeOther)
@@ -86,7 +87,7 @@ func (app *App) PostLoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	session_token := internal.TokenGen(32)
 	csrf_token := internal.TokenGen(32)
-	expires := time.Now().Add(24 * time.Hour)
+	expires := time.Now().Local().Add(2 * time.Hour)
 
 	// set session token
 	http.SetCookie(w, &http.Cookie{
@@ -96,7 +97,7 @@ func (app *App) PostLoginHandler(w http.ResponseWriter, r *http.Request) {
 		HttpOnly: true,
 	})
 
-	// set csfr token
+	// set csrf token
 	http.SetCookie(w, &http.Cookie{
 		Name:     "csrf_token",
 		Value:    csrf_token,
@@ -112,7 +113,6 @@ func (app *App) PostLoginHandler(w http.ResponseWriter, r *http.Request) {
 		HttpOnly: false,
 	})
 
-	fmt.Printf("Session token: %s\nCSRF Token: %s\nExpires: %s\n", session_token, csrf_token, expires.Format("2024-11-28 11:13:29"))
 	// store the tokens in the db
 	if err = app.users.NewSession(user_id, session_token, csrf_token, expires.String()); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
