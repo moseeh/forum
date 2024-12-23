@@ -39,6 +39,8 @@ func (app *App) routes() http.Handler {
 
 	//
 	mux.HandleFunc("POST /posts/create", app.PostsHandler)
+	mux.HandleFunc("POST /comments", app.CommentsHandler)
+
 
 	return mux
 }
