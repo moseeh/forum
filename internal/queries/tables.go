@@ -27,6 +27,7 @@ const POSTS_TABLE = `CREATE TABLE IF NOT EXISTS POSTS (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     author_id VARCHAR(255),
     likes_count INTEGER DEFAULT 0,  -- Counter for quick access to total likes
+    dislikes_count INTEGER DEFAULT 0,  -- Counter for quick access to total dislikes
     comments_count INTEGER DEFAULT 0,  -- Counter for quick access to total comments
     FOREIGN KEY (author_id) REFERENCES USERS (user_id)
 );`
@@ -48,6 +49,17 @@ const LIKES_TABLE = `CREATE TABLE IF NOT EXISTS LIKES (
     FOREIGN KEY (post_id) REFERENCES POSTS (post_id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES USERS (user_id) ON DELETE CASCADE,
     UNIQUE(post_id, user_id)  -- Prevents multiple likes from same user
+);
+`
+
+const DISLIKES_TABLE = `CREATE TABLE IF NOT EXISTS DISLIKES (
+    dislike_id VARCHAR(255) PRIMARY KEY NOT NULL UNIQUE,
+    post_id VARCHAR(255) NOT NULL,
+    user_id VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (post_id) REFERENCES POSTS (post_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES USERS (user_id) ON DELETE CASCADE,
+    UNIQUE(post_id, user_id)  -- Prevents multiple dislikes from same user
 );
 `
 
@@ -115,6 +127,23 @@ BEGIN
     WHERE post_id = OLD.post_id;
 END;`
 
+const DISLIKES_INCREMENT_TRIGGER = `CREATE TRIGGER IF NOT EXISTS increment_post_dislikes
+AFTER INSERT ON DISLIKES
+BEGIN
+    UPDATE POSTS 
+    SET dislikes_count = dislikes_count + 1
+    WHERE post_id = NEW.post_id;
+END;
+`
+
+const DISLIKES_DECREMENT_TRIGGER = `CREATE TRIGGER IF NOT EXISTS decrement_post_dislikes
+AFTER DELETE ON DISLIKES
+BEGIN
+    UPDATE POSTS 
+    SET dislikes_count = dislikes_count - 1
+    WHERE post_id = OLD.post_id;
+END;`
+
 const COMMENTS_INCREMENT_TRIGGER = `CREATE TRIGGER IF NOT EXISTS increment_post_comments
 AFTER INSERT ON COMMENTS
 BEGIN
@@ -132,7 +161,7 @@ CREATE TRIGGER IF NOT EXISTS decrement_post_comments
         WHERE post_id = OLD.post_id;
     END;`
 
-var statements = []string{USERS_TABLE, POSTS_TABLE, CATEGORIES_TABLE, POST_CATEGORIES_TABLE, LIKES_TABLE, COMMENTS_TABLE, POST_UPDATE_TRIGGER, CATEGORIES_UPDATE_TRIGGER, COMMENTS_UPDATE_TRIGGER, LIKES_INCREMENT_TRIGGER, LIKES_DECREMENT_TRIGGER, COMMENTS_INCREMENT_TRIGGER, COMMENTS_DECREMENT_TRIGGER, TOKENS}
+var statements = []string{USERS_TABLE, POSTS_TABLE, CATEGORIES_TABLE, POST_CATEGORIES_TABLE, LIKES_TABLE, DISLIKES_TABLE, DISLIKES_INCREMENT_TRIGGER, DISLIKES_DECREMENT_TRIGGER, COMMENTS_TABLE, POST_UPDATE_TRIGGER, CATEGORIES_UPDATE_TRIGGER, COMMENTS_UPDATE_TRIGGER, LIKES_INCREMENT_TRIGGER, LIKES_DECREMENT_TRIGGER, COMMENTS_INCREMENT_TRIGGER, COMMENTS_DECREMENT_TRIGGER, TOKENS}
 
 func (m *UserModel) InitTables() {
 	for _, statement := range statements {
