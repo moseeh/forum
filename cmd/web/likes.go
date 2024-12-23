@@ -23,6 +23,18 @@ func (app *App) LikesHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Error getting user ID from the databse", http.StatusInternalServerError)
 		return
 	}
+	dislike, err := app.users.UserDislikeOnPostExists(postID, user_ID)
+	if err != nil {
+		http.Error(w, "Database Error", http.StatusInternalServerError)
+		return
+	}
+	if dislike {
+		err = app.users.DeleteDislike(postID, user_ID)
+		if err != nil {
+			http.Error(w, "Database Error", http.StatusInternalServerError)
+			return
+		}
+	}
 	exists, err := app.users.UserLikeOnPostExists(postID, user_ID)
 	if err != nil {
 		http.Error(w, "Database Error", http.StatusInternalServerError)
@@ -30,7 +42,12 @@ func (app *App) LikesHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if exists {
-		http.Error(w, "User already liked this post", http.StatusConflict)
+		err = app.users.DeleteLike(postID, user_ID)
+		if err != nil {
+			http.Error(w, "Database Error", http.StatusInternalServerError)
+			return
+		}
+		http.Redirect(w, r, "/home", http.StatusSeeOther)
 		return
 	}
 	likeID := internal.UUIDGen()
