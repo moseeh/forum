@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"forum/internal"
@@ -19,6 +20,7 @@ func (app *App) CommentsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	post_id := r.FormValue("post_id")
 	comment := r.FormValue("comment")
+	fmt.Println(r.Referer())
 
 	comment_id := internal.UUIDGen()
 	err = app.users.InsertComment(comment_id, post_id, user_id, comment)
@@ -26,5 +28,9 @@ func (app *App) CommentsHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	http.Redirect(w, r, "/home", http.StatusSeeOther)
+	referer := r.Referer()
+	if referer == "" {
+		referer = "/home"
+	}
+	http.Redirect(w, r, referer, http.StatusSeeOther)
 }
