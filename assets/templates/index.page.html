@@ -46,27 +46,23 @@
           <nav>
             <ul class="main-nav">
               <li class="nav-item active" data-filter="home">
-                <a href="#" class="nav-link">Home</a>
+                <a href="/home" class="nav-link">Home</a>
               </li>
               <li class="nav-item" data-filter="popular">
-                <a href="#" class="nav-link">Popular</a>
+                <a href="#" class="nav-link">Created Posts</a>
               </li>
               <li class="nav-item" data-filter="communities">
-                <a href="#" class="nav-link">Communities</a>
+                <a href="#" class="nav-link">Liked Posts</a>
               </li>
             </ul>
             <div class="recent-communities">
-              <h3>Recent Communities</h3>
+              <h3>Categories</h3>
               <ul>
+                {{range .Categories}}
                 <li>
-                  <a href="#" class="community-link">Technology</a>
+                  <a href="#" class="community-link"> {{.Name}} </a>
                 </li>
-                <li>
-                  <a href="#" class="community-link">Gaming</a>
-                </li>
-                <li>
-                  <a href="#" class="community-link">Movies</a>
-                </li>
+                {{end}}
               </ul>
             </div>
           </nav>
@@ -80,7 +76,6 @@
               <textarea name="content" placeholder="Post Content" required></textarea>
               <div class="categories-section">
                 {{if len .Categories}}
-
                 <label>Select Categories (Choose one or more):</label>
                 <div class="categories-grid">
                   {{range .Categories}}
