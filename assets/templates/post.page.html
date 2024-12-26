@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Details</title>
+    <link rel="stylesheet" href="../static/css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+</head>
+<body>
+    <div class="post-card">
+        <div class="post-header">
+            <span class="username">{{.Username}}</span>
+            <span class="timestamp" data-timestamp="{{.CreatedAt}}"></span>
+        </div>
+        <h2 class="post-title">{{.Title}}</h2>
+        <div class="post-content">{{.Content}}</div>
+        
+        <div class="categories">
+            {{range .Categories}}
+                <span class="category-tag">{{.Name}}</span>
+            {{end}}
+        </div>
+
+        <div class="post-actions">
+            <button class="action-btn {{if .IsLiked}}liked{{end}}">
+                <i class="fa-{{if .IsDisliked}}solid{{else}}regular{{end}} fa-thumbs-up"></i> {{.LikesCount}}
+            </button>
+            <button class="action-btn {{if .IsDisliked}}disliked{{end}}">
+                <i class="fa-{{if .IsDisliked}}solid{{else}}regular{{end}} fa-thumbs-down"></i> {{.DislikesCount}}
+            </button>
+            <button class="action-btn">
+                <i class="fa-regular fa-comment"></i>{{.CommentsCount}}
+            </button>
+        </div>
+    </div>
+
+    <div class="new-comment">
+        <textarea class="comment-input" placeholder="Write a comment..."></textarea>
+        <button class="submit-btn">Comment</button>
+    </div>
+
+    <div class="comments-section">
+        {{range .Comments}}
+        <div class="comment-card">
+            <div class="comment-header">
+                <span class="username">{{.Username}}</span>
+                <span class="timestamp" data-timestamp="{{.CreatedAt}}"></span>
+            </div>
+            <div class="comment-content">{{.Content}}</div>
+        </div>
+        {{end}}
+    </div>
+</body>
+</html>
