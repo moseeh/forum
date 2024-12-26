@@ -25,12 +25,18 @@
         </div>
 
         <div class="post-actions">
-            <button class="action-btn {{if .IsLiked}}liked{{end}}">
-                <i class="fa-{{if .IsDisliked}}solid{{else}}regular{{end}} fa-thumbs-up"></i> {{.LikesCount}}
-            </button>
-            <button class="action-btn {{if .IsDisliked}}disliked{{end}}">
-                <i class="fa-{{if .IsDisliked}}solid{{else}}regular{{end}} fa-thumbs-down"></i> {{.DislikesCount}}
-            </button>
+            <a href="/likes?post_id={{.PostID}}">
+                <button class="btn btn-like {{if .IsLiked}}liked{{end}}">
+                  <i class="fa-{{if .IsLiked}}solid{{else}}regular{{end}} fa-thumbs-up"></i>
+                  {{.LikesCount}}
+                </button>
+              </a>
+              <a href="/dislike?post_id={{.PostID}}">
+                <button class="btn btn-like {{if .IsDisliked}}disliked{{end}}">
+                  <i class="fa-{{if .IsDisliked}}solid{{else}}regular{{end}} fa-thumbs-down"></i>
+                  {{.DislikesCount}}
+                </button> 
+              </a>
             <button class="action-btn">
                 <i class="fa-regular fa-comment"></i>{{.CommentsCount}}
             </button>
