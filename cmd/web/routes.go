@@ -33,12 +33,17 @@ func (app *App) routes() http.Handler {
 
 	//
 	mux.HandleFunc("GET /logout", app.LogoutHandler)
-	mux.HandleFunc("GET /likes", app.LikesHandler)
-	mux.HandleFunc("GET /dislike", app.DislikesHandler)
-
+	mux.HandleFunc("GET /post/like", app.LikesHandler)
+	mux.HandleFunc("GET /post/dislike", app.DislikesHandler)
 
 	//
+	mux.HandleFunc("GET /post/details", app.PostDetailsHandler)
 	mux.HandleFunc("POST /posts/create", app.PostsHandler)
+	mux.HandleFunc("POST /comment", app.CommentsHandler)
+
+	//
+	mux.HandleFunc("GET /comment/like", app.CommentLikeHandler)
+	mux.HandleFunc("GET /comment/dislike", app.CommentDislikeHandler)
 
 	return mux
 }

@@ -7,6 +7,10 @@ import (
 )
 
 func (app *App) LikesHandler(w http.ResponseWriter, r *http.Request) {
+	referer := r.Referer()
+	if referer == "" {
+		referer = "/home"
+	}
 	postID := r.URL.Query().Get("post_id")
 	if postID == "" {
 		http.Error(w, "Post ID is reqired", http.StatusBadRequest)
@@ -47,7 +51,7 @@ func (app *App) LikesHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Database Error", http.StatusInternalServerError)
 			return
 		}
-		http.Redirect(w, r, "/home", http.StatusSeeOther)
+		http.Redirect(w, r, referer, http.StatusSeeOther)
 		return
 	}
 	likeID := internal.UUIDGen()
@@ -57,5 +61,6 @@ func (app *App) LikesHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Error adding like", http.StatusInternalServerError)
 		return
 	}
-	http.Redirect(w, r, "/home", http.StatusSeeOther)
+
+	http.Redirect(w, r, referer, http.StatusSeeOther)
 }

@@ -100,43 +100,60 @@
           </div>
           <div id="posts-container">
             {{if len .Posts}} {{range .Posts}}
-            <div class="post-card">
-              <div class="post-header">
-                <div class="post-meta">
-                  <span class="post-author">{{.Username}}</span>
-                  <span class="post-date">{{.CreatedAt.Format "Jan 02, 2006 15:04"}}</span>
+            <a href="/post/details?post_id={{.PostID}}">
+              <div class="post-card">
+                <div class="post-header">
+                  <div class="post-meta">
+                    <span class="post-author">{{.Username}}</span>
+                    <span class="post-date">{{.CreatedAt.Format "Jan 02, 2006 15:04"}}</span>
+                  </div>
+                  <div class="post-categories">
+                    {{range .Categories}}
+                    <span class="category-tag">{{.Name}}</span>
+                    {{end}}
+                  </div>
+                  <h2 class="post-title">{{.Title}}</h2>
                 </div>
-                <div class="post-categories">
-                  {{range .Categories}}
-                  <span class="category-tag">{{.Name}}</span>
+                <div class="post-content">
+                  <p>{{.Content}}</p>
+                </div>
+                <div class="post-footer">
+                  <a href="/post/like?post_id={{.PostID}}">
+                    <button class="btn btn-like {{if .IsLiked}}liked{{end}}">
+                      <i class="fa-{{if .IsLiked}}solid{{else}}regular{{end}} fa-thumbs-up"></i>
+                      {{.LikesCount}}
+                    </button>
+                  </a>
+                  <a href="/post/dislike?post_id={{.PostID}}">
+                    <button class="btn btn-like {{if .IsDisliked}}disliked{{end}}">
+                      <i class="fa-{{if .IsDisliked}}solid{{else}}regular{{end}} fa-thumbs-down"></i>
+                      {{.DislikesCount}}
+                    </button>
+                  </a>
+                  <!-- Updated Comment Button -->
+                  {{if $.IsLoggedIn}}
+                  <button class="btn btn-like comment-button" data-post-id="{{.PostID}}">
+                    <i class="fa-regular fa-comment"></i> {{.CommentsCount}}
+                  </button>
+                  {{else}}
+                  <a href="/login" class="btn btn-like comment-button">
+                    <i class="fa-regular fa-comment"></i> {{.CommentsCount}}
+                  </a>
                   {{end}}
                 </div>
-                <h2 class="post-title">{{.Title}}</h2>
+                <div class="comment-form-container" id="comment-form-{{.PostID}}" style="display: none;">
+                  <form action="/comment" method="POST" class="comment-form">
+                    <input type="hidden" name="post_id" value="{{.PostID}}">
+                    <textarea name="comment" rows="3" class="comment-input"
+                      placeholder="Write your comment..." required></textarea>
+                    <div class="mt-2">
+                      <button type="submit" class="btn btn-primary">Submit Comment</button>
+                      <button type="button" class="btn btn-secondary cancel-comment">Cancel</button>
+                    </div>
+                  </form>
+                </div>
               </div>
-              <div class="post-content">
-                <p>{{.Content}}</p>
-              </div>
-              <div class="post-footer">
-                <a href="/likes?post_id={{.PostID}}">
-                  <button class="btn btn-like {{if .IsLiked}}liked{{end}}">
-                    <i class="fa-{{if .IsLiked}}solid{{else}}regular{{end}} fa-thumbs-up"></i>
-                    {{.LikesCount}}
-                  </button>
-                </a>
-
-                <a href="/dislike?post_id={{.PostID}}">
-                  <button class="btn btn-like {{if .IsDisliked}}disliked{{end}}">
-                    <i class="fa-{{if .IsDisliked}}solid{{else}}regular{{end}} fa-thumbs-down"></i>
-                    {{.DislikesCount}}
-                  </button>
-                </a>
-                <a href="/comments?post_id={{.PostID}}">
-                  <button class="btn btn-like">
-                    <i class="fa-regular fa-comment"></i> 0
-                  </button>
-                </a>
-              </div>
-            </div>
+            </a>
             {{end}} {{else}}
             <div class="post-card">
               <p>No posts available yet. Be the first to create one!</p>
