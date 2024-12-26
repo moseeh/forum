@@ -2,8 +2,8 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Post Details</title>
     <link rel="stylesheet" href="../static/css/style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
@@ -25,18 +25,18 @@
         </div>
 
         <div class="post-actions">
-            <a href="/likes?post_id={{.PostID}}">
+            <a href="/post/like?post_id={{.PostID}}">
                 <button class="btn btn-like {{if .IsLiked}}liked{{end}}">
-                  <i class="fa-{{if .IsLiked}}solid{{else}}regular{{end}} fa-thumbs-up"></i>
-                  {{.LikesCount}}
+                    <i class="fa-{{if .IsLiked}}solid{{else}}regular{{end}} fa-thumbs-up"></i>
+                    {{.LikesCount}}
                 </button>
-              </a>
-              <a href="/dislike?post_id={{.PostID}}">
+            </a>
+            <a href="/post/dislike?post_id={{.PostID}}">
                 <button class="btn btn-like {{if .IsDisliked}}disliked{{end}}">
-                  <i class="fa-{{if .IsDisliked}}solid{{else}}regular{{end}} fa-thumbs-down"></i>
-                  {{.DislikesCount}}
-                </button> 
-              </a>
+                    <i class="fa-{{if .IsDisliked}}solid{{else}}regular{{end}} fa-thumbs-down"></i>
+                    {{.DislikesCount}}
+                </button>
+            </a>
             <button class="action-btn">
                 <i class="fa-regular fa-comment"></i>{{.CommentsCount}}
             </button>
@@ -44,8 +44,8 @@
     </div>
 
     <div class="new-comment">
-        <form action="/comments" method="POST" class="comment-form">
-            <input type="hidden" name="post_id" value="{{.PostID}}">
+        <form action="/comment" method="POST" class="comment-form">
+            <input type="hidden" name="post_id" value="{{.PostID}}" />
             <textarea name="comment" class="comment-input" placeholder="Write a comment..."></textarea>
             <button class="submit-btn">Comment</button>
         </form>
@@ -59,6 +59,18 @@
                 <span class="timestamp" data-timestamp="{{.CreatedAt}}"></span>
             </div>
             <div class="comment-content">{{.Content}}</div>
+            <a href="/comment/like?comment_id={{.Comment_ID}}">
+                <button class="btn btn-like {{if .IsLiked}}liked{{end}}">
+                    <i class="fa-{{if .IsLiked}}solid{{else}}regular{{end}} fa-thumbs-up"></i>
+                    {{.LikesCount}}
+                </button>
+            </a>
+            <a href="/comment/dislike?comment_id={{.Comment_ID}}">
+                <button class="btn btn-like {{if .IsDisliked}}disliked{{end}}">
+                    <i class="fa-{{if .IsDisliked}}solid{{else}}regular{{end}} fa-thumbs-down"></i>
+                    {{.DislikesCount}}
+                </button>
+            </a>
         </div>
         {{end}}
     </div>
