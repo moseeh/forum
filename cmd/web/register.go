@@ -66,6 +66,7 @@ func (app *App) register_post(w http.ResponseWriter, r *http.Request) {
 		tmpl.Execute(w, map[string]interface{}{
 			"Errors": form_errors,
 		})
+		return
 	}
 
 	/// check if user exists
