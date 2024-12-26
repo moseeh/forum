@@ -25,7 +25,7 @@ func (app *App) PostDetailsHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "DATABSE ERROR", http.StatusInternalServerError)
 		return
 	}
-	comments, err := app.users.GetPostComments(postID)
+	comments, err := app.users.GetPostComments(postID, user_ID)
 	if err != nil {
 		http.Error(w, "DATABSE ERROR", http.StatusInternalServerError)
 		return
