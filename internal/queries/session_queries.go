@@ -73,3 +73,22 @@ func (m *UserModel) DeleteSession(sessionToken string) error {
     }
     return nil
 }
+
+// ValidateCSRFToken checks if the provided CSRF token is valid for the session
+func (m *UserModel) ValidateCSRFToken(sessionToken, csrfToken string) (bool, error) {
+    const VALIDATE_CSRF = `
+        SELECT EXISTS(
+            SELECT 1 
+            FROM TOKENS 
+            WHERE session_token = ? 
+            AND csrf_token = ? 
+            AND expires_at > datetime('now')
+        )`
+    
+    var valid bool
+    err := m.DB.QueryRow(VALIDATE_CSRF, sessionToken, csrfToken).Scan(&valid)
+    if err != nil {
+        return false, fmt.Errorf("database error while validating CSRF token: %v", err)
+    }
+    return valid, nil
+}
