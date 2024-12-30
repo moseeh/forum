@@ -40,7 +40,7 @@ func (m *UserModel) ValidateSession(sessionToken string) (bool, error) {
 
 	updateQuery := `
         UPDATE TOKENS 
-        SET expires_at = datetime('now', '+24 hours')
+        SET expires_at = datetime('now', '+2 hours')
         WHERE session_token = ?`
 
 	_, err = m.DB.Exec(updateQuery, sessionToken)
@@ -48,4 +48,16 @@ func (m *UserModel) ValidateSession(sessionToken string) (bool, error) {
 		log.Printf("Failed to update session expiry: %v", err)
 	}
 	return true, nil
+}
+
+func (m *UserModel) DeleteUserSessions(userID string) error {
+	const DELETE_USER_SESSIONS = `
+	DELETE FROM TOKENS 
+	WHERE user_id = ?`
+
+	_, err := m.DB.Exec(DELETE_USER_SESSIONS, userID)
+	if err != nil {
+		return fmt.Errorf("failed to delete user sessions: %v", err)
+	}
+	return nil
 }
