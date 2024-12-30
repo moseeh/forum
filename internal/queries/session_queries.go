@@ -61,3 +61,15 @@ func (m *UserModel) DeleteUserSessions(userID string) error {
 	}
 	return nil
 }
+
+func (m *UserModel) DeleteSession(sessionToken string) error {
+    const DELETE_SESSION = `
+        DELETE FROM TOKENS 
+        WHERE session_token = ?`
+    
+    _, err := m.DB.Exec(DELETE_SESSION, sessionToken)
+    if err != nil {
+        return fmt.Errorf("failed to delete session: %v", err)
+    }
+    return nil
+}
