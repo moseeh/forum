@@ -33,6 +33,8 @@ func (app *App) HomeHandler(w http.ResponseWriter, r *http.Request) {
 				data.IsLoggedIn = true
 				data.Username = usernameCookie.Value
 				userID, _ = app.users.GetUserID(usernameCookie.Value)
+			} else {
+				app.clearAuthCookies(w)
 			}
 		}
 	}
