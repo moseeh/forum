@@ -59,6 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const navItems = document.querySelectorAll('.nav-item');
     const allPosts = document.getElementById('allPosts');
     const likedPosts = document.getElementById('likedPosts');
+    const createdPosts = document.getElementById('createdPosts')
 
     navItems.forEach(item => {
         item.addEventListener('click', function(e) {
@@ -74,8 +75,14 @@ document.addEventListener('DOMContentLoaded', function() {
             if (filter === 'liked') {
                 allPosts.style.display = 'none';
                 likedPosts.style.display = 'block';
+                createdPosts.style.display = 'none';
             } else if (filter === 'all') {
                 allPosts.style.display = 'block';
+                likedPosts.style.display = 'none';
+                createdPosts.style.display = 'none';
+            } else if (filter === 'created') {
+                createdPosts.style.display = 'block';
+                allPosts.style.display = 'none';
                 likedPosts.style.display = 'none';
             }
             // You can add the 'created' filter later
