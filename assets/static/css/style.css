@@ -23,6 +23,12 @@ body {
   background: linear-gradient(45deg, var(--bg-color), #28294d);
   background-attachment: fixed;
 }
+.no-posts-message {
+  text-align: center;
+  color: #ffffff;
+  font-style: italic;
+  margin-top: 20px;
+}
 
 .container {
   max-width: 1400px;
@@ -431,10 +437,10 @@ main {
   margin-bottom: 2rem;
 }
 
-.sidebar .nav-item {
+/* .sidebar .nav-item {
   margin-bottom: 0.5rem;
 
-}
+} */
 
 .sidebar .nav-link {
   display: block;

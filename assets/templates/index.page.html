@@ -46,7 +46,7 @@
           <nav>
             <ul class="main-nav">
               <li class="nav-item active" data-filter="all">
-                <a href="/home" class="nav-link">Home</a>
+                <a href="#" class="nav-link">Home</a>
               </li>
               <li class="nav-item" data-filter="created">
                 <a href="#" class="nav-link">Created Posts</a>
@@ -57,10 +57,10 @@
             </ul>
             <div class="recent-communities">
               <h3>Categories</h3>
-              <ul>
+              <ul class="main-nav">
                 {{range .Categories}}
-                <li>
-                  <a href="#" class="community-link"> {{.Name}} </a>
+                <li class="nav-item">
+                  <a href="#" class="nav-link"> {{.Name}} </a>
                 </li>
                 {{end}}
               </ul>
@@ -93,10 +93,11 @@
             </form>
             {{end}}
           </div>
+
           <div id="allPosts" class="posts-container">
             {{if len .Posts}} {{range .Posts}}
             <a href="/post/details?post_id={{.PostID}}">
-              <div class="post-card">
+              <div class="post-card" data-category="{{range .Categories}}{{.Name}},{{end}}">
                 <div class="post-header">
                   <div class="post-meta">
                     <span class="post-author">{{.Username}}</span>
@@ -154,7 +155,11 @@
               <p>No posts available yet. Be the first to create one!</p>
             </div>
             {{end}}
+            <div id="noPostsMessage" class="no-posts-message" style="display: none;">
+              <p>No posts found for this category.</p>
+            </div>
           </div>
+
           <div id="likedPosts" class="posts-container" style="display: none;">
             {{if len .LikedPosts}} {{range .LikedPosts}}
             <a href="/post/details?post_id={{.PostID}}">
@@ -218,6 +223,7 @@
             </div>
             {{end}}
           </div>
+          
           <div id="createdPosts" class="posts-container" style="display: none;">
             {{if len .CreatedPosts}} {{range .CreatedPosts}}
             <a href="/post/details?post_id={{.PostID}}">

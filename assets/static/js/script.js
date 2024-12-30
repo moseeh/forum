@@ -56,10 +56,13 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Get all necessary elements
     const navItems = document.querySelectorAll('.nav-item');
+    const posts = document.querySelectorAll('.post-card');
     const allPosts = document.getElementById('allPosts');
     const likedPosts = document.getElementById('likedPosts');
-    const createdPosts = document.getElementById('createdPosts')
+    const createdPosts = document.getElementById('createdPosts');
+    const noPostsMessage = document.getElementById('noPostsMessage');
 
     navItems.forEach(item => {
         item.addEventListener('click', function(e) {
@@ -69,23 +72,87 @@ document.addEventListener('DOMContentLoaded', function() {
             navItems.forEach(nav => nav.classList.remove('active'));
             // Add active class to clicked item
             this.classList.add('active');
-            
+
             const filter = this.dataset.filter;
-            
-            if (filter === 'liked') {
-                allPosts.style.display = 'none';
-                likedPosts.style.display = 'block';
-                createdPosts.style.display = 'none';
-            } else if (filter === 'all') {
-                allPosts.style.display = 'block';
-                likedPosts.style.display = 'none';
-                createdPosts.style.display = 'none';
-            } else if (filter === 'created') {
-                createdPosts.style.display = 'block';
-                allPosts.style.display = 'none';
-                likedPosts.style.display = 'none';
+            console.log('Selected filter:', filter); // Debug log
+
+            // Handle different filter types
+            switch(filter) {
+                case 'liked':
+                    showSection(likedPosts);
+                    break;
+                case 'all':
+                    showSection(allPosts);
+                    showAllPosts();
+                    break;
+                case 'created':
+                    showSection(createdPosts);
+                    break;
+                default:
+                    // Category filtering
+                    filterByCategory(this.textContent.trim());
             }
-            // You can add the 'created' filter later
         });
     });
+
+    // Helper function to show a section and hide others
+    function showSection(sectionToShow) {
+        [allPosts, likedPosts, createdPosts].forEach(section => {
+            if (section) {
+                section.style.display = section === sectionToShow ? 'block' : 'none';
+            }
+        });
+        if (noPostsMessage) {
+            noPostsMessage.style.display = 'none';
+        }
+    }
+
+    // Helper function to show all posts
+    function showAllPosts() {
+        posts.forEach(post => {
+            post.style.display = 'block';
+        });
+    }
+
+    // Helper function to filter by category
+    function filterByCategory(category) {
+        showSection(allPosts);
+        let visibleCount = 0;
+
+        posts.forEach(post => {
+            try {
+                const categoryData = post.dataset.category;
+                
+                // Debug log for category data
+                console.log('Post categories:', {
+                    post: post,
+                    categoryData: categoryData
+                });
+
+                if (categoryData) {
+                    const categories = categoryData.split(',')
+                        .map(c => c.trim())
+                        .filter(Boolean);
+
+                    if (categories.includes(category)) {
+                        post.style.display = 'block';
+                        visibleCount++;
+                    } else {
+                        post.style.display = 'none';
+                    }
+                } else {
+                    console.warn('No category data found for post:', post);
+                    post.style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Error processing post:', error);
+                post.style.display = 'none';
+            }
+        });
+
+        // Show/hide no posts message
+        if (noPostsMessage) {
+            noPostsMessage.style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+    }
 });
