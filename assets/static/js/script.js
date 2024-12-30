@@ -54,3 +54,31 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const navItems = document.querySelectorAll('.nav-item');
+    const allPosts = document.getElementById('allPosts');
+    const likedPosts = document.getElementById('likedPosts');
+
+    navItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Remove active class from all items
+            navItems.forEach(nav => nav.classList.remove('active'));
+            // Add active class to clicked item
+            this.classList.add('active');
+            
+            const filter = this.dataset.filter;
+            
+            if (filter === 'liked') {
+                allPosts.style.display = 'none';
+                likedPosts.style.display = 'block';
+            } else if (filter === 'all') {
+                allPosts.style.display = 'block';
+                likedPosts.style.display = 'none';
+            }
+            // You can add the 'created' filter later
+        });
+    });
+});

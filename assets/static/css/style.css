@@ -413,6 +413,18 @@ main {
   padding: 1.5rem;
   max-height: auto;
 }
+.posts-container {
+  transition: opacity 0.3s ease;
+}
+
+.nav-item {
+  cursor: pointer;
+}
+
+.nav-item.active {
+  font-weight: bold;
+  /* Add any other active state styles */
+}
 
 .sidebar .main-nav {
   list-style: none;
