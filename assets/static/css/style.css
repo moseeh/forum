@@ -23,6 +23,12 @@ body {
   background: linear-gradient(45deg, var(--bg-color), #28294d);
   background-attachment: fixed;
 }
+.no-posts-message {
+  text-align: center;
+  color: #ffffff;
+  font-style: italic;
+  margin-top: 20px;
+}
 
 .container {
   max-width: 1400px;
@@ -109,6 +115,46 @@ a:hover {
 .categories {
   margin-top: 10px;
 }
+.categories-section {
+  font-family: Arial, sans-serif;
+  padding: 10px;
+}
+
+.categories-grid {
+  display: list-item;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.category-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+  width: calc(33.33% - 10px); /* Adjust the width for a 3-column layout */
+}
+
+.category-item input {
+  margin: 0;
+  transform: scale(1.1); /* Slightly larger checkbox */
+}
+
+.category-item label {
+  white-space: normal; /* Allow wrapping of text */
+}
+
+@media (max-width: 768px) {
+  .category-item {
+    width: calc(50% - 10px); /* 2-column layout on medium screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .category-item {
+    width: 100%; /* Single column layout on small screens */
+  }
+}
+
 
 .category-tag {
   display: inline-block;
@@ -371,7 +417,19 @@ main {
   background-color: var(--card-bg);
   border-radius: var(--border-radius);
   padding: 1.5rem;
-  max-height: 500px;
+  max-height: auto;
+}
+.posts-container {
+  transition: opacity 0.3s ease;
+}
+
+.nav-item {
+  cursor: pointer;
+}
+
+.nav-item.active {
+  font-weight: bold;
+  /* Add any other active state styles */
 }
 
 .sidebar .main-nav {
@@ -379,10 +437,10 @@ main {
   margin-bottom: 2rem;
 }
 
-.sidebar .nav-item {
+/* .sidebar .nav-item {
   margin-bottom: 0.5rem;
 
-}
+} */
 
 .sidebar .nav-link {
   display: block;

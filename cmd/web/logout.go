@@ -7,11 +7,9 @@ import (
 )
 
 func (app *App) LogoutHandler(w http.ResponseWriter, r *http.Request) {
-	// Get the session cookie
 	sessionCookie, err := r.Cookie("session_token")
 	if err == nil {
-		// Delete the session from the database
-		_, err = app.users.DB.Exec(`DELETE FROM TOKENS WHERE session_token = ?`, sessionCookie.Value)
+		err = app.users.DeleteSession(sessionCookie.Value)
 		if err != nil {
 			log.Printf("Error deleting session: %v", err)
 		}
@@ -24,8 +22,10 @@ func (app *App) LogoutHandler(w http.ResponseWriter, r *http.Request) {
 			Name:     cookieName,
 			Value:    "",
 			Path:     "/",
-			Expires:  time.Now().Add(-24 * time.Hour),
+			Expires:  time.Now().Add(-1 * time.Hour),
 			HttpOnly: true,
+			Secure: true,
+			SameSite: http.SameSiteStrictMode,
 		})
 	}
 

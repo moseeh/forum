@@ -8,10 +8,12 @@ import (
 )
 
 type PageData struct {
-	IsLoggedIn bool
-	Username   string
-	Posts      []db.Post
-	Categories []db.Category
+	IsLoggedIn   bool
+	Username     string
+	Posts        []db.Post
+	LikedPosts   []db.Post
+	CreatedPosts []db.Post
+	Categories   []db.Category
 }
 
 func (app *App) HomeHandler(w http.ResponseWriter, r *http.Request) {
@@ -31,6 +33,8 @@ func (app *App) HomeHandler(w http.ResponseWriter, r *http.Request) {
 				data.IsLoggedIn = true
 				data.Username = usernameCookie.Value
 				userID, _ = app.users.GetUserID(usernameCookie.Value)
+			} else {
+				app.clearAuthCookies(w)
 			}
 		}
 	}
@@ -46,13 +50,27 @@ func (app *App) HomeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Get posts with categories, likes, and comments
-	posts, err := app.users.GetAllPosts(userID) // Pass userID to check if posts are liked by current user
+	posts, err := app.users.GetAllPosts(userID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	if posts != nil {
 		data.Posts = posts
+	}
+	likedPosts, err := app.users.GetLikedPosts(userID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	if likedPosts != nil {
+		data.LikedPosts = likedPosts
+	}
+	createdPosts, err := app.users.GetCreatedPosts(userID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	if createdPosts != nil {
+		data.CreatedPosts = createdPosts
 	}
 
 	tmpl, err := template.ParseFiles("./assets/templates/index.page.html")

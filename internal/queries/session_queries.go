@@ -7,16 +7,37 @@ import (
 )
 
 func (m *UserModel) NewSession(user_id, session_token, csrf_token, expires_at string) error {
-	const INSERT_TOKENS string = "INSERT INTO TOKENS (user_id, session_token,csrf_token,expires_at) VALUES (?, ?, ?, ?)"
-	stmt, err := m.DB.Prepare(INSERT_TOKENS)
+	tx, err := m.DB.Begin()
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to begin transaction: %v", err)
 	}
-	defer stmt.Close()
-	_, err = stmt.Exec(user_id, session_token, csrf_token, expires_at)
+	defer tx.Rollback()
+
+	// First, delete any existing sessions for this user
+	const DELETE_EXISTING = `
+        DELETE FROM TOKENS 
+        WHERE user_id = ?`
+
+	_, err = tx.Exec(DELETE_EXISTING, user_id)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to delete existing sessions: %v", err)
 	}
+
+	// Then create the new session
+	const INSERT_TOKENS = `
+        INSERT INTO TOKENS (user_id, session_token, csrf_token, expires_at) 
+        VALUES (?, ?, ?, ?)`
+
+	_, err = tx.Exec(INSERT_TOKENS, user_id, session_token, csrf_token, expires_at)
+	if err != nil {
+		return fmt.Errorf("failed to insert new session: %v", err)
+	}
+
+	// Commit the transaction
+	if err = tx.Commit(); err != nil {
+		return fmt.Errorf("failed to commit transaction: %v", err)
+	}
+
 	return nil
 }
 
@@ -40,7 +61,7 @@ func (m *UserModel) ValidateSession(sessionToken string) (bool, error) {
 
 	updateQuery := `
         UPDATE TOKENS 
-        SET expires_at = datetime('now', '+24 hours')
+        SET expires_at = datetime('now', '+2 hours')
         WHERE session_token = ?`
 
 	_, err = m.DB.Exec(updateQuery, sessionToken)
@@ -48,4 +69,16 @@ func (m *UserModel) ValidateSession(sessionToken string) (bool, error) {
 		log.Printf("Failed to update session expiry: %v", err)
 	}
 	return true, nil
+}
+
+func (m *UserModel) DeleteSession(sessionToken string) error {
+	const DELETE_SESSION = `
+        DELETE FROM TOKENS 
+        WHERE session_token = ?`
+
+	_, err := m.DB.Exec(DELETE_SESSION, sessionToken)
+	if err != nil {
+		return fmt.Errorf("failed to delete session: %v", err)
+	}
+	return nil
 }
