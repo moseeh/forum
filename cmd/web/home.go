@@ -11,6 +11,7 @@ type PageData struct {
 	IsLoggedIn bool
 	Username   string
 	Posts      []db.Post
+	LikedPosts []db.Post
 	Categories []db.Category
 }
 
@@ -46,13 +47,20 @@ func (app *App) HomeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Get posts with categories, likes, and comments
-	posts, err := app.users.GetAllPosts(userID) // Pass userID to check if posts are liked by current user
+	posts, err := app.users.GetAllPosts(userID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	if posts != nil {
 		data.Posts = posts
+	}
+	likedPosts, err := app.users.GetLikedPosts(userID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	if likedPosts != nil {
+		data.LikedPosts = likedPosts
 	}
 
 	tmpl, err := template.ParseFiles("./assets/templates/index.page.html")
