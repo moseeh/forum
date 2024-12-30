@@ -8,11 +8,12 @@ import (
 )
 
 type PageData struct {
-	IsLoggedIn bool
-	Username   string
-	Posts      []db.Post
-	LikedPosts []db.Post
-	Categories []db.Category
+	IsLoggedIn   bool
+	Username     string
+	Posts        []db.Post
+	LikedPosts   []db.Post
+	CreatedPosts []db.Post
+	Categories   []db.Category
 }
 
 func (app *App) HomeHandler(w http.ResponseWriter, r *http.Request) {
@@ -61,6 +62,13 @@ func (app *App) HomeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	if likedPosts != nil {
 		data.LikedPosts = likedPosts
+	}
+	createdPosts, err := app.users.GetCreatedPosts(userID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	if createdPosts != nil {
+		data.CreatedPosts = createdPosts
 	}
 
 	tmpl, err := template.ParseFiles("./assets/templates/index.page.html")
