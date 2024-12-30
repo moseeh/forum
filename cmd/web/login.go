@@ -18,13 +18,7 @@ func (app *App) GetLoginHandler(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/home", http.StatusSeeOther)
 			return
 		}
-		http.SetCookie(w, &http.Cookie{
-			Name:     "session_token",
-			Value:    "",
-			Path:     "/",
-			Expires:  time.Now().Add(-1 * time.Hour),
-			HttpOnly: true,
-		})
+		app.clearAuthCookies(w)
 	}
 	tmpl, err := template.ParseFiles("./assets/templates/login.page.html")
 	if err != nil {
@@ -94,6 +88,9 @@ func (app *App) PostLoginHandler(w http.ResponseWriter, r *http.Request) {
 		Name:     "session_token",
 		Value:    session_token,
 		Expires:  expires,
+		Path:     "/",
+		Secure:   true,
+		SameSite: http.SameSiteStrictMode,
 		HttpOnly: true,
 	})
 
@@ -120,4 +117,19 @@ func (app *App) PostLoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, "/home", http.StatusFound)
+}
+
+func (app *App) clearAuthCookies(w http.ResponseWriter) {
+	cookies := []string{"session_token", "csrf_token", "username"}
+	for _, cookieName := range cookies {
+		http.SetCookie(w, &http.Cookie{
+			Name:     cookieName,
+			Value:    "",
+			Path:     "/",
+			Expires:  time.Now().Add(-1 * time.Hour),
+			HttpOnly: true,
+			Secure:   true,
+			SameSite: http.SameSiteStrictMode,
+		})
+	}
 }
