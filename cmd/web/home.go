@@ -14,6 +14,7 @@ type PageData struct {
 	LikedPosts   []db.Post
 	CreatedPosts []db.Post
 	Categories   []db.Category
+	Trends       []db.CategoryCount
 }
 
 func (app *App) HomeHandler(w http.ResponseWriter, r *http.Request) {
@@ -72,6 +73,13 @@ func (app *App) HomeHandler(w http.ResponseWriter, r *http.Request) {
 	if createdPosts != nil {
 		data.CreatedPosts = createdPosts
 	}
+	trends,err := app.users.TrendingCount()
+	if err!= nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+    }
+	if trends!= nil {
+        data.Trends = trends
+    }
 
 	tmpl, err := template.ParseFiles("./assets/templates/index.page.html")
 	if err != nil {
