@@ -22,6 +22,7 @@ func (app *App) HomeHandler(w http.ResponseWriter, r *http.Request) {
 		IsLoggedIn: false,
 		Posts:      []db.Post{},
 		Categories: []db.Category{},
+		Trends:     []db.CategoryCount{},
 	}
 
 	// Get current user if logged in
@@ -73,13 +74,18 @@ func (app *App) HomeHandler(w http.ResponseWriter, r *http.Request) {
 	if createdPosts != nil {
 		data.CreatedPosts = createdPosts
 	}
-	trends,err := app.users.TrendingCount()
-	if err!= nil {
-        http.Error(w, err.Error(), http.StatusInternalServerError)
-    }
-	if trends!= nil {
-        data.Trends = trends
-    }
+	trends, err := app.users.TrendingCount()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	if trends != nil {
+		Sort(trends)
+		if len(trends) > 5 {
+			data.Trends = trends[:5]
+		} else {
+			data.Trends = trends
+		}
+	}
 
 	tmpl, err := template.ParseFiles("./assets/templates/index.page.html")
 	if err != nil {
@@ -91,4 +97,14 @@ func (app *App) HomeHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+}
+
+func Sort(data []db.CategoryCount) {
+    for i := 0; i < len(data)-1; i++ {
+        for j := 0; j < len(data)-i-1; j++ {
+            if data[j].Count < data[j+1].Count {
+                data[j], data[j+1] = data[j+1], data[j]
+            }
+        }
+    }
 }
