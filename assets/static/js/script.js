@@ -1,10 +1,10 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Sidebar navigation
     document.querySelectorAll('.sidebar .nav-item').forEach(item => {
-        item.addEventListener('click', function() {
+        item.addEventListener('click', function () {
             // Remove active class from all items
             document.querySelectorAll('.sidebar .nav-item').forEach(i => i.classList.remove('active'));
-            
+
             // Add active class to the clicked item
             this.classList.add('active');
         });
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Signup button
     const signupButton = document.getElementById('join-community-btn');
     if (signupButton) {
-        signupButton.addEventListener('click', function() {
+        signupButton.addEventListener('click', function () {
             window.location.href = '/register';
         });
     }
@@ -22,24 +22,24 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', () => {
     const createPostBtn = document.getElementById('create-post-btn');
     const createPostModal = document.getElementById('create-post-modal');
-    
+
     createPostBtn.addEventListener('click', () => {
-      createPostModal.style.display = 'block';
+        createPostModal.style.display = 'block';
     });
-  
+
     // Close modal when clicking outside
     window.addEventListener('click', (e) => {
-      if (e.target === createPostModal) {
-        createPostModal.style.display = 'none';
-      }
+        if (e.target === createPostModal) {
+            createPostModal.style.display = 'none';
+        }
     });
-  });
+});
 
 
-  document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Handle comment button clicks
     document.querySelectorAll('.comment-button').forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             const postId = this.dataset.postId;
             const formContainer = document.getElementById(`comment-form-${postId}`);
             formContainer.style.display = 'block';
@@ -48,14 +48,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle cancel button clicks
     document.querySelectorAll('.cancel-comment').forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             const formContainer = this.closest('.comment-form-container');
             formContainer.style.display = 'none';
         });
     });
 });
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Get all necessary elements
     const navItems = document.querySelectorAll('.nav-item');
     const posts = document.querySelectorAll('.post-card');
@@ -65,9 +65,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const noPostsMessage = document.getElementById('noPostsMessage');
 
     navItems.forEach(item => {
-        item.addEventListener('click', function(e) {
+        item.addEventListener('click', function (e) {
             e.preventDefault();
-            
+
             // Remove active class from all items
             navItems.forEach(nav => nav.classList.remove('active'));
             // Add active class to clicked item
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Selected filter:', filter); // Debug log
 
             // Handle different filter types
-            switch(filter) {
+            switch (filter) {
                 case 'liked':
                     showSection(likedPosts);
                     break;
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
         posts.forEach(post => {
             try {
                 const categoryData = post.dataset.category;
-                
+
                 // Debug log for category data
                 console.log('Post categories:', {
                     post: post,
@@ -156,3 +156,43 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+
+function timeAgo(date) {
+    const now = new Date();
+    const diff = now - date;
+
+    const seconds = Math.floor(diff / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    const months = Math.floor(days / 30);
+
+    if (months >= 1) {
+        return date.toLocaleString('en-GB', {
+            timeZone: 'Africa/Nairobi',
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    } else if (days >= 1) {
+        return `${days} days ago`;
+    } else if (hours >= 1) {
+        return `${hours} hours ago`;
+    } else if (minutes >= 1) {
+        return `${minutes} minutes ago`;
+    } else {
+        return `${seconds} seconds ago`;
+    }
+}
+
+function displayTimeAgo() {
+    const elements = document.getElementsByClassName('post-date');
+    for (let element of elements) {
+        const date = new Date(element.textContent.trim() + ' GMT');
+        element.textContent = timeAgo(date);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', displayTimeAgo);
