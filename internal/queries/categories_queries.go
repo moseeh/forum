@@ -66,12 +66,6 @@ func (m *UserModel) TrendingCount() ([]CategoryCount, error) {
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
-	//sort
-	for i := 0; i < len(categoryCounts)-1; i++ {
-		if categoryCounts[i+1].Count > categoryCounts[i].Count {
-			categoryCounts[i], categoryCounts[i+1] = categoryCounts[i+1], categoryCounts[i]
-		}
-	}
 
 	return categoryCounts, nil
 }
