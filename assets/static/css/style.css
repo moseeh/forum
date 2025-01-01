@@ -546,6 +546,12 @@ main {
   align-items: center;
   padding: 0.75rem 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+}
+
+.trending-topics li:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-color);
 }
 
 .trending-topics li:last-child {

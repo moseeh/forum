@@ -293,14 +293,12 @@
           <div class="card trending-topics">
             <h3>Trending Topics</h3>
             <ul>
+              {{range .Trends}}
               <li>
-                <span>#Technology</span>
-                <span>2.4k posts</span>
+                <span class="nav-item">{{ .CategoryName }}</span>
+                <span>{{ .Count }} posts</span>
               </li>
-              <li>
-                <span>#AI</span>
-                <span>1.7k posts</span>
-              </li>
+              {{end}}
             </ul>
           </div>
           <div class="card community-invite">
