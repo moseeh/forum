@@ -2,10 +2,17 @@ package db
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 
 	"github.com/gofrs/uuid"
 )
+
+type CategoryCount struct {
+	CategoryID   string
+	Count        int
+	CategoryName string
+}
 
 var categories = []Category{
 	{Name: "Technology", Description: "All about the latest tech trends and innovations"},
@@ -20,7 +27,7 @@ var categories = []Category{
 }
 
 // Function to insert categories into the database
-func InsertCategories(db *sql.DB) {
+func  InsertCategories(db *sql.DB) {
 	// Use INSERT OR IGNORE to avoid duplicate entries based on the UNIQUE constraint
 	stmt, err := db.Prepare(`INSERT OR IGNORE INTO CATEGORIES (category_id, name, description) VALUES (?, ?, ?)`)
 	if err != nil {
@@ -39,4 +46,30 @@ func InsertCategories(db *sql.DB) {
 			log.Printf("Error inserting category %s: %v\n", category.Name, err)
 		}
 	}
+}
+
+func (m *UserModel) TrendingCount() ([]CategoryCount,error) {
+	rows, err := m.DB.Query(` SELECT pc.category_id, COUNT(*) AS count, c.name FROM POST_CATEGORIES pc JOIN CATEGORIES c ON pc.category_id = c.category_id GROUP BY pc.category_id `)
+	if err != nil {
+		return nil,err
+	}
+	defer rows.Close()
+
+	var categoryCounts []CategoryCount
+
+	for rows.Next() {
+		var categoryCount CategoryCount
+		if err := rows.Scan(&categoryCount.CategoryID, &categoryCount.Count, &categoryCount.CategoryName); err != nil {
+			return nil,err
+		}
+		categoryCounts = append(categoryCounts, categoryCount)
+	}
+	if err := rows.Err(); err != nil {
+		return nil,err
+	}
+	// Display the counts for each category
+	for _, categoryCount := range categoryCounts {
+		fmt.Printf("Category: %s (ID: %s), Count: %d\n", categoryCount.CategoryName, categoryCount.CategoryID, categoryCount.Count)
+	}
+	return categoryCounts,nil
 }
