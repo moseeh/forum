@@ -17,7 +17,9 @@ function timeAgo(date) {
             hour: '2-digit',
             minute: '2-digit'
         });
-    } else if (days >= 1) {
+    } else if (days == 1) {
+        return 'Yesterday ';
+    } else if (days > 1) {
         return `${days} days ago`;
     } else if (hours >= 1) {
         return `${hours} hours ago`;
