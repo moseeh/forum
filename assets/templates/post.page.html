@@ -15,6 +15,7 @@
             <span class="username">{{.Username}}</span>
             <span class="timestamp" data-timestamp="{{.CreatedAt}}"></span>
         </div>
+        <h2 class="post-date">{{.CreatedAt}}</h2>
         <h2 class="post-title">{{.Title}}</h2>
         <div class="post-content">{{.Content}}</div>
 
@@ -74,6 +75,8 @@
         </div>
         {{end}}
     </div>
+
+    <script src="../static/js/time.js"></script>
 </body>
 
 </html>
