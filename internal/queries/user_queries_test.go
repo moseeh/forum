@@ -119,3 +119,68 @@ func TestUserExists(t *testing.T) {
 		})
 	}
 }
+
+
+func TestGetPassword(t *testing.T) {
+	// Set up an in-memory SQLite database
+	db, err := sql.Open("sqlite3", ":memory:")
+	if err != nil {
+		t.Fatalf("failed to open database: %s", err)
+	}
+	defer db.Close()
+
+	// Create the USERS table
+	createTableQuery := `
+		CREATE TABLE USERS (
+			user_id TEXT PRIMARY KEY,
+			username TEXT NOT NULL,
+			email TEXT NOT NULL UNIQUE,
+			password TEXT NOT NULL
+		);`
+	_, err = db.Exec(createTableQuery)
+	if err != nil {
+		t.Fatalf("failed to create table: %s", err)
+	}
+
+	// Initialize the UserModel
+	userModel := &UserModel{DB: db}
+
+	// Insert a test user
+	insertUserQuery := `
+		INSERT INTO USERS (user_id, username, email, password)
+		VALUES ('1', 'testuser', 'mrcrabs@example.com', 'hashedpassword123');`
+	_, err = db.Exec(insertUserQuery)
+	if err != nil {
+		t.Fatalf("failed to insert test user: %s", err)
+	}
+
+	// Test cases
+	tests := []struct {
+		email       string
+		expected    string
+		shouldError bool
+	}{
+		{"mrcrabs@example.com", "hashedpassword123", false},  // Valid email
+		{"mrspuff@example.com", "", true},            // Nonexistent email
+	}
+
+	for _, test := range tests {
+		t.Run(test.email, func(t *testing.T) {
+			// Call the method under test
+			password, err := userModel.GetPassword(test.email)
+
+			// Check for unexpected errors
+			if test.shouldError && err == nil {
+				t.Errorf("expected an error but got none")
+			}
+			if !test.shouldError && err != nil {
+				t.Errorf("unexpected error: %s", err)
+			}
+
+			// Verify the result
+			if password != test.expected {
+				t.Errorf("unexpected result: got %v, want %v", password, test.expected)
+			}
+		})
+	}
+}
