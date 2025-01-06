@@ -10,7 +10,7 @@ import (
 var allowedRoutes = map[string]bool{
 	"/":                true,
 	"/home":            true,
-	"login":            true,
+	"/login":            true,
 	"/register":        true,
 	"/logout":          true,
 	"/post/like":       true,
