@@ -50,21 +50,21 @@ func (app *App) PostLoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	// confirm if a user exists in the database
 	if ok, _ := app.users.UserExists(email); !ok {
-		http.Error(w, "User doesn't exist", http.StatusNotFound)
-		return
+		form_errors["email"] = append(form_errors["email"], "User does not exist")
+	} else {
+		// Get password hash
+		password_hash, err := app.users.GetPassword(email)
+		if err != nil {
+			fmt.Println(err)
+		}
+	
+		// compare password hash
+		val := internal.CompareHash(password_hash, password)
+		if !val {
+			form_errors["password"] = append(form_errors["password"], "Incorrect password")
+		}
 	}
 
-	// Get password hash
-	password_hash, err := app.users.GetPassword(email)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	// compare password hash
-	val := internal.CompareHash(password_hash, password)
-	if !val {
-		form_errors["password"] = append(form_errors["password"], "Incorrect password")
-	}
 
 	if len(form_errors) > 0 {
 		tmpl.Execute(w, map[string]interface{}{
