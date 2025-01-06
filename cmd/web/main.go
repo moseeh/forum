@@ -31,7 +31,7 @@ func main() {
 	internal.InsertCategories(db)
 	server := http.Server{
 		Addr:    ":8000",
-		Handler: App.routes(),
+		Handler: RouteChecker(App.routes()),
 	}
 	go func() {
 		if err := server.ListenAndServe(); err != nil {
