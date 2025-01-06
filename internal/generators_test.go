@@ -29,3 +29,19 @@ func TestHashPassword(t *testing.T) {
 		t.Error("Empty password hash is empty")
 	}
 }
+
+func TestCompareHash(t *testing.T) {
+	hash, _ := HashPassword("correctpassword")
+	if !CompareHash(hash, "correctpassword") {
+		t.Error("Correct password comparison failed")
+	}
+
+	if CompareHash(hash, "wrongpassword") {
+		t.Error("Incorrect password comparison passed")
+	}
+
+	emptyHash, _ := HashPassword("")
+	if CompareHash(emptyHash, "") {
+		t.Error("Empty password comparison failed")
+	}
+}
