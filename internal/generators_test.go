@@ -45,3 +45,16 @@ func TestCompareHash(t *testing.T) {
 		t.Error("Empty password comparison failed")
 	}
 }
+
+func TestUUIDGen(t *testing.T) {
+	uuid1 := UUIDGen()
+	uuid2 := UUIDGen()
+
+	if uuid1 == "" || uuid2 == "" {
+		t.Error("UUID generation produced an empty string")
+	}
+
+	if uuid1 == uuid2 {
+		t.Error("UUID generation produced the same UUID twice, which should be rare")
+	}
+}
