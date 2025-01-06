@@ -236,3 +236,56 @@ func TestGetUsername(t *testing.T) {
 		}
 	})
 }
+
+
+func TestGetUserID(t *testing.T) {
+	// Set up an in-memory SQLite database
+	db, err := sql.Open("sqlite3", ":memory:")
+	if err != nil {
+		t.Fatalf("failed to open database: %s", err)
+	}
+	defer db.Close()
+
+	// Create the USERS table
+	createTableQuery := `
+		CREATE TABLE USERS (
+			user_id TEXT PRIMARY KEY,
+			username TEXT NOT NULL UNIQUE,
+			email TEXT NOT NULL UNIQUE,
+			password TEXT NOT NULL
+		);`
+	_, err = db.Exec(createTableQuery)
+	if err != nil {
+		t.Fatalf("failed to create table: %s", err)
+	}
+
+	// Initialize the UserModel
+	userModel := &UserModel{DB: db}
+
+	// Insert a test user
+	insertUserQuery := `
+		INSERT INTO USERS (user_id, username, email, password)
+		VALUES ('1', 'randomuser', 'randuser@example.com', 'hashedpassword123');`
+	_, err = db.Exec(insertUserQuery)
+	if err != nil {
+		t.Fatalf("failed to insert test user: %s", err)
+	}
+
+	// Test GetUserID
+	t.Run("Valid username", func(t *testing.T) {
+		userID, err := userModel.GetUserID("randomuser")
+		if err != nil {
+			t.Errorf("unexpected error: %s", err)
+		}
+		if userID != "1" {
+			t.Errorf("unexpected result: got %s, want 1", userID)
+		}
+	})
+
+	t.Run("Nonexistent username", func(t *testing.T) {
+		_, err := userModel.GetUserID("nonexistent")
+		if err == nil {
+			t.Error("expected an error but got none")
+		}
+	})
+}
