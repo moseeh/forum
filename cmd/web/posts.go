@@ -27,7 +27,7 @@ func (app *App) PostsHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Parse form data
 	if err := r.ParseForm(); err != nil {
-		http.Error(w, "Error parsing form", http.StatusBadRequest)
+		app.ErrorHandler(w,r,400)
 		return
 	}
 
@@ -37,21 +37,21 @@ func (app *App) PostsHandler(w http.ResponseWriter, r *http.Request) {
 	categories := r.Form["categories[]"] // Get selected categories
 
 	if title == "" || content == "" {
-		http.Error(w, "Title and content are required", http.StatusBadRequest)
+		app.ErrorHandler(w,r,400)
 		return
 	}
 
 	// Get user ID
 	userID, err := app.users.GetUserID(usernameCookie.Value)
 	if err != nil {
-		http.Error(w, "Error getting user ID", http.StatusInternalServerError)
+		app.ErrorHandler(w,r,500)
 		return
 	}
 
 	// Begin transaction
 	tx, err := app.users.DB.Begin()
 	if err != nil {
-		http.Error(w, "Database error", http.StatusInternalServerError)
+		app.ErrorHandler(w,r,500)
 		return
 	}
 	defer tx.Rollback()
@@ -60,7 +60,7 @@ func (app *App) PostsHandler(w http.ResponseWriter, r *http.Request) {
 	postID := internal.UUIDGen()
 	err = app.users.InsertPost(tx, postID, title, content, userID)
 	if err != nil {
-		http.Error(w, "Error creating post", http.StatusInternalServerError)
+		app.ErrorHandler(w,r,500)
 		return
 	}
 
@@ -68,14 +68,14 @@ func (app *App) PostsHandler(w http.ResponseWriter, r *http.Request) {
 	for _, categoryID := range categories {
 		err = app.users.InsertPostCategory(tx, postID, categoryID)
 		if err != nil {
-			http.Error(w, "Error linking categories", http.StatusInternalServerError)
+			app.ErrorHandler(w,r,500)
 			return
 		}
 	}
 
 	// Commit transaction
 	if err = tx.Commit(); err != nil {
-		http.Error(w, "Error completing post creation", http.StatusInternalServerError)
+		app.ErrorHandler(w,r,500)
 		return
 	}
 
