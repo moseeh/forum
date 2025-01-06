@@ -1,54 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Error</title>
-    <link rel="stylesheet" href="../static/css/style.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-    />
-  </head>
 
-  <body>
-    <header class="card">
-      <div class="header-content">
-        <div class="logo">
-          <h1>Forum</h1>
-        </div>
-        <!-- <div class="search-bar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Error</title>
+  <link rel="stylesheet" href="../static/css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+</head>
+
+<body>
+  <header class="card">
+    <div class="header-content">
+      <div class="logo">
+        <h1>Forum</h1>
+      </div>
+      <!-- <div class="search-bar">
             <input type="text" placeholder="Search discussions..." class="form-input" />
           </div> -->
-        <div class="header-actions">
-          {{if .IsLoggedIn}}
-          <div class="user-menu">
-            <span class="username">Welcome, {{.Username}}</span>
-            <button class="btn" id="create-post-btn">Create Post</button>
-            <a href="/logout">
-              <button class="btn" id="logout-btn">Logout</button>
-            </a>
-          </div>
-          {{else}}
-          <a href="/login">
-            <button class="btn" id="login-btn">Login</button>
+      <div class="header-actions">
+        {{if .IsLoggedIn}}
+        <div class="user-menu">
+          <span class="username">Welcome, {{.Username}}</span>
+          <button class="btn" id="create-post-btn">Create Post</button>
+          <a href="/logout">
+            <button class="btn" id="logout-btn">Logout</button>
           </a>
-          <a href="/register">
-            <button class="btn" id="register-btn">Register</button>
-          </a>
-          {{end}}
         </div>
+        {{else}}
+        <a href="/login">
+          <button class="btn" id="login-btn">Login</button>
+        </a>
+        <a href="/register">
+          <button class="btn" id="register-btn">Register</button>
+        </a>
+        {{end}}
       </div>
-    </header>
+    </div>
+  </header>
 
-    <body>
-      <div class="error-container">
-        <h1>Error {{ .Status }}</h1>
-        <p>{{ .message }}</p>
-        <a href="/"><p>Back to Homepage</p></a>
-      </div>
-      
-      
-    </body>
+  <body>
+    <div class="error-container">
+      <h1>Error {{ .Status }}</h1>
+      <p>{{ .Message }}</p>
+      <a href="/">
+        <p>Back to Homepage</p>
+      </a>
+    </div>
   </body>
+</body>
+
 </html>
