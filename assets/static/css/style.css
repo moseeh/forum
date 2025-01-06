@@ -578,6 +578,28 @@ main {
   font-size: 0.95rem;
 }
 
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* height: 100vh; */
+  color: #721c24;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 20px;
+}
+
+.error-container h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+.error-container p {
+  font-size: 1.5rem;
+}
+
+
 @media (max-width: 1200px) {
   main {
     grid-template-columns: 200px 1fr 300px;
