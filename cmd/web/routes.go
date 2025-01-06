@@ -23,7 +23,7 @@ var allowedRoutes = map[string]bool{
 }
 
 // RouteChecker is a middleware that checkes allowed routes
-func RouteChecker(next http.Handler) http.Handler {
+func (app *App)RouteChecker(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if strings.HasPrefix(r.URL.Path, "/static/") {
 			// Static(w,r)
@@ -32,7 +32,7 @@ func RouteChecker(next http.Handler) http.Handler {
 		}
 
 		if _, ok := allowedRoutes[r.URL.Path]; !ok {
-			http.Error(w, r.URL.Path+" not allowed", http.StatusInternalServerError)
+			app.ErrorHandler(w,r,404)
 			return
 		}
 		next.ServeHTTP(w, r)
