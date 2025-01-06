@@ -221,6 +221,7 @@ header.card {
   display: flex;
   align-items: center;
   gap: 1rem;
+  margin-left: auto;
 }
 .action-btn {
   display: inline-flex;
