@@ -41,7 +41,7 @@ func TestCompareHash(t *testing.T) {
 	}
 
 	emptyHash, _ := HashPassword("")
-	if CompareHash(emptyHash, "") {
+	if !CompareHash(emptyHash, "") {
 		t.Error("Empty password comparison failed")
 	}
 }
@@ -56,5 +56,21 @@ func TestUUIDGen(t *testing.T) {
 
 	if uuid1 == uuid2 {
 		t.Error("UUID generation produced the same UUID twice, which should be rare")
+	}
+}
+
+func TestTokenGen(t *testing.T) {
+	// Test token generation with different lengths
+	token1 := TokenGen(16)
+	token2 := TokenGen(32)
+
+	if len(token1) != 24 || len(token2) != 44 { // Note: base64 encoding increases the size
+		t.Errorf("Token length incorrect. Expected 24 for 16 bytes input, got %d", len(token1))
+		t.Errorf("Token length incorrect. Expected 44 for 32 bytes input, got %d", len(token2))
+	}
+
+	// Check if tokens are different
+	if token1 == token2 {
+		t.Error("Two tokens with different length requirements are identical")
 	}
 }
