@@ -59,8 +59,6 @@ func TestInsertUser(t *testing.T) {
 	}
 }
 
-
-
 func TestUserExists(t *testing.T) {
 	db, err := sql.Open("sqlite3", ":memory:")
 	if err != nil {
@@ -95,7 +93,7 @@ func TestUserExists(t *testing.T) {
 		expected    bool
 		shouldError bool
 	}{
-		{"squidward@example.com", true, false},  // User exists
+		{"squidward@example.com", true, false},    // User exists
 		{"nonexistent@example.com", false, false}, // User does not exist
 	}
 
@@ -119,7 +117,6 @@ func TestUserExists(t *testing.T) {
 		})
 	}
 }
-
 
 func TestGetPassword(t *testing.T) {
 	// Set up an in-memory SQLite database
@@ -160,8 +157,8 @@ func TestGetPassword(t *testing.T) {
 		expected    string
 		shouldError bool
 	}{
-		{"mrcrabs@example.com", "hashedpassword123", false},  // Valid email
-		{"mrspuff@example.com", "", true},            // Nonexistent email
+		{"mrcrabs@example.com", "hashedpassword123", false}, // Valid email
+		{"mrspuff@example.com", "", true},                   // Nonexistent email
 	}
 
 	for _, test := range tests {
@@ -237,7 +234,6 @@ func TestGetUsername(t *testing.T) {
 	})
 }
 
-
 func TestGetUserID(t *testing.T) {
 	// Set up an in-memory SQLite database
 	db, err := sql.Open("sqlite3", ":memory:")
@@ -288,4 +284,88 @@ func TestGetUserID(t *testing.T) {
 			t.Error("expected an error but got none")
 		}
 	})
+}
+
+func TestInsertPostCategory(t *testing.T) {
+
+	db, err := dbConnection()
+	if err != nil {
+		t.Fatalf("failed to open database: %s", err)
+	}
+	defer db.Close()
+
+	// Create the POSTS, CATEGORIES, and POST_CATEGORIES tables
+	createTablesQuery := `
+		CREATE TABLE POSTS (
+			post_id TEXT PRIMARY KEY,
+			title TEXT NOT NULL,
+			content TEXT NOT NULL,
+			author_id TEXT NOT NULL
+		);
+
+		CREATE TABLE CATEGORIES (
+			category_id TEXT PRIMARY KEY,
+			name TEXT NOT NULL,
+			description TEXT
+		);
+
+		CREATE TABLE POST_CATEGORIES (
+			post_id TEXT NOT NULL,
+			category_id TEXT NOT NULL,
+			FOREIGN KEY (post_id) REFERENCES POSTS (post_id),
+			FOREIGN KEY (category_id) REFERENCES CATEGORIES (category_id)
+		);`
+	_, err = db.Exec(createTablesQuery)
+	if err != nil {
+		t.Fatalf("failed to create tables: %s", err)
+	}
+
+	// Insert sample data for POSTS and CATEGORIES
+	insertSampleDataQuery := `
+		INSERT INTO POSTS (post_id, title, content, author_id)
+		VALUES ('1', 'Sample Post', 'Sample content', 'author1');
+
+		INSERT INTO CATEGORIES (category_id, name, description)
+		VALUES ('cat1', 'Technology', 'Posts about technology');`
+	_, err = db.Exec(insertSampleDataQuery)
+	if err != nil {
+		t.Fatalf("failed to insert sample data: %s", err)
+	}
+
+	// Initialize the UserModel
+	userModel := &UserModel{DB: db}
+
+	// Start a transaction
+	tx, err := db.Begin()
+	if err != nil {
+		t.Fatalf("failed to begin transaction: %s", err)
+	}
+
+	// Call InsertPostCategory
+	postID := "1"
+	categoryID := "cat1"
+
+	err = userModel.InsertPostCategory(tx, postID, categoryID)
+	if err != nil {
+		t.Errorf("unexpected error during InsertPostCategory: %s", err)
+	}
+
+	// Commit the transaction
+	err = tx.Commit()
+	if err != nil {
+		t.Fatalf("failed to commit transaction: %s", err)
+	}
+
+	// Validate the inserted post-category mapping
+	var insertedPostID, insertedCategoryID string
+	query := `SELECT post_id, category_id FROM POST_CATEGORIES WHERE post_id = ? AND category_id = ?`
+	err = db.QueryRow(query, postID, categoryID).Scan(&insertedPostID, &insertedCategoryID)
+	if err != nil {
+		t.Errorf("failed to retrieve inserted post-category mapping: %s", err)
+	}
+
+	if insertedPostID != postID || insertedCategoryID != categoryID {
+		t.Errorf("unexpected mapping values: got (%s, %s), want (%s, %s)",
+			insertedPostID, insertedCategoryID, postID, categoryID)
+	}
 }
