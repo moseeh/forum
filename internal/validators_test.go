@@ -42,3 +42,30 @@ func TestValidateUsername(t *testing.T) {
 		}
 	}
 }
+
+func TestValidateEmail(t *testing.T) {
+	validEmails := []string{
+		"user@example.com",
+		"user.name+tag@example.co.uk",
+		"user-name@example.org",
+	}
+	for _, email := range validEmails {
+		if !ValidateEmail(email) {
+			t.Errorf("Expected %s to be a valid email", email)
+		}
+	}
+
+	invalidEmails := []string{
+		"user@example",
+		"user@.com",
+		"user@example.",
+		"@example.com",
+		"user name@example.com",
+		"user@example.c",
+	}
+	for _, email := range invalidEmails {
+		if ValidateEmail(email) {
+			t.Errorf("Expected %s to be an invalid email", email)
+		}
+	}
+}
