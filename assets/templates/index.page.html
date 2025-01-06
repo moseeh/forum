@@ -10,6 +10,7 @@
 </head>
 
 <body>
+  <!--------------------Header---------------->
   <div id="main-content">
     <div class="container">
       <header class="card">
@@ -41,6 +42,7 @@
         </div>
       </header>
 
+      <!--------------------left bar---------------->
       <main>
         <div class="sidebar card">
           <nav>
@@ -93,7 +95,7 @@
             </form>
             {{end}}
           </div>
-
+          <!-------------------All Posts------------------------->
           <div id="allPosts" class="posts-container">
             {{if len .Posts}} {{range .Posts}}
             <a href="/post/details?post_id={{.PostID}}">
@@ -160,6 +162,7 @@
             </div>
           </div>
 
+          <!-------------------liked posts------------------------->
           <div id="likedPosts" class="posts-container" style="display: none;">
             {{if len .LikedPosts}} {{range .LikedPosts}}
             <a href="/post/details?post_id={{.PostID}}">
@@ -223,7 +226,7 @@
             </div>
             {{end}}
           </div>
-          
+          <!-----------------------------created posts----------------------->
           <div id="createdPosts" class="posts-container" style="display: none;">
             {{if len .CreatedPosts}} {{range .CreatedPosts}}
             <a href="/post/details?post_id={{.PostID}}">
@@ -289,6 +292,7 @@
           </div>
         </div>
 
+        <!-----------------------right bbar---------------->
         <div class="trending-sidebar">
           <div class="card trending-topics">
             <h3>Trending Topics</h3>
@@ -323,6 +327,7 @@
   </div>
 
   <script src="../static/js/script.js"></script>
+  <script src="../static/js/time.js"></script>
 </body>
 
 </html>
