@@ -73,7 +73,7 @@
         <div class="content">
           <div id="create-post-modal" style="display: none">
             {{if .IsLoggedIn}}
-            <form id="create-post-form" action="/posts/create" method="POST">
+            <form id="create-post-form" action="/posts/create" method="POST" onsubmit="return validateForm(event)">
               <input type="text" name="title" placeholder="Post Title" required />
               <textarea name="content" placeholder="Post Content" required></textarea>
               <div class="categories-section">
@@ -82,7 +82,8 @@
                 <div class="categories-grid">
                   {{range .Categories}}
                   <div class="category-item">
-                    <input type="checkbox" name="categories[]" value="{{.CategoryID}}" id="category-{{.CategoryID}}" />
+                    <input type="checkbox" name="categories[]" value="{{.CategoryID}}" id="category-{{.CategoryID}}"
+                      class="category-checkbox" />
                     <label for="category-{{.CategoryID}}">{{.Name}}</label>
                   </div>
                   {{end}}
@@ -222,7 +223,7 @@
             {{end}} {{else}}
             <div class="post-card">
               <h3>No liked posts yet</h3>
-              <p>Posts you like will appear here. Start exploring to find posts you enjoy!</p>
+              <p>Posts you like will appear here. Start exploring to find posts you enjoy after logging in!</p>
             </div>
             {{end}}
           </div>
@@ -285,8 +286,8 @@
             </a>
             {{end}} {{else}}
             <div class="post-card">
-              <h3>No liked posts yet</h3>
-              <p>Posts you like will appear here. Start exploring to find posts you enjoy!</p>
+              <h3>You haven't created any posts yet</h3>
+              <p>Start contributing by creating your first post after logging in!</p>
             </div>
             {{end}}
           </div>
