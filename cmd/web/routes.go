@@ -16,7 +16,7 @@ var allowedRoutes = map[string]bool{
 	"/post/like":       true,
 	"/post/dislike":    true,
 	"/post/details":    true,
-	"/post/create":     true,
+	"/posts/create":     true,
 	"/comment":         true,
 	"/comment/like":    true,
 	"/comment/dislike": true,
