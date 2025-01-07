@@ -68,7 +68,7 @@ To facilitate communication among users:
 
 ## Filter
 
-The forum must include a filtering mechanism to:
+The forum includes a filtering mechanism to:
 
 - Filter posts by **categories** (like subforums for specific topics).
 - Display posts created by the logged-in user (**created posts**).
@@ -76,7 +76,7 @@ The forum must include a filtering mechanism to:
 
 ### Notes:
 
-- The "created posts" and "liked posts" filters should only be available to registered users.
+- The "created posts" and "liked posts" filters is only available to registered users.
 
 ---
 
