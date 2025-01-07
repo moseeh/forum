@@ -14,3 +14,7 @@ COPY go.sum ./
 
 
 RUN go mod tidy
+
+EXPOSE 8000
+
+CMD [ "make" ]
