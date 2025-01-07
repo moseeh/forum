@@ -44,7 +44,7 @@ func (app *App) HomeHandler(w http.ResponseWriter, r *http.Request) {
 	// Get all categories
 	categories, err := app.users.GetAllCategories()
 	if err != nil {
-		http.Error(w, "Error fetching categories", http.StatusInternalServerError)
+		app.ErrorHandler(w,r,500)
 		return
 	}
 	if categories != nil {
@@ -54,7 +54,7 @@ func (app *App) HomeHandler(w http.ResponseWriter, r *http.Request) {
 	// Get posts with categories, likes, and comments
 	posts, err := app.users.GetAllPosts(userID)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		app.ErrorHandler(w,r,500)
 		return
 	}
 	if posts != nil {
@@ -62,21 +62,21 @@ func (app *App) HomeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	likedPosts, err := app.users.GetLikedPosts(userID)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		app.ErrorHandler(w,r,500)
 	}
 	if likedPosts != nil {
 		data.LikedPosts = likedPosts
 	}
 	createdPosts, err := app.users.GetCreatedPosts(userID)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		app.ErrorHandler(w,r,500)
 	}
 	if createdPosts != nil {
 		data.CreatedPosts = createdPosts
 	}
 	trends, err := app.users.TrendingCount()
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		app.ErrorHandler(w,r,500)
 	}
 	if trends != nil {
 		Sort(trends)
@@ -89,12 +89,12 @@ func (app *App) HomeHandler(w http.ResponseWriter, r *http.Request) {
 
 	tmpl, err := template.ParseFiles("./assets/templates/index.page.html")
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		app.ErrorHandler(w,r,500)
 		return
 	}
 
 	if err := tmpl.Execute(w, data); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		app.ErrorHandler(w,r,500)
 		return
 	}
 }

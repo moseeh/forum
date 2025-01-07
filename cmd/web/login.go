@@ -22,7 +22,7 @@ func (app *App) GetLoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	tmpl, err := template.ParseFiles("./assets/templates/login.page.html")
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		app.ErrorHandler(w,r,500)
 		return
 	}
 	tmpl.Execute(w, nil)
@@ -32,7 +32,7 @@ func (app *App) PostLoginHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl := template.Must(template.ParseFiles("./assets/templates/login.page.html"))
 	form_errors := map[string][]string{}
 	if err := r.ParseForm(); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		app.ErrorHandler(w,r,400)
 		return
 	}
 
@@ -112,7 +112,7 @@ func (app *App) PostLoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	// store the tokens in the db
 	if err = app.users.NewSession(user_id, session_token, csrf_token, expires.String()); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		app.ErrorHandler(w,r,500)
 		return
 	}
 

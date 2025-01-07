@@ -14,7 +14,7 @@ func (app *App) CommentLikeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	commentID := r.URL.Query().Get("comment_id")
 	if commentID == "" {
-		http.Error(w, "comment ID is reqired", http.StatusBadRequest)
+		app.ErrorHandler(w,r,400)
 		return
 	}
 
@@ -30,26 +30,26 @@ func (app *App) CommentLikeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	dislike, err := app.users.UserDislikeOnCommentExists(commentID, user_ID)
 	if err != nil {
-		http.Error(w, "Database Error", http.StatusInternalServerError)
+		app.ErrorHandler(w,r,500)
 		return
 	}
 	if dislike {
 		err = app.users.DeleteCommentDislike(commentID, user_ID)
 		if err != nil {
-			http.Error(w, "Database Error", http.StatusInternalServerError)
+			app.ErrorHandler(w,r,500)
 			return
 		}
 	}
 	exists, err := app.users.UserLikeOnCommentExists(commentID, user_ID)
 	if err != nil {
-		http.Error(w, "Database Error", http.StatusInternalServerError)
+		app.ErrorHandler(w,r,500)
 		return
 	}
 
 	if exists {
 		err = app.users.DeleteCommentLike(commentID, user_ID)
 		if err != nil {
-			http.Error(w, "Database Error", http.StatusInternalServerError)
+			app.ErrorHandler(w,r,500)
 			return
 		}
 		http.Redirect(w, r, referer, http.StatusSeeOther)
@@ -59,7 +59,7 @@ func (app *App) CommentLikeHandler(w http.ResponseWriter, r *http.Request) {
 
 	err = app.users.InsertCommentLike(likeID, commentID, user_ID)
 	if err != nil {
-		http.Error(w, "Error adding like", http.StatusInternalServerError)
+		app.ErrorHandler(w,r,500)
 		return
 	}
 
@@ -73,7 +73,7 @@ func (app *App) CommentDislikeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	commentID := r.URL.Query().Get("comment_id")
 	if commentID == "" {
-		http.Error(w, "comment ID is reqired", http.StatusBadRequest)
+		app.ErrorHandler(w,r,404)
 		return
 	}
 
@@ -84,32 +84,32 @@ func (app *App) CommentDislikeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	user_ID, err := app.users.GetUserID(usernameCookie.Value)
 	if err != nil {
-		http.Error(w, "Error getting user ID from the databse", http.StatusInternalServerError)
+		app.ErrorHandler(w,r,500)
 		return
 	}
 
 	like, err := app.users.UserLikeOnCommentExists(commentID, user_ID)
 	if err != nil {
-		http.Error(w, "Database Error", http.StatusInternalServerError)
+		app.ErrorHandler(w,r,500)
 		return
 	}
 	if like {
 		err = app.users.DeleteCommentLike(commentID, user_ID)
 		if err != nil {
-			http.Error(w, "Database Error", http.StatusInternalServerError)
+			app.ErrorHandler(w,r,500)
 			return
 		}
 	}
 	exists, err := app.users.UserDislikeOnCommentExists(commentID, user_ID)
 	if err != nil {
-		http.Error(w, "Database Error", http.StatusInternalServerError)
+		app.ErrorHandler(w,r,500)
 		return
 	}
 
 	if exists {
 		err = app.users.DeleteCommentDislike(commentID, user_ID)
 		if err != nil {
-			http.Error(w, "Database Error", http.StatusInternalServerError)
+			app.ErrorHandler(w,r,500)
 			return
 		}
 		http.Redirect(w, r, referer, http.StatusSeeOther)
@@ -120,7 +120,7 @@ func (app *App) CommentDislikeHandler(w http.ResponseWriter, r *http.Request) {
 	err = app.users.InsertCommentDislike(dislikeID, commentID, user_ID)
 	if err != nil {
 		fmt.Println(err)
-		http.Error(w, "Error adding dislike", http.StatusInternalServerError)
+		app.ErrorHandler(w,r,500)
 		return
 	}
 

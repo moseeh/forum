@@ -17,20 +17,20 @@ func (app *App) PostDetailsHandler(w http.ResponseWriter, r *http.Request) {
         username = usernameCookie.Value // Set username only if cookie exists
         user_ID, err = app.users.GetUserID(username)
         if err != nil {
-            http.Error(w, "Error getting user ID from the database", http.StatusInternalServerError)
+            app.ErrorHandler(w,r,500)
             return
         }
     }
     
     post, err := app.users.GetPostDetails(postID, user_ID)
     if err != nil {
-        http.Error(w, "DATABASE ERROR", http.StatusInternalServerError)
+        app.ErrorHandler(w,r,500)
         return
     }
     
     comments, err := app.users.GetPostComments(postID, user_ID)
     if err != nil {
-        http.Error(w, "DATABASE ERROR", http.StatusInternalServerError)
+        app.ErrorHandler(w,r,500)
         return
     }
 
@@ -49,13 +49,13 @@ func (app *App) PostDetailsHandler(w http.ResponseWriter, r *http.Request) {
     
     tmpl, err := template.ParseFiles("./assets/templates/post.page.html")
     if err != nil {
-        http.Error(w, "Template parsing error", http.StatusInternalServerError)
+        app.ErrorHandler(w,r,500)
         return
     }
 
     err = tmpl.Execute(w, data)
     if err != nil {
-        http.Error(w, "Template execution error", http.StatusInternalServerError)
+        app.ErrorHandler(w,r,500)
         return
     }
 }
