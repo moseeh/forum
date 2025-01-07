@@ -24,21 +24,21 @@ SQLite enables creating and controlling a database using queries. To learn more 
 
 ## Authentication
 
-The forum must support user authentication, including:
+The forum supports user authentication, including:
 
 ### Registration:
 
 - **Email**:
-  - Must collect an email address during registration.
-  - If the email is already in use, return an error response.
+  - Collecting an email address during registration.
+  - If the email is already in use, error response is returned.
 - **Username**:
-  - Collect a unique username.
+  - Collecting a unique username.
 - **Password**:
-  - Collect a password and optionally encrypt it when stored.
+  - Collecting a password and optionally encrypt it when stored.
 
 ### Login:
 
-- The forum should verify if the provided email exists in the database and check if the credentials are correct.
+- The forum verifies if the provided email exists in the database and check if the credentials are correct.
 - If the password doesn't match, it returns an error response.
 
 ### Sessions:
