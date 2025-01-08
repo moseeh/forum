@@ -158,3 +158,15 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
+    document.getElementById('closeModal').onclick = function() {
+        document.getElementById('create-post-modal').style.display = 'none';
+    };
+
+    // Optional: Close modal on outside click
+    window.onclick = function(event) {
+        const modal = document.getElementById('create-post-modal');
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    };
+

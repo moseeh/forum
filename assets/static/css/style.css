@@ -479,10 +479,10 @@ nav {
   transition: all 0.3s ease;
 }
 
-.sidebar .nav-link:hover {
+/* .sidebar .nav-link:hover {
   background-color: rgba(255, 255, 255, 0.1);
   color: var(--accent-color);
-}
+} */
 
 .sidebar .nav-item.active .nav-link {
   background-color: rgba(255, 255, 255, 0.1);
@@ -528,9 +528,14 @@ nav {
   flex-direction: column;
   max-width: 98%;
 }
+.posts-container {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+}
 
-
-#create-post-modal {
+/* #create-post-modal {
   background-color: var(--card-bg);
   padding: 2rem;
   border-radius: var(--border-radius);
@@ -546,8 +551,51 @@ nav {
   border: 2px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--border-radius);
   color: var(--text-color);
+} */
+.form-input {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--border-radius);
+  color: var(--text-color);
 }
-
+/* Categories Section */
+.categories-section {
+  margin: 1rem 0;
+}
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+/* Responsive Design */
+#create-post-modal {
+  min-width: 700px;
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+#create-post-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+#create-post-form input[type="text"],
+#create-post-form textarea {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius);
+  color: var(--text-color);
+}
+#create-post-form textarea {
+  min-height: 150px;
+  resize: vertical;
+}
 .trending-sidebar {
   display: flex;
   flex-direction: column;
