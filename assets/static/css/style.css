@@ -479,10 +479,10 @@ nav {
   transition: all 0.3s ease;
 }
 
-.sidebar .nav-link:hover {
+/* .sidebar .nav-link:hover {
   background-color: rgba(255, 255, 255, 0.1);
   color: var(--accent-color);
-}
+} */
 
 .sidebar .nav-item.active .nav-link {
   background-color: rgba(255, 255, 255, 0.1);
