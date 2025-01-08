@@ -41,8 +41,10 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.comment-button').forEach(button => {
         button.addEventListener('click', function () {
             const postId = this.dataset.postId;
-            const formContainer = document.getElementById(`comment-form-${postId}`);
-            formContainer.style.display = 'block';
+            const formContainers = document.querySelectorAll(`#comment-form-${postId}`);
+            formContainers.forEach(formContainer => {
+                formContainer.style.display = 'block';
+            });
         });
     });
 
