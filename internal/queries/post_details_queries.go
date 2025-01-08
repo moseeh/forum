@@ -30,7 +30,7 @@ func (m *UserModel) GetPostDetails(postID, currentUserID string) (*Post, error) 
 	)
 
 	if err == sql.ErrNoRows {
-		return nil, nil
+		return nil, err
 	}
 	if err != nil {
 		return nil, err
