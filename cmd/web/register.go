@@ -61,10 +61,12 @@ func (app *App) register_post(w http.ResponseWriter, r *http.Request) {
 	} else if len(password) < 8 {
 		form_errors["password"] = append(form_errors["password"], "Password must be at least 8 characters")
 	}
-
+	if exists, _ := app.users.UsernameExists(username); exists {
+		form_errors["username"] = append(form_errors["username"], "username already exists")
+	}
 	/// check if user exists
-	if exists, _ := app.users.UserExists(email); exists {
-		form_errors["username"] = append(form_errors["username"], "Username already exists")
+	if exists, _ := app.users.UserEmailExists(email); exists {
+		form_errors["email"] = append(form_errors["email"], "email already exists")
 	}
 
 	if len(form_errors) > 0 {
