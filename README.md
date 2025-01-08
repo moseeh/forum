@@ -15,7 +15,6 @@ This project is a web forum with the following functionality:
 
 SQLite is used to store the forum's data (e.g., users, posts, comments). It is an embedded database software ideal for local storage in application software.
 
-
 ### Notes:
 
 SQLite enables creating and controlling a database using queries. To learn more about SQLite, visit the [SQLite documentation](https://sqlite.org/).
@@ -84,42 +83,63 @@ The forum includes a filtering mechanism to:
 
 **Docker** has been used to allow packaging the application and its dependencies into a container, ensuring consistent behavior across environments.
 
+To build the image
+
+```docker
+docker build -t forum .
+```
+
+Then to run the bult image
+
+```docker
+docker run -d -p 8000:8000 forum
+```
+
 ---
 
 ## How to run the application
 
 1. Clone the Repository
-```
-git clone https://learn.zone01kisumu.ke/git/aaochieng/forum.git
+   
+   ```
+   git clone https://learn.zone01kisumu.ke/git/aaochieng/forum.git
+   ```
 
 cd forum
-```
-2. run the following command
 
 ```
+2. run the following command
+```
+
 make
+
 ````
 or
+
 ```
 go run ./cmd/web/
 ```
 
 3. On your Web Browser,
-```
-localhost:8000
-```
+   
+   ```
+   localhost:8000
+   ```
 4. To run tests:
-```
-make test
-```
-or
-```
-go test ./...
-```
+   
+   ```
+   make test
+   ```
+   
+   or
+   
+   ```
+   go test ./...
+   ```
 
 ## Authors
 
-[Aaron Ochieng'](https://github.com/Aaron-Ochieng)
+[Aaron Ochieng](https://github.com/Aaron-Ochieng)
 
 [Moses Onyango](https://github.com/moseeh)
 
