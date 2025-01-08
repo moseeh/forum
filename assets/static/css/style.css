@@ -528,7 +528,12 @@ nav {
   flex-direction: column;
   max-width: 98%;
 }
-
+.posts-container {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+}
 
 #create-post-modal {
   background-color: var(--card-bg);
