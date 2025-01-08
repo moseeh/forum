@@ -85,13 +85,13 @@ The forum includes a filtering mechanism to:
 
 To build the image
 
-```docker
+```
 docker build -t forum .
 ```
 
 Then to run the bult image
 
-```docker
+```
 docker run -d -p 8000:8000 forum
 ```
 
@@ -103,22 +103,18 @@ docker run -d -p 8000:8000 forum
    
    ```
    git clone https://learn.zone01kisumu.ke/git/aaochieng/forum.git
+
+   cd forum
    ```
-
-cd forum
-
-```
 2. run the following command
-```
+    ```
+    make
+    ```
+    or
 
-make
-
-````
-or
-
-```
-go run ./cmd/web/
-```
+    ```
+    go run ./cmd/web/
+    ```
 
 3. On your Web Browser,
    
