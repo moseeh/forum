@@ -14,7 +14,7 @@ func (app *App) CommentsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	user_id, err := app.users.GetUserID(usernameCookie.Value)
 	if err != nil {
-		app.ErrorHandler(w,r,500)
+		app.ErrorHandler(w, r, 500)
 		return
 	}
 	post_id := r.FormValue("post_id")
@@ -23,7 +23,7 @@ func (app *App) CommentsHandler(w http.ResponseWriter, r *http.Request) {
 	comment_id := internal.UUIDGen()
 	err = app.users.InsertComment(comment_id, post_id, user_id, comment)
 	if err != nil {
-		app.ErrorHandler(w,r,500)
+		app.ErrorHandler(w, r, 500)
 		return
 	}
 	referer := r.Referer()

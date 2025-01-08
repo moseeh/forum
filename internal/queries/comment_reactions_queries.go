@@ -47,7 +47,6 @@ func (m *UserModel) DeleteCommentLike(commentID, userID string) error {
 	return nil
 }
 
-
 func (m *UserModel) UserDislikeOnCommentExists(commentID, userID string) (bool, error) {
 	query := `SELECT EXISTS (SELECT 1 FROM COMMENT_DISLIKES WHERE comment_id = ? AND user_id = ?)`
 	stmt, err := m.DB.Prepare(query)

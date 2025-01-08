@@ -24,7 +24,7 @@ func (app *App) LogoutHandler(w http.ResponseWriter, r *http.Request) {
 			Path:     "/",
 			Expires:  time.Now().Add(-1 * time.Hour),
 			HttpOnly: true,
-			Secure: true,
+			Secure:   true,
 			SameSite: http.SameSiteStrictMode,
 		})
 	}

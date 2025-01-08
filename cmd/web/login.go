@@ -22,7 +22,7 @@ func (app *App) GetLoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	tmpl, err := template.ParseFiles("./assets/templates/login.page.html")
 	if err != nil {
-		app.ErrorHandler(w,r,500)
+		app.ErrorHandler(w, r, 500)
 		return
 	}
 	tmpl.Execute(w, nil)
@@ -32,7 +32,7 @@ func (app *App) PostLoginHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl := template.Must(template.ParseFiles("./assets/templates/login.page.html"))
 	form_errors := map[string][]string{}
 	if err := r.ParseForm(); err != nil {
-		app.ErrorHandler(w,r,400)
+		app.ErrorHandler(w, r, 400)
 		return
 	}
 
@@ -57,14 +57,13 @@ func (app *App) PostLoginHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println(err)
 		}
-	
+
 		// compare password hash
 		val := internal.CompareHash(password_hash, password)
 		if !val {
 			form_errors["password"] = append(form_errors["password"], "Incorrect password")
 		}
 	}
-
 
 	if len(form_errors) > 0 {
 		tmpl.Execute(w, map[string]interface{}{
@@ -112,7 +111,7 @@ func (app *App) PostLoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	// store the tokens in the db
 	if err = app.users.NewSession(user_id, session_token, csrf_token, expires.String()); err != nil {
-		app.ErrorHandler(w,r,500)
+		app.ErrorHandler(w, r, 500)
 		return
 	}
 

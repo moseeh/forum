@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"strings"
 
 	"forum/internal"
 )
@@ -27,31 +28,31 @@ func (app *App) PostsHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Parse form data
 	if err := r.ParseForm(); err != nil {
-		app.ErrorHandler(w,r,400)
+		app.ErrorHandler(w, r, 400)
 		return
 	}
 
 	// Get form values
-	title := r.FormValue("title")
-	content := r.FormValue("content")
+	title := strings.TrimSpace(r.FormValue("title"))
+	content := strings.TrimSpace(r.FormValue("content"))
 	categories := r.Form["categories[]"] // Get selected categories
 
 	if title == "" || content == "" {
-		app.ErrorHandler(w,r,400)
+		app.ErrorHandler(w, r, 400)
 		return
 	}
 
 	// Get user ID
 	userID, err := app.users.GetUserID(usernameCookie.Value)
 	if err != nil {
-		app.ErrorHandler(w,r,500)
+		app.ErrorHandler(w, r, 500)
 		return
 	}
 
 	// Begin transaction
 	tx, err := app.users.DB.Begin()
 	if err != nil {
-		app.ErrorHandler(w,r,500)
+		app.ErrorHandler(w, r, 500)
 		return
 	}
 	defer tx.Rollback()
@@ -60,7 +61,7 @@ func (app *App) PostsHandler(w http.ResponseWriter, r *http.Request) {
 	postID := internal.UUIDGen()
 	err = app.users.InsertPost(tx, postID, title, content, userID)
 	if err != nil {
-		app.ErrorHandler(w,r,500)
+		app.ErrorHandler(w, r, 500)
 		return
 	}
 
@@ -68,14 +69,14 @@ func (app *App) PostsHandler(w http.ResponseWriter, r *http.Request) {
 	for _, categoryID := range categories {
 		err = app.users.InsertPostCategory(tx, postID, categoryID)
 		if err != nil {
-			app.ErrorHandler(w,r,500)
+			app.ErrorHandler(w, r, 500)
 			return
 		}
 	}
 
 	// Commit transaction
 	if err = tx.Commit(); err != nil {
-		app.ErrorHandler(w,r,500)
+		app.ErrorHandler(w, r, 500)
 		return
 	}
 

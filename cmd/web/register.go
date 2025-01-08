@@ -36,7 +36,7 @@ func (app *App) register_post(w http.ResponseWriter, r *http.Request) {
 	tmpl := template.Must(template.ParseFiles("./assets/templates/register.page.html"))
 	form_errors := map[string][]string{}
 	if err := r.ParseForm(); err != nil {
-		app.ErrorHandler(w,r,400)
+		app.ErrorHandler(w, r, 400)
 		return
 	}
 
@@ -74,12 +74,11 @@ func (app *App) register_post(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-
 	id := internal.UUIDGen()
 	password_hash, _ := internal.HashPassword(password)
 
 	if err := app.users.InsertUser(id, username, email, password_hash); err != nil {
-		app.ErrorHandler(w,r,500)
+		app.ErrorHandler(w, r, 500)
 		return
 	}
 

@@ -101,4 +101,3 @@ func (u *UserModel) GetCreatedPosts(currentUserID string) ([]Post, error) {
 	}
 	return posts, nil
 }
-

@@ -44,7 +44,7 @@ func (app *App) HomeHandler(w http.ResponseWriter, r *http.Request) {
 	// Get all categories
 	categories, err := app.users.GetAllCategories()
 	if err != nil {
-		app.ErrorHandler(w,r,500)
+		app.ErrorHandler(w, r, 500)
 		return
 	}
 	if categories != nil {
@@ -54,7 +54,7 @@ func (app *App) HomeHandler(w http.ResponseWriter, r *http.Request) {
 	// Get posts with categories, likes, and comments
 	posts, err := app.users.GetAllPosts(userID)
 	if err != nil {
-		app.ErrorHandler(w,r,500)
+		app.ErrorHandler(w, r, 500)
 		return
 	}
 	if posts != nil {
@@ -62,21 +62,21 @@ func (app *App) HomeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	likedPosts, err := app.users.GetLikedPosts(userID)
 	if err != nil {
-		app.ErrorHandler(w,r,500)
+		app.ErrorHandler(w, r, 500)
 	}
 	if likedPosts != nil {
 		data.LikedPosts = likedPosts
 	}
 	createdPosts, err := app.users.GetCreatedPosts(userID)
 	if err != nil {
-		app.ErrorHandler(w,r,500)
+		app.ErrorHandler(w, r, 500)
 	}
 	if createdPosts != nil {
 		data.CreatedPosts = createdPosts
 	}
 	trends, err := app.users.TrendingCount()
 	if err != nil {
-		app.ErrorHandler(w,r,500)
+		app.ErrorHandler(w, r, 500)
 	}
 	if trends != nil {
 		Sort(trends)
@@ -89,22 +89,22 @@ func (app *App) HomeHandler(w http.ResponseWriter, r *http.Request) {
 
 	tmpl, err := template.ParseFiles("./assets/templates/index.page.html")
 	if err != nil {
-		app.ErrorHandler(w,r,500)
+		app.ErrorHandler(w, r, 500)
 		return
 	}
 
 	if err := tmpl.Execute(w, data); err != nil {
-		app.ErrorHandler(w,r,500)
+		app.ErrorHandler(w, r, 500)
 		return
 	}
 }
 
 func Sort(data []db.CategoryCount) {
-    for i := 0; i < len(data)-1; i++ {
-        for j := 0; j < len(data)-i-1; j++ {
-            if data[j].Count < data[j+1].Count {
-                data[j], data[j+1] = data[j+1], data[j]
-            }
-        }
-    }
+	for i := 0; i < len(data)-1; i++ {
+		for j := 0; j < len(data)-i-1; j++ {
+			if data[j].Count < data[j+1].Count {
+				data[j], data[j+1] = data[j+1], data[j]
+			}
+		}
+	}
 }

@@ -71,7 +71,6 @@ func TestGetAllCategories(t *testing.T) {
 	}
 }
 
-
 func TestInsertPost(t *testing.T) {
 	db, err := dbConnection()
 	if err != nil {

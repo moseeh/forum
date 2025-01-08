@@ -13,7 +13,7 @@ func (app *App) LikesHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	postID := r.URL.Query().Get("post_id")
 	if postID == "" {
-		app.ErrorHandler(w,r,400)
+		app.ErrorHandler(w, r, 400)
 		return
 	}
 
@@ -24,31 +24,31 @@ func (app *App) LikesHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	user_ID, err := app.users.GetUserID(usernameCookie.Value)
 	if err != nil {
-		app.ErrorHandler(w,r,500)
+		app.ErrorHandler(w, r, 500)
 		return
 	}
 	dislike, err := app.users.UserDislikeOnPostExists(postID, user_ID)
 	if err != nil {
-		app.ErrorHandler(w,r,500)
+		app.ErrorHandler(w, r, 500)
 		return
 	}
 	if dislike {
 		err = app.users.DeleteDislike(postID, user_ID)
 		if err != nil {
-			app.ErrorHandler(w,r,500)
+			app.ErrorHandler(w, r, 500)
 			return
 		}
 	}
 	exists, err := app.users.UserLikeOnPostExists(postID, user_ID)
 	if err != nil {
-		app.ErrorHandler(w,r,500)
+		app.ErrorHandler(w, r, 500)
 		return
 	}
 
 	if exists {
 		err = app.users.DeleteLike(postID, user_ID)
 		if err != nil {
-			app.ErrorHandler(w,r,500)
+			app.ErrorHandler(w, r, 500)
 			return
 		}
 		http.Redirect(w, r, referer, http.StatusSeeOther)
@@ -58,7 +58,7 @@ func (app *App) LikesHandler(w http.ResponseWriter, r *http.Request) {
 
 	err = app.users.InsertLike(likeID, postID, user_ID)
 	if err != nil {
-		app.ErrorHandler(w,r,500)
+		app.ErrorHandler(w, r, 500)
 		return
 	}
 

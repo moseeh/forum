@@ -10,20 +10,20 @@ import (
 var allowedRoutes = map[string]bool{
 	"/":                true,
 	"/home":            true,
-	"/login":            true,
+	"/login":           true,
 	"/register":        true,
 	"/logout":          true,
 	"/post/like":       true,
 	"/post/dislike":    true,
 	"/post/details":    true,
-	"/posts/create":     true,
+	"/posts/create":    true,
 	"/comment":         true,
 	"/comment/like":    true,
 	"/comment/dislike": true,
 }
 
 // RouteChecker is a middleware that checkes allowed routes
-func (app *App)RouteChecker(next http.Handler) http.Handler {
+func (app *App) RouteChecker(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if strings.HasPrefix(r.URL.Path, "/static/") {
 			// Static(w,r)
@@ -32,7 +32,7 @@ func (app *App)RouteChecker(next http.Handler) http.Handler {
 		}
 
 		if _, ok := allowedRoutes[r.URL.Path]; !ok {
-			app.ErrorHandler(w,r,404)
+			app.ErrorHandler(w, r, 404)
 			return
 		}
 		next.ServeHTTP(w, r)
