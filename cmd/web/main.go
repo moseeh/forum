@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	internal "forum/internal/queries"
 
@@ -36,6 +37,7 @@ func main() {
 	go func() {
 		if err := server.ListenAndServe(); err != nil {
 			log.Println(err)
+			os.Exit(0)
 		}
 	}()
 	fmt.Printf("Listening on port %s\n", server.Addr)
