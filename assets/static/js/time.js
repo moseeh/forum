@@ -72,3 +72,21 @@ function validateForm(event) {
   form.submit();
   return true;
 }
+function validateCommentForm(event) {
+  // Prevent the default form submission
+  event.preventDefault();
+  
+  // Get form elements
+  const form = event.target;
+  const comment = form.querySelector('textarea[name="comment"]').value;
+  
+  // Check if comment contains only whitespace or is empty
+  if (!comment.trim()) {
+      alert("Comment cannot be empty");
+      return false;
+  }
+  
+  // If validation passes, submit the form
+  form.submit();
+  return true;
+}

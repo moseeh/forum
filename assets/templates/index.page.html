@@ -146,7 +146,7 @@
                 {{end}}
               </div>
               <div class="comment-form-container" id="comment-form-{{.PostID}}" style="display: none;">
-                <form action="/comment" method="POST" class="comment-form">
+                <form action="/comment" method="POST" class="comment-form" onsubmit="return validateCommentForm(event)">
                   <input type="hidden" name="post_id" value="{{.PostID}}">
                   <textarea name="comment" rows="3" class="comment-input" placeholder="Write your comment..."
                     required></textarea>
@@ -213,7 +213,7 @@
                 {{end}}
               </div>
               <div class="comment-form-container" id="comment-form-{{.PostID}}" style="display: none;">
-                <form action="/comment" method="POST" class="comment-form">
+                <form action="/comment" method="POST" class="comment-form" onsubmit="return validateCommentForm(event)"> 
                   <input type="hidden" name="post_id" value="{{.PostID}}">
                   <textarea name="comment" rows="3" class="comment-input" placeholder="Write your comment..."
                     required></textarea>
@@ -232,6 +232,7 @@
           </div>
           {{end}}
         </div>
+        
         <!-----------------------------created posts----------------------->
         <div id="createdPosts" class="posts-container" style="display: none;">
           {{if len .CreatedPosts}} {{range .CreatedPosts}}
@@ -277,7 +278,7 @@
                 {{end}}
               </div>
               <div class="comment-form-container" id="comment-form-{{.PostID}}" style="display: none;">
-                <form action="/comment" method="POST" class="comment-form">
+                <form action="/comment" method="POST" class="comment-form" onsubmit="return validateCommentForm(event)">
                   <input type="hidden" name="post_id" value="{{.PostID}}">
                   <textarea name="comment" rows="3" class="comment-input" placeholder="Write your comment..."
                     required></textarea>
