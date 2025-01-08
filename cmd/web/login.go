@@ -49,7 +49,7 @@ func (app *App) PostLoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// confirm if a user exists in the database
-	if ok, _ := app.users.UserExists(email); !ok {
+	if ok, _ := app.users.UserEmailExists(email); !ok {
 		form_errors["email"] = append(form_errors["email"], "User does not exist")
 	} else {
 		// Get password hash

@@ -100,7 +100,7 @@ func TestUserExists(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.email, func(t *testing.T) {
 			// Call the method under test
-			exists, err := userModel.UserExists(test.email)
+			exists, err := userModel.UserEmailExists(test.email)
 
 			// Check for unexpected errors
 			if test.shouldError && err == nil {
