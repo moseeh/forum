@@ -12,44 +12,51 @@
 <body>
     <header class="card">
         <div class="header-content">
-          <div class="logo">
-            <a href="/"><h1>Forum</h1></a>
-          </div>
-          <!-- <div class="search-bar">
+            <div class="logo">
+                <a href="/">
+                    <h1>Forum</h1>
+                </a>
+            </div>
+            <!-- <div class="search-bar">
             <input type="text" placeholder="Search discussions..." class="form-input" />
           </div> -->
-          <div class="header-actions">
-            {{if .IsLoggedIn}}
-            <div class="user-menu">
-              <span class="username">Welcome, {{.Username}}</span>
-              <button class="btn" id="create-post-btn">Create Post</button>
-              <a href="/logout">
-                <button class="btn" id="logout-btn">Logout</button>
-              </a>
+            <div class="header-actions">
+                {{if .IsLoggedIn}}
+                <div class="user-menu">
+                    <span class="username">Welcome, {{.Username}}</span>
+                    <button class="btn" id="create-post-btn">Create Post</button>
+                    <a href="/logout">
+                        <button class="btn" id="logout-btn">Logout</button>
+                    </a>
+                </div>
+                {{else}}
+                <a href="/login">
+                    <button class="btn" id="login-btn">Login</button>
+                </a>
+                <a href="/register">
+                    <button class="btn" id="register-btn">Register</button>
+                </a>
+                {{end}}
             </div>
-            {{else}}
-            <a href="/login">
-              <button class="btn" id="login-btn">Login</button>
-            </a>
-            <a href="/register">
-              <button class="btn" id="register-btn">Register</button>
-            </a>
-            {{end}}
-          </div>
         </div>
-      </header>
-    <div class="post-card">
-        <div class="post-header">
-            <span class="username">{{.Username}}</span>
-            <span class="post-date" data-timestamp="{{.CreatedAt}}">{{.CreatedAt}}</span>
-        </div>
-        <h2 class="post-title">{{.Title}}</h2>
-        <div class="post-content">{{.Content}}</div>
+    </header>
 
-        <div class="categories">
-            {{range .Categories}}
-            <span class="category-tag">{{.Name}}</span>
-            {{end}}
+
+    <div class="post-card-details">
+        <div class="post-header">
+            <div class="post-meta">
+                <span class="post-author">{{.Post.Username}}</span>
+                <span class="post-date">{{.Post.CreatedAt.Format "Jan 02, 2006 15:04"}}</span>
+            </div>
+            <div class="post-categories">
+                {{range .Post.Categories}}
+                <span class="category-tag">{{.Name}}</span>
+                {{end}}
+            </div>
+            <h2 class="post-title">{{.Post.Title}}</h2>
+        </div>
+        <div class="post-content">
+            <p>{{.Post.Content}}</p>
         </div>
 
         <div class="post-actions">
@@ -80,13 +87,13 @@
     </div>
 
     <div class="comments-section">
-        {{range .Comments}}
+        {{if len .Comments}} {{range .Comments}}
         <div class="comment-card">
-            <div class="comment-header">
-                <span class="username">{{.Username}}</span>
-                <span class="timestamp" data-timestamp="{{.CreatedAt}}"></span>
+            <div class="post-meta">
+                <span class="post-author">{{.Username}}</span>
+                <span class="post-date">{{.CreatedAt.Format "Jan 02, 2006 15:04"}}</span>
             </div>
-            <div class="comment-content">{{.Content}}</div>
+            <div class="post-content">{{.Content}}</div>
             <a href="/comment/like?comment_id={{.Comment_ID}}">
                 <button class="btn btn-like {{if .IsLiked}}liked{{end}}">
                     <i class="fa-{{if .IsLiked}}solid{{else}}regular{{end}} fa-thumbs-up"></i>
@@ -99,6 +106,10 @@
                     {{.DislikesCount}}
                 </button>
             </a>
+        </div>
+        {{end}} {{else}}
+        <div class="post-card">
+            <p>No comments available yet. Be the first to create one!</p>
         </div>
         {{end}}
     </div>

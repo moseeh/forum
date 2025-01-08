@@ -11,40 +11,40 @@
 
 <body>
   <!--------------------Header---------------->
-  <div id="main-content">
-    <div class="container">
-      <header class="card">
-        <div class="header-content">
-          <div class="logo">
-            <h1>Forum</h1>
-          </div>
-          <!-- <div class="search-bar">
+  <header class="card">
+    <div class="header-content">
+      <div class="logo">
+        <a href="/">
+          <h1>Forum</h1>
+        </a>
+      </div>
+      <!-- <div class="search-bar">
             <input type="text" placeholder="Search discussions..." class="form-input" />
           </div> -->
-          <div class="header-actions">
-            {{if .IsLoggedIn}}
-            <div class="user-menu">
-              <span class="username">Welcome, {{.Username}}</span>
-              <button class="btn" id="create-post-btn">Create Post</button>
-              <a href="/logout">
-                <button class="btn" id="logout-btn">Logout</button>
-              </a>
-            </div>
-            {{else}}
-            <a href="/login">
-              <button class="btn" id="login-btn">Login</button>
-            </a>
-            <a href="/register">
-              <button class="btn" id="register-btn">Register</button>
-            </a>
-            {{end}}
-          </div>
+      <div class="header-actions">
+        {{if .IsLoggedIn}}
+        <div class="user-menu">
+          <span class="username">Welcome, {{.Username}}</span>
+          <button class="btn" id="create-post-btn">Create Post</button>
+          <a href="/logout">
+            <button class="btn" id="logout-btn">Logout</button>
+          </a>
         </div>
-      </header>
-
-      <!--------------------left bar---------------->
-      <main>
-        <div class="sidebar card">
+        {{else}}
+        <a href="/login">
+          <button class="btn" id="login-btn">Login</button>
+        </a>
+        <a href="/register">
+          <button class="btn" id="register-btn">Register</button>
+        </a>
+        {{end}}
+      </div>
+    </div>
+  </header>
+  <div class="container">
+    <!--------------------left bar---------------->
+      <div class="sidebar ">
+        <div class="card trending-topics">
           <nav>
             <ul class="main-nav">
               <li class="nav-item active" data-filter="all">
@@ -69,243 +69,248 @@
             </div>
           </nav>
         </div>
+      </div>
 
-        <div class="content">
-          <div id="create-post-modal" style="display: none">
-            {{if .IsLoggedIn}}
-            <form id="create-post-form" action="/posts/create" method="POST">
-              <input type="text" name="title" placeholder="Post Title" required />
-              <textarea name="content" placeholder="Post Content" required></textarea>
-              <div class="categories-section">
-                {{if len .Categories}}
-                <label>Select Categories (Choose one or more):</label>
-                <div class="categories-grid">
-                  {{range .Categories}}
-                  <div class="category-item">
-                    <input type="checkbox" name="categories[]" value="{{.CategoryID}}" id="category-{{.CategoryID}}" />
-                    <label for="category-{{.CategoryID}}">{{.Name}}</label>
-                  </div>
-                  {{end}}
+      <div class="content">
+        <div id="create-post-modal" style="display: none">
+          {{if .IsLoggedIn}}
+          <form id="create-post-form" action="/posts/create" method="POST" onsubmit="return validateForm(event)">
+            <input type="text" name="title" placeholder="Post Title" required />
+            <textarea name="content" placeholder="Post Content" required></textarea>
+            <div class="categories-section">
+              {{if len .Categories}}
+              <label>Select Categories (Choose one or more):</label>
+              <div class="categories-grid">
+                {{range .Categories}}
+                <div class="category-item">
+                  <input type="checkbox" name="categories[]" value="{{.CategoryID}}" id="category-{{.CategoryID}}"
+                    class="category-checkbox" />
+                  <label for="category-{{.CategoryID}}">{{.Name}}</label>
                 </div>
-                {{else}}
-                <p>No categories available</p>
                 {{end}}
               </div>
-              <button type="submit" class="btn">Submit Post</button>
-            </form>
-            {{end}}
-          </div>
-          <!-------------------All Posts------------------------->
-          <div id="allPosts" class="posts-container">
-            {{if len .Posts}} {{range .Posts}}
-            <a href="/post/details?post_id={{.PostID}}">
-              <div class="post-card" data-category="{{range .Categories}}{{.Name}},{{end}}">
-                <div class="post-header">
-                  <div class="post-meta">
-                    <span class="post-author">{{.Username}}</span>
-                    <span class="post-date">{{.CreatedAt.Format "Jan 02, 2006 15:04"}}</span>
-                  </div>
-                  <div class="post-categories">
-                    {{range .Categories}}
-                    <span class="category-tag">{{.Name}}</span>
-                    {{end}}
-                  </div>
-                  <h2 class="post-title">{{.Title}}</h2>
+              {{else}}
+              <p>No categories available</p>
+              {{end}}
+            </div>
+            <button type="submit" class="btn">Submit Post</button>
+          </form>
+          {{end}}
+        </div>
+        <!-------------------All Posts------------------------->
+        <div id="allPosts" class="posts-container">
+          {{if len .Posts}} {{range .Posts}}
+          <a href="/post/details?post_id={{.PostID}}">
+            <div class="post-card" data-category="{{range .Categories}}{{.Name}},{{end}}">
+              <div class="post-header">
+                <div class="post-meta">
+                  <span class="post-author">{{.Username}}</span>
+                  <span class="post-date">{{.CreatedAt.Format "Jan 02, 2006 15:04"}}</span>
                 </div>
-                <div class="post-content">
-                  <p>{{.Content}}</p>
-                </div>
-                <div class="post-footer">
-                  <a href="/post/like?post_id={{.PostID}}">
-                    <button class="btn btn-like {{if .IsLiked}}liked{{end}}">
-                      <i class="fa-{{if .IsLiked}}solid{{else}}regular{{end}} fa-thumbs-up"></i>
-                      {{.LikesCount}}
-                    </button>
-                  </a>
-                  <a href="/post/dislike?post_id={{.PostID}}">
-                    <button class="btn btn-like {{if .IsDisliked}}disliked{{end}}">
-                      <i class="fa-{{if .IsDisliked}}solid{{else}}regular{{end}} fa-thumbs-down"></i>
-                      {{.DislikesCount}}
-                    </button>
-                  </a>
-                  <!-- Updated Comment Button -->
-                  {{if $.IsLoggedIn}}
-                  <button class="btn btn-like comment-button" data-post-id="{{.PostID}}">
-                    <i class="fa-regular fa-comment"></i> {{.CommentsCount}}
-                  </button>
-                  {{else}}
-                  <a href="/login" class="btn btn-like comment-button">
-                    <i class="fa-regular fa-comment"></i> {{.CommentsCount}}
-                  </a>
+                <div class="post-categories">
+                  {{range .Categories}}
+                  <span class="category-tag">{{.Name}}</span>
                   {{end}}
                 </div>
-                <div class="comment-form-container" id="comment-form-{{.PostID}}" style="display: none;">
-                  <form action="/comment" method="POST" class="comment-form">
-                    <input type="hidden" name="post_id" value="{{.PostID}}">
-                    <textarea name="comment" rows="3" class="comment-input" placeholder="Write your comment..."
-                      required></textarea>
-                    <div class="mt-2">
-                      <button type="submit" class="btn btn-primary">Submit Comment</button>
-                      <button type="button" class="btn btn-secondary cancel-comment">Cancel</button>
-                    </div>
-                  </form>
-                </div>
+                <h2 class="post-title">{{.Title}}</h2>
               </div>
-            </a>
-            {{end}} {{else}}
-            <div class="post-card">
-              <p>No posts available yet. Be the first to create one!</p>
-            </div>
-            {{end}}
-            <div id="noPostsMessage" class="no-posts-message" style="display: none;">
-              <p>No posts found for this category.</p>
-            </div>
-          </div>
+              <div class="post-content">
+                <p>{{.Content}}</p>
+              </div>
 
-          <!-------------------liked posts------------------------->
-          <div id="likedPosts" class="posts-container" style="display: none;">
-            {{if len .LikedPosts}} {{range .LikedPosts}}
-            <a href="/post/details?post_id={{.PostID}}">
-              <div class="post-card">
-                <div class="post-header">
-                  <div class="post-meta">
-                    <span class="post-author">{{.Username}}</span>
-                    <span class="post-date">{{.CreatedAt.Format "Jan 02, 2006 15:04"}}</span>
-                  </div>
-                  <div class="post-categories">
-                    {{range .Categories}}
-                    <span class="category-tag">{{.Name}}</span>
-                    {{end}}
-                  </div>
-                  <h2 class="post-title">{{.Title}}</h2>
-                </div>
-                <div class="post-content">
-                  <p>{{.Content}}</p>
-                </div>
-                <div class="post-footer">
-                  <a href="/post/like?post_id={{.PostID}}">
-                    <button class="btn btn-like {{if .IsLiked}}liked{{end}}">
-                      <i class="fa-{{if .IsLiked}}solid{{else}}regular{{end}} fa-thumbs-up"></i>
-                      {{.LikesCount}}
-                    </button>
-                  </a>
-                  <a href="/post/dislike?post_id={{.PostID}}">
-                    <button class="btn btn-like {{if .IsDisliked}}disliked{{end}}">
-                      <i class="fa-{{if .IsDisliked}}solid{{else}}regular{{end}} fa-thumbs-down"></i>
-                      {{.DislikesCount}}
-                    </button>
-                  </a>
-                  <!-- Updated Comment Button -->
-                  {{if $.IsLoggedIn}}
-                  <button class="btn btn-like comment-button" data-post-id="{{.PostID}}">
-                    <i class="fa-regular fa-comment"></i> {{.CommentsCount}}
+              <div class="post-footer">
+                <a href="/post/like?post_id={{.PostID}}">
+                  <button class="btn btn-like {{if .IsLiked}}liked{{end}}">
+                    <i class="fa-{{if .IsLiked}}solid{{else}}regular{{end}} fa-thumbs-up"></i>
+                    {{.LikesCount}}
                   </button>
-                  {{else}}
-                  <a href="/login" class="btn btn-like comment-button">
-                    <i class="fa-regular fa-comment"></i> {{.CommentsCount}}
-                  </a>
-                  {{end}}
-                </div>
-                <div class="comment-form-container" id="comment-form-{{.PostID}}" style="display: none;">
-                  <form action="/comment" method="POST" class="comment-form">
-                    <input type="hidden" name="post_id" value="{{.PostID}}">
-                    <textarea name="comment" rows="3" class="comment-input" placeholder="Write your comment..."
-                      required></textarea>
-                    <div class="mt-2">
-                      <button type="submit" class="btn btn-primary">Submit Comment</button>
-                      <button type="button" class="btn btn-secondary cancel-comment">Cancel</button>
-                    </div>
-                  </form>
-                </div>
+                </a>
+
+                <a href="/post/dislike?post_id={{.PostID}}">
+                  <button class="btn btn-like {{if .IsDisliked}}disliked{{end}}">
+                    <i class="fa-{{if .IsDisliked}}solid{{else}}regular{{end}} fa-thumbs-down"></i>
+                    {{.DislikesCount}}
+                  </button>
+                </a>
+                
+                <!-- Updated Comment Button -->
+                {{if $.IsLoggedIn}}
+                <button class="btn btn-like comment-button" data-post-id="{{.PostID}}">
+                  <i class="fa-regular fa-comment"></i> {{.CommentsCount}}
+                </button>
+                {{else}}
+                <a href="/login" class="btn btn-like comment-button">
+                  <i class="fa-regular fa-comment"></i> {{.CommentsCount}}
+                </a>
+                {{end}}
               </div>
-            </a>
-            {{end}} {{else}}
-            <div class="post-card">
-              <h3>No liked posts yet</h3>
-              <p>Posts you like will appear here. Start exploring to find posts you enjoy!</p>
+              <div class="comment-form-container" id="comment-form-{{.PostID}}" style="display: none;">
+                <form action="/comment" method="POST" class="comment-form">
+                  <input type="hidden" name="post_id" value="{{.PostID}}">
+                  <textarea name="comment" rows="3" class="comment-input" placeholder="Write your comment..."
+                    required></textarea>
+                  <div class="mt-2">
+                    <button type="submit" class="btn btn-primary">Submit Comment</button>
+                    <button type="button" class="btn btn-secondary cancel-comment">Cancel</button>
+                  </div>
+                </form>
+              </div>
             </div>
-            {{end}}
+          </a>
+          {{end}} {{else}}
+          <div class="post-card">
+            <p>No posts available yet. Be the first to create one!</p>
           </div>
-          <!-----------------------------created posts----------------------->
-          <div id="createdPosts" class="posts-container" style="display: none;">
-            {{if len .CreatedPosts}} {{range .CreatedPosts}}
-            <a href="/post/details?post_id={{.PostID}}">
-              <div class="post-card">
-                <div class="post-header">
-                  <div class="post-meta">
-                    <span class="post-author">{{.Username}}</span>
-                    <span class="post-date">{{.CreatedAt.Format "Jan 02, 2006 15:04"}}</span>
-                  </div>
-                  <div class="post-categories">
-                    {{range .Categories}}
-                    <span class="category-tag">{{.Name}}</span>
-                    {{end}}
-                  </div>
-                  <h2 class="post-title">{{.Title}}</h2>
-                </div>
-                <div class="post-content">
-                  <p>{{.Content}}</p>
-                </div>
-                <div class="post-footer">
-                  <a href="/post/like?post_id={{.PostID}}">
-                    <button class="btn btn-like {{if .IsLiked}}liked{{end}}">
-                      <i class="fa-{{if .IsLiked}}solid{{else}}regular{{end}} fa-thumbs-up"></i>
-                      {{.LikesCount}}
-                    </button>
-                  </a>
-                  <a href="/post/dislike?post_id={{.PostID}}">
-                    <button class="btn btn-like {{if .IsDisliked}}disliked{{end}}">
-                      <i class="fa-{{if .IsDisliked}}solid{{else}}regular{{end}} fa-thumbs-down"></i>
-                      {{.DislikesCount}}
-                    </button>
-                  </a>
-                  <!-- Updated Comment Button -->
-                  {{if $.IsLoggedIn}}
-                  <button class="btn btn-like comment-button" data-post-id="{{.PostID}}">
-                    <i class="fa-regular fa-comment"></i> {{.CommentsCount}}
-                  </button>
-                  {{else}}
-                  <a href="/login" class="btn btn-like comment-button">
-                    <i class="fa-regular fa-comment"></i> {{.CommentsCount}}
-                  </a>
-                  {{end}}
-                </div>
-                <div class="comment-form-container" id="comment-form-{{.PostID}}" style="display: none;">
-                  <form action="/comment" method="POST" class="comment-form">
-                    <input type="hidden" name="post_id" value="{{.PostID}}">
-                    <textarea name="comment" rows="3" class="comment-input" placeholder="Write your comment..."
-                      required></textarea>
-                    <div class="mt-2">
-                      <button type="submit" class="btn btn-primary">Submit Comment</button>
-                      <button type="button" class="btn btn-secondary cancel-comment">Cancel</button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </a>
-            {{end}} {{else}}
-            <div class="post-card">
-              <h3>No liked posts yet</h3>
-              <p>Posts you like will appear here. Start exploring to find posts you enjoy!</p>
-            </div>
-            {{end}}
+          {{end}}
+          <div id="noPostsMessage" class="no-posts-message" style="display: none;">
+            <p>No posts found for this category.</p>
           </div>
         </div>
 
-        <!-----------------------right bbar---------------->
-        <div class="trending-sidebar">
-          <div class="card trending-topics">
-            <h3>Trending Topics</h3>
-            <ul>
-              {{range .Trends}}
-              <li>
-                <span class="nav-item">{{ .CategoryName }}</span>
-                <span>{{ .Count }} posts</span>
-              </li>
-              {{end}}
-            </ul>
+        <!-------------------liked posts------------------------->
+        <div id="likedPosts" class="posts-container" style="display: none;">
+          {{if len .LikedPosts}} {{range .LikedPosts}}
+          <a href="/post/details?post_id={{.PostID}}">
+            <div class="post-card">
+              <div class="post-header">
+                <div class="post-meta">
+                  <span class="post-author">{{.Username}}</span>
+                  <span class="post-date">{{.CreatedAt.Format "Jan 02, 2006 15:04"}}</span>
+                </div>
+                <div class="post-categories">
+                  {{range .Categories}}
+                  <span class="category-tag">{{.Name}}</span>
+                  {{end}}
+                </div>
+                <h2 class="post-title">{{.Title}}</h2>
+              </div>
+              <div class="post-content">
+                <p>{{.Content}}</p>
+              </div>
+              <div class="post-footer">
+                <a href="/post/like?post_id={{.PostID}}">
+                  <button class="btn btn-like {{if .IsLiked}}liked{{end}}">
+                    <i class="fa-{{if .IsLiked}}solid{{else}}regular{{end}} fa-thumbs-up"></i>
+                    {{.LikesCount}}
+                  </button>
+                </a>
+                <a href="/post/dislike?post_id={{.PostID}}">
+                  <button class="btn btn-like {{if .IsDisliked}}disliked{{end}}">
+                    <i class="fa-{{if .IsDisliked}}solid{{else}}regular{{end}} fa-thumbs-down"></i>
+                    {{.DislikesCount}}
+                  </button>
+                </a>
+                <!-- Updated Comment Button -->
+                {{if $.IsLoggedIn}}
+                <button class="btn btn-like comment-button" data-post-id="{{.PostID}}">
+                  <i class="fa-regular fa-comment"></i> {{.CommentsCount}}
+                </button>
+                {{else}}
+                <a href="/login" class="btn btn-like comment-button">
+                  <i class="fa-regular fa-comment"></i> {{.CommentsCount}}
+                </a>
+                {{end}}
+              </div>
+              <div class="comment-form-container" id="comment-form-{{.PostID}}" style="display: none;">
+                <form action="/comment" method="POST" class="comment-form">
+                  <input type="hidden" name="post_id" value="{{.PostID}}">
+                  <textarea name="comment" rows="3" class="comment-input" placeholder="Write your comment..."
+                    required></textarea>
+                  <div class="mt-2">
+                    <button type="submit" class="btn btn-primary">Submit Comment</button>
+                    <button type="button" class="btn btn-secondary cancel-comment">Cancel</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </a>
+          {{end}} {{else}}
+          <div class="post-card">
+            <h3>No liked posts yet</h3>
+            <p>Posts you like will appear here. Start exploring to find posts you enjoy after logging in!</p>
           </div>
-          <!-- <div class="card community-invite">
+          {{end}}
+        </div>
+        <!-----------------------------created posts----------------------->
+        <div id="createdPosts" class="posts-container" style="display: none;">
+          {{if len .CreatedPosts}} {{range .CreatedPosts}}
+          <a href="/post/details?post_id={{.PostID}}">
+            <div class="post-card">
+              <div class="post-header">
+                <div class="post-meta">
+                  <span class="post-author">{{.Username}}</span>
+                  <span class="post-date">{{.CreatedAt.Format "Jan 02, 2006 15:04"}}</span>
+                </div>
+                <div class="post-categories">
+                  {{range .Categories}}
+                  <span class="category-tag">{{.Name}}</span>
+                  {{end}}
+                </div>
+                <h2 class="post-title">{{.Title}}</h2>
+              </div>
+              <div class="post-content">
+                <p>{{.Content}}</p>
+              </div>
+              <div class="post-footer">
+                <a href="/post/like?post_id={{.PostID}}">
+                  <button class="btn btn-like {{if .IsLiked}}liked{{end}}">
+                    <i class="fa-{{if .IsLiked}}solid{{else}}regular{{end}} fa-thumbs-up"></i>
+                    {{.LikesCount}}
+                  </button>
+                </a>
+                <a href="/post/dislike?post_id={{.PostID}}">
+                  <button class="btn btn-like {{if .IsDisliked}}disliked{{end}}">
+                    <i class="fa-{{if .IsDisliked}}solid{{else}}regular{{end}} fa-thumbs-down"></i>
+                    {{.DislikesCount}}
+                  </button>
+                </a>
+                <!-- Updated Comment Button -->
+                {{if $.IsLoggedIn}}
+                <button class="btn btn-like comment-button" data-post-id="{{.PostID}}">
+                  <i class="fa-regular fa-comment"></i> {{.CommentsCount}}
+                </button>
+                {{else}}
+                <a href="/login" class="btn btn-like comment-button">
+                  <i class="fa-regular fa-comment"></i> {{.CommentsCount}}
+                </a>
+                {{end}}
+              </div>
+              <div class="comment-form-container" id="comment-form-{{.PostID}}" style="display: none;">
+                <form action="/comment" method="POST" class="comment-form">
+                  <input type="hidden" name="post_id" value="{{.PostID}}">
+                  <textarea name="comment" rows="3" class="comment-input" placeholder="Write your comment..."
+                    required></textarea>
+                  <div class="mt-2">
+                    <button type="submit" class="btn btn-primary">Submit Comment</button>
+                    <button type="button" class="btn btn-secondary cancel-comment">Cancel</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </a>
+          {{end}} {{else}}
+          <div class="post-card">
+            <h3>You haven't created any posts yet</h3>
+            <p>Start contributing by creating your first post after logging in!</p>
+          </div>
+          {{end}}
+        </div>
+      </div>
+
+      <!-----------------------right bbar---------------->
+      <div class="trending-sidebar">
+        <div class="card trending-topics">
+          <h3>Trending Topics</h3>
+          <ul>
+            {{range .Trends}}
+            <li>
+              <span class="nav-item">{{ .CategoryName }}</span>
+              <span>{{ .Count }} posts</span>
+            </li>
+            {{end}}
+          </ul>
+        </div>
+        <!-- <div class="card community-invite">
             {{if .IsLoggedIn}}
             <h3>Create Your Community</h3>
             <p>
@@ -321,11 +326,9 @@
             <button class="btn" id="join-community-btn">Sign Up Now</button>
             {{end}}
           </div> -->
-        </div>
-      </main>
-    </div>
+      </div>
+    
   </div>
-
   <script src="../static/js/script.js"></script>
   <script src="../static/js/time.js"></script>
 </body>
