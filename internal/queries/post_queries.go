@@ -49,9 +49,9 @@ func (u *UserModel) GetAllCategories() ([]Category, error) {
 }
 
 // InsertPost creates a new post within a transaction
-func (u *UserModel) InsertPost(tx *sql.Tx, postID, title, content, userID string) error {
-	query := `INSERT INTO POSTS (post_id, title, content, author_id) VALUES (?, ?, ?, ?)`
-	_, err := tx.Exec(query, postID, title, content, userID)
+func (u *UserModel) InsertPost(tx *sql.Tx, postID, title, content, userID, image string) error {
+	query := `INSERT INTO POSTS (post_id, title, content, author_id, image_url) VALUES (?, ?, ?, ?, ?)`
+	_, err := tx.Exec(query, postID, title, content, userID, image)
 	return err
 }
 
