@@ -1,7 +1,10 @@
 package main
 
 import (
+	"io"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strings"
 
 	"forum/internal"
@@ -26,9 +29,10 @@ func (app *App) PostsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Parse form data
-	if err := r.ParseForm(); err != nil {
-		app.ErrorHandler(w, r, 400)
+	// Parse the form to retrieve file and filename
+	err = r.ParseMultipartForm(20 << 20) // Max 20MB file size
+	if err != nil {
+		http.Error(w, "Error parsing form data", http.StatusBadRequest)
 		return
 	}
 
@@ -49,6 +53,47 @@ func (app *App) PostsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	postID := internal.UUIDGen()
+	var imageName string
+
+	//Handle image upload
+	file, header, err := r.FormFile("image")
+	if err != nil && err != http.ErrMissingFile {
+		app.ErrorHandler(w, r, 400)
+		return
+	}
+
+	if file != nil {
+		defer file.Close()
+
+		//add file extension
+		ext := filepath.Ext(header.Filename)
+		newFilename := postID + ext
+
+		//difine file path
+		filepath := filepath.Join("post_images", newFilename)
+
+		// Create the directory if it doesn't exist
+		if _, err := os.Stat("post_images"); os.IsNotExist(err) {
+			os.Mkdir("post_images", os.ModePerm)
+		}
+
+		//create the file
+		out, err := os.Create(filepath)
+		if err != nil {
+			app.ErrorHandler(w, r, 500)
+			return
+		}
+
+		defer out.Close()
+		if _, err := io.Copy(out, file); err != nil {
+			app.ErrorHandler(w, r, 500)
+			return
+		}
+
+		imageName = newFilename
+	}
+
 	// Begin transaction
 	tx, err := app.users.DB.Begin()
 	if err != nil {
@@ -58,8 +103,8 @@ func (app *App) PostsHandler(w http.ResponseWriter, r *http.Request) {
 	defer tx.Rollback()
 
 	// Insert post
-	postID := internal.UUIDGen()
-	err = app.users.InsertPost(tx, postID, title, content, userID)
+
+	err = app.users.InsertPost(tx, postID, title, content, userID, imageName)
 	if err != nil {
 		app.ErrorHandler(w, r, 500)
 		return
