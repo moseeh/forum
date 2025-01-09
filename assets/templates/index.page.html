@@ -74,8 +74,8 @@
       <div class="content">
         <div id="create-post-modal" style="display: none" class="modal">
           {{if .IsLoggedIn}}
-          <form id="create-post-form" action="/posts/create" method="POST" onsubmit="return validateForm(event)">
-            <input type="text" name="title" placeholder="Post Title" required />
+          <form id="create-post-form" action="/posts/create" method="POST" enctype="multipart/form-data">
+           <input type="text" name="title" placeholder="Post Title" required />
             <textarea name="content" placeholder="Post Content" required></textarea>
             <div class="categories-section">
               {{if len .Categories}}
@@ -93,6 +93,8 @@
               <p>No categories available</p>
               {{end}}
             </div>
+            <label for="image-upload">Uplaod Image (Max: 20MB)</label>
+            <input type="file" id="image-upload" name="image" accept="image/*" />
             <button type="submit" class="btn">Submit Post</button><br>
             <button id="closeModal" class="btn">Close</button>
           </form>
