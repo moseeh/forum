@@ -26,6 +26,7 @@ const POSTS_TABLE = `CREATE TABLE IF NOT EXISTS POSTS (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     author_id VARCHAR(255),
+    image_url TEXT,
     likes_count INTEGER DEFAULT 0,  -- Counter for quick access to total likes
     dislikes_count INTEGER DEFAULT 0,  -- Counter for quick access to total dislikes
     comments_count INTEGER DEFAULT 0,  -- Counter for quick access to total comments
