@@ -361,6 +361,23 @@ header.card {
   color: var(--text-muted);
 }
 
+/* Styling for the image container in the post */
+.post-image {
+  width: 100%; /* Ensures the container takes full width of its parent */
+  margin-bottom: 1rem; /* Adds some space below the image */
+  border-radius: var(--border-radius); /* Optional: adds rounded corners for consistency */
+  overflow: hidden; /* Hides any parts of the image that overflow the container */
+}
+
+/* Ensures the image itself is responsive and well-sized */
+.post-image img {
+  width: 100%; /* Makes the image take the full width of its container */
+  height: auto; /* Keeps the aspect ratio intact */
+  object-fit: cover; /* Ensures the image covers the container without distortion */
+  border-radius: var(--border-radius); /* Optional: adds rounded corners for consistency */
+}
+
+
 .submit-btn {
   padding: 10px 20px;
   background: linear-gradient(45deg,
