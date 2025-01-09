@@ -6,7 +6,7 @@ func (m *UserModel) GetPostDetails(postID, currentUserID string) (*Post, error) 
 	query := `
     SELECT 
         p.post_id, p.title, p.content, p.created_at, p.updated_at,
-        u.username, p.author_id, p.likes_count, p.dislikes_count, p.comments_count,
+        u.username, p.author_id, p.image_url, p.likes_count, p.dislikes_count, p.comments_count,
         CASE 
             WHEN l.user_id IS NOT NULL THEN 1
             ELSE 0
@@ -25,7 +25,7 @@ func (m *UserModel) GetPostDetails(postID, currentUserID string) (*Post, error) 
 	err := m.DB.QueryRow(query, currentUserID, currentUserID, postID).Scan(
 		&post.PostID, &post.Title, &post.Content,
 		&post.CreatedAt, &post.UpdatedAt, &post.Username,
-		&post.AuthorID, &post.LikesCount, &post.DislikesCount, &post.CommentsCount,
+		&post.AuthorID, &post.ImageName, &post.LikesCount, &post.DislikesCount, &post.CommentsCount,
 		&post.IsLiked, &post.IsDisliked,
 	)
 
