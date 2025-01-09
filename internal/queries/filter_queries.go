@@ -4,7 +4,7 @@ func (u *UserModel) GetLikedPosts(currentUserID string) ([]Post, error) {
 	query := `
 	SELECT 
 		p.post_id, p.title, p.content, p.created_at, p.updated_at,
-		u.username, p.author_id, p.likes_count, p.dislikes_count, p.comments_count,
+		u.username, p.author_id, p.image_url, p.likes_count, p.dislikes_count, p.comments_count,
 		CASE 
 			WHEN l.user_id IS NOT NULL THEN 1 
 			ELSE 0 
@@ -32,7 +32,7 @@ func (u *UserModel) GetLikedPosts(currentUserID string) ([]Post, error) {
 		err := rows.Scan(
 			&post.PostID, &post.Title, &post.Content,
 			&post.CreatedAt, &post.UpdatedAt, &post.Username,
-			&post.AuthorID, &post.LikesCount, &post.DislikesCount, &post.CommentsCount,
+			&post.AuthorID, &post.ImageName, &post.LikesCount, &post.DislikesCount, &post.CommentsCount,
 			&post.IsLiked, &post.IsDisliked,
 		)
 		if err != nil {
@@ -55,7 +55,7 @@ func (u *UserModel) GetCreatedPosts(currentUserID string) ([]Post, error) {
 	query := `
 	SELECT 
 		p.post_id, p.title, p.content, p.created_at, p.updated_at,
-		u.username, p.author_id, p.likes_count, p.dislikes_count, p.comments_count,
+		u.username, p.author_id, p.image_url, p.likes_count, p.dislikes_count, p.comments_count,
 		CASE 
 			WHEN l.user_id IS NOT NULL THEN 1 
 			ELSE 0 
@@ -83,7 +83,7 @@ func (u *UserModel) GetCreatedPosts(currentUserID string) ([]Post, error) {
 		err := rows.Scan(
 			&post.PostID, &post.Title, &post.Content,
 			&post.CreatedAt, &post.UpdatedAt, &post.Username,
-			&post.AuthorID, &post.LikesCount, &post.DislikesCount, &post.CommentsCount,
+			&post.AuthorID, &post.ImageName, &post.LikesCount, &post.DislikesCount, &post.CommentsCount,
 			&post.IsLiked, &post.IsDisliked,
 		)
 		if err != nil {
