@@ -122,8 +122,9 @@ func TestInsertPost(t *testing.T) {
 	title := "Test Post"
 	content := "This is a test post content."
 	userID := "1"
+	imagelink := ""
 
-	err = userModel.InsertPost(tx, postID, title, content, userID)
+	err = userModel.InsertPost(tx, postID, title, content, userID, imagelink)
 	if err != nil {
 		t.Errorf("unexpected error during InsertPost: %s", err)
 	}
