@@ -92,6 +92,7 @@ func TestInsertPost(t *testing.T) {
 			title TEXT NOT NULL,
 			content TEXT NOT NULL,
 			author_id TEXT NOT NULL,
+			image_url Text,
 			FOREIGN KEY (author_id) REFERENCES USERS (user_id)
 		);`
 	_, err = db.Exec(createTablesQuery)
