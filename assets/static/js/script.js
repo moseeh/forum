@@ -160,15 +160,24 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-    document.getElementById('closeModal').onclick = function() {
-        document.getElementById('create-post-modal').style.display = 'none';
-    };
+document.getElementById('closeModal').onclick = function () {
+    document.getElementById('create-post-modal').style.display = 'none';
+};
 
-    // Optional: Close modal on outside click
-    window.onclick = function(event) {
-        const modal = document.getElementById('create-post-modal');
-        if (event.target == modal) {
-            modal.style.display = 'none';
+// Optional: Close modal on outside click
+window.onclick = function (event) {
+    const modal = document.getElementById('create-post-modal');
+    if (event.target == modal) {
+        modal.style.display = 'none';
+    }
+};
+
+document.getElementById('create-post-form').addEventListener('submit', function (event) {
+    var imageUpload = document.getElementById('image-upload'); if (imageUpload.files.length > 0) {
+        var fileSize = imageUpload.files[0].size / 1024 / 1024; // in MB 
+        if (fileSize > 20) {
+            alert('Image file size must not exceed 20MB.'); event.preventDefault(); // Prevent form submission
         }
-    };
+    }
+});
 
