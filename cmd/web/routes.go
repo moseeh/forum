@@ -26,7 +26,6 @@ var allowedRoutes = map[string]bool{
 func (app *App) RouteChecker(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if strings.HasPrefix(r.URL.Path, "/static/") {
-			// Static(w,r)
 			next.ServeHTTP(w, r)
 			return
 		}

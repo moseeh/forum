@@ -66,16 +66,18 @@ func (app *App) PostsHandler(w http.ResponseWriter, r *http.Request) {
 	if file != nil {
 		defer file.Close()
 
+		postDir := "assets/static/post_images"
+
 		//add file extension
 		ext := filepath.Ext(header.Filename)
 		newFilename := postID + ext
 
 		//difine file path
-		filepath := filepath.Join("assets/static/post_images", newFilename)
+		filepath := filepath.Join(postDir, newFilename)
 
 		// Create the directory if it doesn't exist
-		if _, err := os.Stat("assets/static/post_images"); os.IsNotExist(err) {
-			os.Mkdir("assets/static/post_images", os.ModePerm)
+		if _, err := os.Stat(postDir); os.IsNotExist(err) {
+			os.Mkdir(postDir, os.ModePerm)
 		}
 
 		//create the file
