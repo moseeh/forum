@@ -371,7 +371,7 @@ header.card {
 
 /* Ensures the image itself is responsive and well-sized */
 .post-image img {
-  width: 100%; /* Makes the image take the full width of its container */
+  width: 50%; /* Makes the image take the full width of its container */
   height: auto; /* Keeps the aspect ratio intact */
   object-fit: cover; /* Ensures the image covers the container without distortion */
   border-radius: var(--border-radius); /* Optional: adds rounded corners for consistency */
