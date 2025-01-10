@@ -23,6 +23,9 @@ var categories = []Category{
 	{Name: "Travel", Description: "Travel guides and destinations"},
 	{Name: "Health", Description: "Health tips and medical advice"},
 	{Name: "Finance", Description: "Financial advice and economic news"},
+	{Name: "Entertainment", Description: "Movies series and anime"},
+	{Name: "Memes", Description: "Funny memes on any topics"},
+	{Name: "Programming Tips", Description: "Help each other solve things"},
 }
 
 // Function to insert categories into the database
