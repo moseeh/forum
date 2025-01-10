@@ -20,8 +20,8 @@ body {
   background-color: var(--bg-color);
   color: var(--text-color);
   line-height: 1.6;
-  /* background: linear-gradient(45deg, var(--bg-color), #28294d); */
-  /* background-attachment: fixed; */
+  /* background: linear-gradient(60deg, var(--bg-color),   #28294d);
+  background-attachment: fixed; */
 }
 
 .no-posts-message {
@@ -452,9 +452,8 @@ nav {
 
 /* Sidebar Navigation Styles */
 .sidebar {
-  position: fixed;
+  position: sticky;
   top: 5rem;
-  left: calc((100vw - 1600px) / 2 + 1rem);
   width: 250px;
   height: calc(100vh - 5rem);
   overflow-y: auto;
