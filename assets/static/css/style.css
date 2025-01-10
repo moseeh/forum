@@ -31,15 +31,17 @@ body {
   margin-top: 20px;
 }
 
+/* Modified container for fixed sidebars */
 .container {
-  height: 100vh;
+  height: calc(100vh - 5rem);
   max-width: 1600px;
   margin: 0 auto;
-  padding: 0 1rem;
   margin-top: 5rem;
-
+  padding: 0 1rem;
   display: grid;
   grid-template-columns: 250px 1fr 250px;
+  position: relative;
+  gap: 1rem;
 }
 
 .card {
@@ -50,29 +52,21 @@ body {
 
 .post-card a {
   color: inherit;
-  /* Inherit text color from parent */
   text-decoration: none;
-  /* Remove underline */
 }
 
 .post-card a:hover {
-  
   text-decoration: none;
-  /* No underline on hover */
 }
 
 a {
   color: var(--text-color);
-  /* Use your white text color */
   text-decoration: none;
-  /* Remove underline */
 }
 
 a:hover {
   color: var(--text-color);
-  /* Ensure hover text color stays consistent */
   text-decoration: none;
-  /* Ensure underline doesn't reappear on hover */
 }
 
 .post-card {
@@ -84,8 +78,9 @@ a:hover {
   box-shadow: 0 10px 30px rgba(65, 88, 208, 0.2);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 .post-card-details {
-  padding:  10px;
+  padding: 10px;
   margin-top: 5rem;
   margin: 5.5rem auto auto;
   max-width: 1000px;
@@ -93,6 +88,7 @@ a:hover {
   background-color: var(--card-bg);
   box-shadow: 0 10px 30px rgba(65, 88, 208, 0.2);
 }
+
 .comment-card {
   padding: 15px;
   margin-bottom: 10px;
@@ -109,7 +105,7 @@ a:hover {
   background-color: var(--card-bg);
   box-shadow: 0 10px 20px rgba(65, 88, 208, 0.1);
 }
-/* Comments Section */
+
 .comments-section {
   margin: 20px auto;
   padding: 15px;
@@ -118,12 +114,6 @@ a:hover {
   background-color: var(--card-bg);
   box-shadow: 0 10px 20px rgba(65, 88, 208, 0.1);
 }
-
-/* .post-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 15px 40px rgba(65, 88, 208, 0.5);
-}
- */
 
 .post-title {
   font-size: 1.5rem;
@@ -137,7 +127,6 @@ a:hover {
   justify-content: space-between;
 }
 
-/* Post Actions */
 .post-actions {
   display: flex;
   justify-content: flex-start;
@@ -174,18 +163,25 @@ a:hover {
   gap: 8px;
   text-align: left;
   width: calc(33.33% - 10px);
-  /* Adjust the width for a 3-column layout */
 }
 
 .category-item input {
   margin: 0;
   transform: scale(1.1);
-  /* Slightly larger checkbox */
 }
 
 .category-item label {
   white-space: normal;
-  /* Allow wrapping of text */
+}
+
+.category-tag {
+  display: inline-block;
+  font-size: 0.8rem;
+  padding: 5px 10px;
+  margin-right: 5px;
+  border-radius: 15px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--accent-color);
 }
 
 @media (max-width: 768px) {
@@ -202,16 +198,6 @@ a:hover {
   }
 }
 
-.category-tag {
-  display: inline-block;
-  font-size: 0.8rem;
-  padding: 5px 10px;
-  margin-right: 5px;
-  border-radius: 15px;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: var(--accent-color);
-}
-
 /* Post Content */
 .post-content p {
   font-size: 1rem;
@@ -219,7 +205,6 @@ a:hover {
   margin: 0 0 15px 0;
 }
 
-/* Post Content Styling */
 .post-content {
   font-size: 1rem;
   line-height: 1.6;
@@ -227,7 +212,7 @@ a:hover {
   color: var(--text-color);
 }
 
-/* Header Styles */
+/* Modified header styles */
 header.card {
   position: fixed;
   right: 0;
@@ -235,7 +220,6 @@ header.card {
   top: 0;
   padding: 1rem 2rem;
   z-index: 1000;
-  /* margin-bottom: 50px; */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -457,8 +441,13 @@ nav {
 
 /* Sidebar Navigation Styles */
 .sidebar {
-  display: flex;
-  flex-direction: column;
+  position: fixed;
+  top: 5rem;
+  left: calc((100vw - 1600px) / 2 + 1rem);
+  width: 250px;
+  height: calc(100vh - 5rem);
+  overflow-y: auto;
+  padding-right: 1rem;
 }
 
 
@@ -540,10 +529,11 @@ nav {
 }
 
 .content {
-  display: flex;
-  padding-left: 2%;
-  flex-direction: column;
-  max-width: 98%;
+  grid-column: 2;
+  overflow-y: auto;
+  height: calc(100vh - 5rem);
+  padding: 0 1rem;
+  margin-left: 250px;
 }
 .posts-container {
   margin-bottom: 2rem;
@@ -614,8 +604,30 @@ nav {
   resize: vertical;
 }
 .trending-sidebar {
-  display: flex;
-  flex-direction: column;
+  position: fixed;
+  top: 5rem;
+  right: calc((100vw - 1600px) / 2 + 1rem);
+  width: 250px;
+  height: calc(100vh - 5rem);
+  overflow-y: auto;
+}
+.sidebar::-webkit-scrollbar,
+.content::-webkit-scrollbar,
+.trending-sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-track,
+.content::-webkit-scrollbar-track,
+.trending-sidebar::-webkit-scrollbar-track {
+  background: var(--bg-color);
+}
+
+.sidebar::-webkit-scrollbar-thumb,
+.content::-webkit-scrollbar-thumb,
+.trending-sidebar::-webkit-scrollbar-thumb {
+  background: var(--card-bg);
+  border-radius: 4px;
 }
 
 .trending-topics,
