@@ -173,10 +173,17 @@ window.onclick = function (event) {
 };
 
 document.getElementById('create-post-form').addEventListener('submit', function (event) {
-    var imageUpload = document.getElementById('image-upload'); if (imageUpload.files.length > 0) {
-        var fileSize = imageUpload.files[0].size / 1024 / 1024; // in MB 
+    var imageUpload = document.getElementById('image-upload');
+    if (imageUpload.files.length > 0) {
+        var file = imageUpload.files[0];
+        var fileSize = file.size / 1024 / 1024; // in MB
+        var fileType = file.type;
         if (fileSize > 20) {
-            alert('Image file size must not exceed 20MB.'); event.preventDefault(); // Prevent form submission
+            alert('Image file size must not exceed 20MB.');
+            event.preventDefault(); // Prevent form submission
+        } else if (!fileType.startsWith('image/')) {
+            alert('The selected file is not an image.');
+            event.preventDefault(); // Prevent form submission
         }
     }
 });
