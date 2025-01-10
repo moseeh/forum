@@ -1,10 +1,11 @@
-# Forum Project
+# Forum Image Upload
 
 ## Objectives
 
 This project is a web forum with the following functionality:
 
 - **Communication between users**: Users can interact by creating posts and comments.
+- **Image Upload**: Users can also interact by uploading images to the posts they are trying to make.
 - **Categorization of posts**: Posts can be associated with one or more categories.
 - **Likes and dislikes**: Users can like or dislike posts and comments, with the counts visible to everyone.
 - **Filtering posts**: Posts can be filtered by categories, user-created posts, and liked posts.
@@ -13,7 +14,7 @@ This project is a web forum with the following functionality:
 
 ## SQLite
 
-SQLite is used to store the forum's data (e.g., users, posts, comments). It is an embedded database software ideal for local storage in application software.
+SQLite is used to store the forum's data (e.g., users, posts,likes, dislikes, comments). It is an embedded database software ideal for local storage in application software.
 
 ### Notes:
 
@@ -73,6 +74,10 @@ The forum includes a filtering mechanism to:
 - Display posts created by the logged-in user (**created posts**).
 - Display posts liked by the logged-in user (**liked posts**).
 
+## Image Upload
+
+The forum allows registered users to upload images to their respective posts. The image should not exceed 20 mb of size. Formats allowed are JPEG, SVG, PNG, GIF
+
 ### Notes:
 
 - The "created posts" and "liked posts" filters is only available to registered users.
@@ -100,35 +105,39 @@ docker run -d -p 8000:8000 forum
 ## How to run the application
 
 1. Clone the Repository
-   
-   ```
-   git clone https://learn.zone01kisumu.ke/git/aaochieng/forum.git
 
-   cd forum
    ```
+   git clone https://learn.zone01kisumu.ke/git/aosindo/forum-image-upload
+
+   cd forum-image-upload
+   ```
+
 2. run the following command
-    ```
-    make
-    ```
-    or
 
-    ```
-    go run ./cmd/web/
-    ```
+   ```
+   make
+   ```
+
+   or
+
+   ```
+   go run ./cmd/web/
+   ```
 
 3. On your Web Browser,
-   
+
    ```
    localhost:8000
    ```
+
 4. To run tests:
-   
+
    ```
    make test
    ```
-   
+
    or
-   
+
    ```
    go test ./...
    ```
