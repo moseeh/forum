@@ -2,7 +2,7 @@
   --primary-color: #4158d0;
   --secondary-color: #c850c0;
   --accent-color: #ffcc70;
-  --bg-color: #0a0b1e;
+  --bg-color: #121435;
   --text-color: #ffffff;
   --card-bg: #1a1b3a;
   --border-radius: 16px;
@@ -84,7 +84,7 @@ a:hover {
   padding: 20px;
   margin-top: 5rem;
   margin: 5.5rem auto auto;
-  /* max-width: 1000px; */
+  max-width: 1000px;
   width: 100%;
   border-radius: var(--border-radius);
   background-color: var(--card-bg);
@@ -359,7 +359,7 @@ header.card {
 /* Styling for the image container in the post */
 .post-image {
   width: 100%; /* Ensures the container takes full width of its parent */
-  max-height: 700px;
+  max-height: 1000px;
   margin: 1rem 0;
   border-radius: var(--border-radius); /* Optional: adds rounded corners for consistency */
   overflow: hidden; /* Hides any parts of the image that overflow the container */
@@ -371,7 +371,7 @@ header.card {
 /* Ensures the image itself is responsive and well-sized */
 .post-image img {
   width: auto; /* Let width adjust automatically */
-  max-width: 800px; /* Maximum width of the image */
+  max-width: 1000px; /* Maximum width of the image */
   height: auto;
   max-height: 500px; /* Maximum height of the image */
   object-fit: contain; /* Keep aspect ratio without cropping */
