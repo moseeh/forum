@@ -81,7 +81,7 @@ a:hover {
 }
 
 .post-card-details {
-  padding: 10px;
+  padding: 20px;
   margin-top: 5rem;
   margin: 5.5rem auto auto;
   /* max-width: 1000px; */
@@ -359,17 +359,23 @@ header.card {
 /* Styling for the image container in the post */
 .post-image {
   width: 100%; /* Ensures the container takes full width of its parent */
-  margin-bottom: 1rem; /* Adds some space below the image */
+  max-height: 700px;
+  margin: 1rem 0;
   border-radius: var(--border-radius); /* Optional: adds rounded corners for consistency */
   overflow: hidden; /* Hides any parts of the image that overflow the container */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Ensures the image itself is responsive and well-sized */
 .post-image img {
-  width: 50%; /* Makes the image take the full width of its container */
-  height: auto; /* Keeps the aspect ratio intact */
-  object-fit: cover; /* Ensures the image covers the container without distortion */
-  border-radius: var(--border-radius); /* Optional: adds rounded corners for consistency */
+  width: auto; /* Let width adjust automatically */
+  max-width: 800px; /* Maximum width of the image */
+  height: auto;
+  max-height: 500px; /* Maximum height of the image */
+  object-fit: contain; /* Keep aspect ratio without cropping */
+  border-radius: var(--border-radius);
 }
 
 
@@ -402,6 +408,17 @@ header.card {
   font-size: 0.95rem;
   line-height: 1.4;
   color: var(--text-muted);
+}
+.file-upload-area {
+  width: 100%;
+  padding: 1rem;
+  margin: 0.5rem 0;
+}
+#create-post-modal .btn,
+#create-post-modal .submit-btn {
+  padding: 0.75rem 1.5rem;
+  width: 100%;
+  margin: 0.5rem 0;
 }
 
 .user-profile img {
@@ -458,6 +475,8 @@ nav {
   height: calc(100vh - 5rem);
   overflow-y: auto;
   padding-right: 1rem;
+  padding-bottom: 2rem;
+  -webkit-overflow-scrolling: touch; 
 }
 
 
@@ -574,13 +593,17 @@ nav {
 }
 /* Responsive Design */
 #create-post-modal {
-  min-width: 700px;
+  min-width: auto;
+  width: 90%;
+  max-width: 700px;
   background-color: var(--card-bg);
   border-radius: var(--border-radius);
   padding: 2rem;
-  margin-bottom: 2rem;
+  margin: 2rem auto;
 }
 #create-post-form {
+  width: 100%;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -740,5 +763,42 @@ nav {
   .header-actions {
     width: 100%;
     justify-content: space-between;
+  }
+  .sidebar {
+    display: none;
+  }
+}
+@media (max-width: 768px) {
+  #create-post-modal {
+    width: 95%; /* Take up more width on mobile */
+    padding: 1rem; /* Reduce padding on mobile */
+    margin: 1rem auto;
+  }
+  
+  #create-post-form input[type="text"],
+  #create-post-form textarea {
+    padding: 0.5rem; /* Slightly reduce input padding */
+  }
+  
+  .categories-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns on mobile */
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  #create-post-modal {
+    width: 100%; /* Full width on very small screens */
+    margin: 0;
+    border-radius: 0; /* Remove border radius on mobile */
+  }
+  
+  .categories-grid {
+    grid-template-columns: 1fr; /* Single column on very small screens */
+  }
+  
+  /* Ensure form elements are properly sized */
+  #create-post-form {
+    gap: 0.75rem;
   }
 }
