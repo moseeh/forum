@@ -86,7 +86,6 @@ body {
 }
 
 .social-login {
-    flex-wrap: wrap;
     display: flex;
     flex-direction: row;
     gap: 1rem;
@@ -102,7 +101,7 @@ body {
     padding: 0.75rem;
     border: none;
     border-radius: var(--border-radius);
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(184, 171, 171, 0.4);
     color: var(--text-color);
     cursor: pointer;
     transition: background-color 0.2s;
@@ -157,25 +156,5 @@ body {
     
     .social-login {
         flex-direction: column;
-    }
-}
-
-@media (max-width: 600px) {
-    .social-btn {
-        width: 100%; /* Full width on smaller screens */
-        padding: 1rem; /* Increase padding for better touch targets */
-        min-width: 200px; /* Set a minimum width */
-    }
-}
-
-@media (min-width: 601px) and (max-width: 900px) {
-    .social-btn {
-        width: 45%; /* Adjust width for medium screens */
-    }
-}
-
-@media (min-width: 901px) {
-    .social-btn {
-        width: 30%; /* Adjust width for larger screens */
     }
 }
