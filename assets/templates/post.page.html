@@ -44,8 +44,8 @@
     <div class="post-card-details">
         <div class="post-header">
             <div class="post-meta">
-                <span class="post-author">{{.Post.Username}}</span>
-                <span class="post-date">{{.Post.CreatedAt.Format "Jan 02, 2006 15:04"}}</span>
+               <h1><span class="post-author">{{.Post.Username}}</span></h1>
+                <h2><span class="post-date">{{.Post.CreatedAt.Format "Jan 02, 2006 15:04"}}</span></h2>
             </div>
             <div class="post-categories">
                 {{range .Post.Categories}}
