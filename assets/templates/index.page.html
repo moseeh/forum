@@ -24,8 +24,8 @@
       <div class="header-actions">
         {{if .IsLoggedIn}}
         <div class="user-menu">
-          <span class="username">Welcome, {{.Username}}</span>
-          <button class="btn" id="create-post-btn">Create Post</button>
+          <span class="username">Welcome, {{.Username}}&nbsp;&nbsp;&nbsp;</span>
+          <button class="btn" id="create-post-btn">Create Post</button>&nbsp;&nbsp;
           <a href="/logout">
             <button class="btn" id="logout-btn">Logout</button>
           </a>
@@ -107,7 +107,7 @@
           <div class="post-card" data-category="{{range .Categories}}{{.Name}},{{end}}">
             <div class="post-header">
               <div class="post-meta">
-                <span class="post-author">{{.Username}}</span>
+                <h2><span class="post-author">{{.Username}}</span></h2>
                 <span class="post-date">{{.CreatedAt.Format "Jan 02, 2006 15:04"}}</span>
               </div>
               <div class="post-categories">
@@ -129,21 +129,21 @@
               <a href="/post/like?post_id={{.PostID}}">
                 <button class="btn btn-like {{if .IsLiked}}liked{{end}}">
                   <i class="fa-{{if .IsLiked}}solid{{else}}regular{{end}} fa-thumbs-up"></i>
-                  {{.LikesCount}}
+                  &nbsp;&nbsp;{{.LikesCount}}
                 </button>
               </a>
 
               <a href="/post/dislike?post_id={{.PostID}}">
                 <button class="btn btn-like {{if .IsDisliked}}disliked{{end}}">
                   <i class="fa-{{if .IsDisliked}}solid{{else}}regular{{end}} fa-thumbs-down"></i>
-                  {{.DislikesCount}}
+                  &nbsp;&nbsp; {{.DislikesCount}}
                 </button>
               </a>
 
               <!-- Updated Comment Button -->
               {{if $.IsLoggedIn}}
               <button class="btn btn-like comment-button" data-post-id="{{.PostID}}">
-                <i class="fa-regular fa-comment"></i> {{.CommentsCount}}
+                &nbsp;&nbsp;<i class="fa-regular fa-comment"></i> &nbsp;&nbsp;{{.CommentsCount}}
               </button>
               {{else}}
               <a href="/login" class="btn btn-like comment-button">
