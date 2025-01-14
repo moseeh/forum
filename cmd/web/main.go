@@ -22,6 +22,11 @@ func main() {
 		fmt.Println(err)
 		return
 	}
+	
+	config = Config{
+		ClientID:     os.Getenv("GITHUB_CLIENT_ID"),
+		ClientSecret: os.Getenv("GITHUB_CLIENT_SECRET"),
+	}
 
 	App := App{
 		users: &internal.UserModel{
