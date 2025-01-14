@@ -20,6 +20,7 @@ var allowedRoutes = map[string]bool{
 	"/comment":         true,
 	"/comment/like":    true,
 	"/comment/dislike": true,
+	"/auth/github":     true,
 }
 
 // RouteChecker is a middleware that checkes allowed routes
@@ -76,6 +77,9 @@ func (app *App) routes() http.Handler {
 	//
 	mux.HandleFunc("GET /comment/like", app.CommentLikeHandler)
 	mux.HandleFunc("GET /comment/dislike", app.CommentDislikeHandler)
+
+	//
+	mux.HandleFunc("GET /auth/github", app.HandleGithubAuth)
 
 	return mux
 }
