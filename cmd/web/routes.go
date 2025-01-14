@@ -8,19 +8,20 @@ import (
 )
 
 var allowedRoutes = map[string]bool{
-	"/":                true,
-	"/home":            true,
-	"/login":           true,
-	"/register":        true,
-	"/logout":          true,
-	"/post/like":       true,
-	"/post/dislike":    true,
-	"/post/details":    true,
-	"/posts/create":    true,
-	"/comment":         true,
-	"/comment/like":    true,
-	"/comment/dislike": true,
-	"/auth/github":     true,
+	"/":                     true,
+	"/home":                 true,
+	"/login":                true,
+	"/register":             true,
+	"/logout":               true,
+	"/post/like":            true,
+	"/post/dislike":         true,
+	"/post/details":         true,
+	"/posts/create":         true,
+	"/comment":              true,
+	"/comment/like":         true,
+	"/comment/dislike":      true,
+	"/auth/github":          true,
+	"/auth/github/callback": true,
 }
 
 // RouteChecker is a middleware that checkes allowed routes
@@ -80,6 +81,7 @@ func (app *App) routes() http.Handler {
 
 	//
 	mux.HandleFunc("GET /auth/github", app.HandleGithubAuth)
+	mux.HandleFunc("GET /auth/github/callback", app.HandleGithubCallback)
 
 	return mux
 }
