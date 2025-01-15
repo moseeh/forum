@@ -79,7 +79,7 @@ func (app *App) register_post(w http.ResponseWriter, r *http.Request) {
 	id := internal.UUIDGen()
 	password_hash, _ := internal.HashPassword(password)
 
-	if err := app.users.InsertUser(id, username, email, password_hash); err != nil {
+	if err := app.users.InsertUser(id, username, email, password_hash, "traditional", ""); err != nil {
 		app.ErrorHandler(w, r, 500)
 		return
 	}
