@@ -3,26 +3,26 @@ package db
 import (
 	"database/sql"
 	"fmt"
-	"log"
 )
 
 type UserModel struct {
 	DB *sql.DB
 }
 
-func (m *UserModel) InsertUser(id, username, email, password string) error {
-	const USER_INSERT string = "INSERT INTO USERS (user_id, username, email, password) VALUES (?,?,?,?);"
+func (m *UserModel) InsertUser(id, username, email, password, authProvider, avatarUrl string) error {
+	const USER_INSERT string = "INSERT INTO USERS (user_id, username, email, password, auth_provider, avatar_url) VALUES (?,?,?,?,?,?);"
 	stmt, err := m.DB.Prepare(USER_INSERT)
 	if err != nil {
 		fmt.Println(err)
 		return err
 	}
 	defer stmt.Close()
-	res, err := stmt.Exec(id, username, email, password)
+
+	_, err = stmt.Exec(id, username, email, password, authProvider, "")
 	if err != nil {
-		log.Println(res)
 		return err
 	}
+
 	return nil
 }
 
