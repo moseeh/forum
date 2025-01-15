@@ -69,27 +69,52 @@ func (app *App) HandleGoogleCallback(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to get user info", http.StatusInternalServerError)
 		return
 	}
-	existingUser, err := app.users.GetUserbYUsername(googleUser.Name)
+	user_id := ""
+	exists, err := app.users.UserEmailExists(googleUser.Email)
 	if err != nil {
-		http.Error(w, "Failed to get user", http.StatusInternalServerError)
+		http.Error(w, "Error getting user", http.StatusInternalServerError)
 		return
 	}
-	user_id := ""
-	if existingUser != nil {
-		if existingUser.AuthProvider != "google" {
-			http.Error(w, "Username already taken", http.StatusConflict)
-			return
-		} else {
-			user_id = existingUser.UserID
-		}
-	} else {
-		user_id = internal.UUIDGen()
-		err = app.users.InsertUser(user_id, googleUser.Name, googleUser.Email, "", "google", googleUser.Picture)
+	if exists {
+		user_id, _, err = app.users.GetUsername(googleUser.Email)
 		if err != nil {
-			http.Error(w, "Error Adding User", http.StatusInternalServerError)
+			http.Error(w, "An error occurred", http.StatusInternalServerError)
 			return
+		}
+		_, err = app.users.DB.Exec("UPDATE users SET auth_provider = ?, avatar_url = ? WHERE email = ?", "google", googleUser.Picture, googleUser.Email)
+		if err != nil {
+			http.Error(w, "An error occurred", http.StatusInternalServerError)
+			return
+		}
+
+	} else {
+		existingUser, err := app.users.GetUserbYUsername(googleUser.Name)
+		if err != nil {
+			http.Error(w, "Failed to get user", http.StatusInternalServerError)
+			return
+		}
+		if existingUser != nil {
+			if existingUser.AuthProvider != "google" {
+				user_id = internal.UUIDGen()
+				googleUser.Name = googleUser.Name + "1"
+				err = app.users.InsertUser(user_id, googleUser.Name, googleUser.Email, "", "google", googleUser.Picture)
+				if err != nil {
+					http.Error(w, "Error Adding User", http.StatusInternalServerError)
+					return
+				}
+			} else {
+				user_id = existingUser.UserID
+			}
+		} else {
+			user_id = internal.UUIDGen()
+			err = app.users.InsertUser(user_id, googleUser.Name, googleUser.Email, "", "google", googleUser.Picture)
+			if err != nil {
+				http.Error(w, "Error Adding User", http.StatusInternalServerError)
+				return
+			}
 		}
 	}
+
 	err = app.AddSession(w, r, googleUser.Name, user_id)
 	if err != nil {
 		app.clearAuthCookies(w)

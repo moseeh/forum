@@ -33,7 +33,6 @@ func (app *App) HandleGithubAuth(w http.ResponseWriter, r *http.Request) {
 		MaxAge:   3600,
 		HttpOnly: true,
 	})
-
 	// redirect to github
 	githubURL := fmt.Sprintf(
 		"https://github.com/login/oauth/authorize?client_id=%s&redirect_uri=%s&state=%s",
@@ -70,9 +69,14 @@ func (app *App) HandleGithubCallback(w http.ResponseWriter, r *http.Request) {
 	}
 	user_id := ""
 	if existingUser != nil {
+		user_id = internal.UUIDGen()
 		if existingUser.AuthProvider != "github" {
-			http.Error(w, "Username already taken", http.StatusConflict)
-			return
+			githubUser.Login = githubUser.Login + "1"
+			err = app.users.InsertUser(user_id, githubUser.Login, "", "", "github", githubUser.AvatarURL)
+			if err != nil {
+				http.Error(w, "Error adding user", http.StatusInternalServerError)
+				return
+			}
 		} else {
 			user_id = existingUser.UserID
 		}
@@ -149,7 +153,6 @@ func (app *App) getGithubAccessToken(code string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	fmt.Println(string(body))
 	values := make(map[string]string)
 	for _, pair := range strings.Split(string(body), "&") {
 		if strings.Contains(pair, "=") {
