@@ -30,10 +30,8 @@ func (app *App) HomeHandler(w http.ResponseWriter, r *http.Request) {
 	sessionCookie, err := r.Cookie("session_token")
 	userID := ""
 	if err == nil {
-		fmt.Println("hello")
 		usernameCookie, err := r.Cookie("username")
 		if err == nil {
-			fmt.Println("hello again")
 			if valid, err := app.users.ValidateSession(sessionCookie.Value); valid && err == nil {
 				data.IsLoggedIn = true
 				data.Username = usernameCookie.Value
