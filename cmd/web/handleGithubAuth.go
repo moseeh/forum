@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"strings"
+	"time"
 
 	"forum/internal"
 )
@@ -17,7 +18,6 @@ type Config struct {
 type GithubUser struct {
 	ID        int64  `json:"id"`
 	Login     string `json:"login"`
-	Email     string `json:"email"`
 	Name      string `json:"name"`
 	AvatarURL string `json:"avatar_url"`
 }
@@ -62,7 +62,75 @@ func (app *App) HandleGithubCallback(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to get user info", http.StatusInternalServerError)
 		return
 	}
-	fmt.Println(githubUser.Email)
+
+	existingUser, err := app.users.GetUserbYUsername(githubUser.Login)
+	if err != nil {
+		http.Error(w, "Failed to get user", http.StatusInternalServerError)
+		return
+	}
+	user_id := ""
+	if existingUser != nil {
+		if existingUser.AuthProvider != "github" {
+			http.Error(w, "Username already taken", http.StatusConflict)
+			return
+		} else {
+			user_id = existingUser.UserID
+		}
+	} else {
+		user_id = internal.UUIDGen()
+		err = app.users.InsertUser(user_id, githubUser.Login, "", "", "github", githubUser.AvatarURL)
+		if err != nil {
+			http.Error(w, "Error adding user", http.StatusInternalServerError)
+			return
+		}
+	}
+	err = app.AddSession(w, r, githubUser, user_id)
+	if err != nil {
+		app.clearAuthCookies(w)
+		http.Error(w, "Error adding session", http.StatusInternalServerError)
+		return
+	}
+	http.Redirect(w, r, "/home", http.StatusFound)
+}
+
+func (app *App) AddSession(w http.ResponseWriter, r *http.Request, githubUser *GithubUser, user_id string) error {
+	session_token := internal.TokenGen(32)
+	csrf_token := internal.TokenGen(32)
+	expires := time.Now().Local().Add(2 * time.Hour)
+	// set session token
+	http.SetCookie(w, &http.Cookie{
+		Name:     "session_token",
+		Value:    session_token,
+		Expires:  expires,
+		Path:     "/", // Make sure the path is set to "/"
+		Secure:   true,
+		SameSite: http.SameSiteStrictMode,
+		HttpOnly: true,
+	})
+
+	// set csrf token
+	http.SetCookie(w, &http.Cookie{
+		Name:     "csrf_token",
+		Value:    csrf_token,
+		Expires:  expires,
+		Path:     "/", // Set the path to "/"
+		HttpOnly: false,
+	})
+
+	// set username
+	http.SetCookie(w, &http.Cookie{
+		Name:     "username",
+		Value:    githubUser.Login,
+		Expires:  expires,
+		Path:     "/", // Set the path to "/"
+		HttpOnly: false,
+	})
+	// store the tokens in the db
+	if err := app.users.NewSession(user_id, session_token, csrf_token, expires.String()); err != nil {
+		app.ErrorHandler(w, r, 500)
+		return err
+	}
+	return nil
 }
 
 func (app *App) getGithubAccessToken(code string) (string, error) {
@@ -83,6 +151,7 @@ func (app *App) getGithubAccessToken(code string) (string, error) {
 	}
 	values := make(map[string]string)
 	for _, pair := range strings.Split(string(body), "&") {
+		fmt.Println(pair)
 		parts := strings.Split(pair, "=")
 		values[parts[0]] = parts[1]
 	}
