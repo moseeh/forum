@@ -22,6 +22,8 @@ var allowedRoutes = map[string]bool{
 	"/comment/dislike":      true,
 	"/auth/github":          true,
 	"/auth/github/callback": true,
+	"/auth/google":          true,
+	"/auth/google/callback": true,
 }
 
 // RouteChecker is a middleware that checkes allowed routes
@@ -82,6 +84,10 @@ func (app *App) routes() http.Handler {
 	//
 	mux.HandleFunc("GET /auth/github", app.HandleGithubAuth)
 	mux.HandleFunc("GET /auth/github/callback", app.HandleGithubCallback)
+
+	//
+	mux.HandleFunc("GET /auth/google", app.HandleGoogleAuth)
+	mux.HandleFunc("GET /auth/google/callback", app.HandleGoogleCallback)
 
 	return mux
 }
