@@ -84,7 +84,7 @@ func (app *App) HandleGithubCallback(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	err = app.AddSession(w, r, githubUser, user_id)
+	err = app.AddSession(w, r, githubUser.Login, user_id)
 	if err != nil {
 		app.clearAuthCookies(w)
 		http.Error(w, "Error adding session", http.StatusInternalServerError)
@@ -93,7 +93,7 @@ func (app *App) HandleGithubCallback(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/home", http.StatusFound)
 }
 
-func (app *App) AddSession(w http.ResponseWriter, r *http.Request, githubUser *GithubUser, user_id string) error {
+func (app *App) AddSession(w http.ResponseWriter, r *http.Request, username, user_id string) error {
 	session_token := internal.TokenGen(32)
 	csrf_token := internal.TokenGen(32)
 	expires := time.Now().Local().Add(2 * time.Hour)
@@ -120,7 +120,7 @@ func (app *App) AddSession(w http.ResponseWriter, r *http.Request, githubUser *G
 	// set username
 	http.SetCookie(w, &http.Cookie{
 		Name:     "username",
-		Value:    githubUser.Login,
+		Value:    username,
 		Expires:  expires,
 		Path:     "/", // Set the path to "/"
 		HttpOnly: false,
@@ -149,11 +149,13 @@ func (app *App) getGithubAccessToken(code string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	fmt.Println(string(body))
 	values := make(map[string]string)
 	for _, pair := range strings.Split(string(body), "&") {
-		fmt.Println(pair)
-		parts := strings.Split(pair, "=")
-		values[parts[0]] = parts[1]
+		if strings.Contains(pair, "=") {
+			parts := strings.Split(pair, "=")
+			values[parts[0]] = parts[1]
+		}
 	}
 	return values["access_token"], nil
 }
