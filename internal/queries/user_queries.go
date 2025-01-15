@@ -18,7 +18,7 @@ func (m *UserModel) InsertUser(id, username, email, password, authProvider, avat
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(id, username, email, password, authProvider, "")
+	_, err = stmt.Exec(id, username, email, password, authProvider, avatarUrl)
 	if err != nil {
 		return err
 	}
