@@ -2,14 +2,15 @@ package db
 
 import "log"
 
-const USERS_TABLE string = `CREATE TABLE
-    IF NOT EXISTS USERS (
-        user_id VARCHAR(255) PRIMARY KEY NOT NULL UNIQUE,
-        username varchar(20) NOT NULL UNIQUE,
-        email VARCHAR(255) NOT NULL UNIQUE,
-        password VARCHAR(255),
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );`
+const USERS_TABLE string = `CREATE TABLE IF NOT EXISTS USERS (
+    user_id VARCHAR(255) PRIMARY KEY NOT NULL UNIQUE,
+    username VARCHAR(20) NOT NULL UNIQUE,
+    email VARCHAR(255) UNIQUE,
+    password VARCHAR(255),
+    avatar_url VARCHAR(255),
+    auth_provider VARCHAR(50) NOT NULL ,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);`
 
 const CATEGORIES_TABLE string = `CREATE TABLE IF NOT EXISTS CATEGORIES (
     category_id VARCHAR(255) PRIMARY KEY NOT NULL UNIQUE,
