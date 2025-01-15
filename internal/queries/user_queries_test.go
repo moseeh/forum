@@ -19,7 +19,9 @@ func TestInsertUser(t *testing.T) {
 			user_id TEXT PRIMARY KEY,
 			username TEXT NOT NULL,
 			email TEXT NOT NULL,
-			password TEXT NOT NULL
+			password TEXT NOT NULL,
+			avatar_url TEXT,
+            auth_provider TEXT NOT NULL
 		);`
 	_, err = db.Exec(createTableQuery)
 	if err != nil {
@@ -33,8 +35,10 @@ func TestInsertUser(t *testing.T) {
 	username := "aaochieng"
 	email := "aaochieng@example.com"
 	password := "securepassword"
+	authProvider := "traditional"
+	avatarUrl := ""
 
-	err = userModel.InsertUser(id, username, email, password)
+	err = userModel.InsertUser(id, username, email, password, authProvider, avatarUrl)
 	if err != nil {
 		t.Errorf("unexpected error: %s", err)
 	}
@@ -287,7 +291,6 @@ func TestGetUserID(t *testing.T) {
 }
 
 func TestInsertPostCategory(t *testing.T) {
-
 	db, err := dbConnection()
 	if err != nil {
 		t.Fatalf("failed to open database: %s", err)
