@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"html/template"
 	"net/http"
 
@@ -37,7 +36,6 @@ func (app *App) HomeHandler(w http.ResponseWriter, r *http.Request) {
 				data.Username = usernameCookie.Value
 				userID, _ = app.users.GetUserID(usernameCookie.Value)
 			} else {
-				fmt.Println(err)
 				app.clearAuthCookies(w)
 			}
 		}
