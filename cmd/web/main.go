@@ -22,12 +22,15 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	
+
 	config = Config{
 		ClientID:     os.Getenv("GITHUB_CLIENT_ID"),
 		ClientSecret: os.Getenv("GITHUB_CLIENT_SECRET"),
 	}
-
+	googleConfig = GoogleConfig{
+		ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
+		ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
+	}
 	App := App{
 		users: &internal.UserModel{
 			DB: db,
