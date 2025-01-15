@@ -16,7 +16,7 @@ func (app *App) LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Clear all cookies
-	cookies := []string{"session_token", "csrf_token", "username"}
+	cookies := []string{"session_token", "csrf_token", "username", "oauth_state"}
 	for _, cookieName := range cookies {
 		http.SetCookie(w, &http.Cookie{
 			Name:     cookieName,

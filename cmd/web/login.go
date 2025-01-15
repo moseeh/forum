@@ -119,7 +119,7 @@ func (app *App) PostLoginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *App) clearAuthCookies(w http.ResponseWriter) {
-	cookies := []string{"session_token", "csrf_token", "username"}
+	cookies := []string{"session_token", "csrf_token", "username", "oauth_state"}
 	for _, cookieName := range cookies {
 		http.SetCookie(w, &http.Cookie{
 			Name:     cookieName,
