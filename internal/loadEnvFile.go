@@ -2,7 +2,6 @@ package internal
 
 import (
 	"bufio"
-	"fmt"
 	"log"
 	"os"
 	"strings"
@@ -31,7 +30,7 @@ func LoadEnvFile(filename string) error {
 		key := strings.TrimSpace(parts[0])
 		value := strings.TrimSpace(parts[1])
 		err := os.Setenv(key, value)
-		fmt.Println(err)
+		return err
 	}
 
 	return scanner.Err()
