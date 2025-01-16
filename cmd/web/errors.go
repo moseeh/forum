@@ -19,11 +19,12 @@ func (app *App) ErrorHandler(w http.ResponseWriter, r *http.Request, Status int)
 	username := "" // Initialize empty username
 	status := ""
 	message := ""
+	avatar_url := ""
 
 	usernameCookie, err := r.Cookie("username")
 	if err == nil {
 		username = usernameCookie.Value // Set username only if cookie exists
-		user_ID, err = app.users.GetUserID(username)
+		user_ID, avatar_url, err = app.users.GetUserID(username)
 		if err != nil {
 			http.Error(w, "Error getting user ID from the database", http.StatusInternalServerError)
 			return
@@ -41,10 +42,12 @@ func (app *App) ErrorHandler(w http.ResponseWriter, r *http.Request, Status int)
 		Message       string
 		IsLoggedIn    bool
 		Username      string
+		AvatarURL     string
 	}{
 		DisplayStatus: status,
 		Message:       message,
 		IsLoggedIn:    user_ID != "",
+		AvatarURL:     avatar_url,
 		Username:      username, // Use the initialized username variable
 	}
 

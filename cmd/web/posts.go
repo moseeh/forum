@@ -47,7 +47,7 @@ func (app *App) PostsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Get user ID
-	userID, err := app.users.GetUserID(usernameCookie.Value)
+	userID, _, err := app.users.GetUserID(usernameCookie.Value)
 	if err != nil {
 		app.ErrorHandler(w, r, 500)
 		return

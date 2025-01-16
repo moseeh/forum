@@ -23,7 +23,7 @@ func (app *App) DislikesHandler(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
-	user_ID, err := app.users.GetUserID(usernameCookie.Value)
+	user_ID,_, err := app.users.GetUserID(usernameCookie.Value)
 	if err != nil {
 		app.ErrorHandler(w, r, 500)
 		return

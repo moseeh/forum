@@ -10,6 +10,7 @@ import (
 type PageData struct {
 	IsLoggedIn   bool
 	Username     string
+	AvatarURL    string
 	Posts        []db.Post
 	LikedPosts   []db.Post
 	CreatedPosts []db.Post
@@ -28,13 +29,15 @@ func (app *App) HomeHandler(w http.ResponseWriter, r *http.Request) {
 	// Get current user if logged in
 	sessionCookie, err := r.Cookie("session_token")
 	userID := ""
+	avatar_url := ""
 	if err == nil {
 		usernameCookie, err := r.Cookie("username")
 		if err == nil {
 			if valid, err := app.users.ValidateSession(sessionCookie.Value); valid && err == nil {
 				data.IsLoggedIn = true
 				data.Username = usernameCookie.Value
-				userID, _ = app.users.GetUserID(usernameCookie.Value)
+				userID, avatar_url, _ = app.users.GetUserID(usernameCookie.Value)
+				data.AvatarURL = avatar_url
 			} else {
 				app.clearAuthCookies(w)
 			}
