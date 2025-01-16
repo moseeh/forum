@@ -7,8 +7,11 @@ import (
 
 var ErrorPages = map[int][]string{
 	404: {"404 Not Found", "The page you are looking for could not be found."},
+	405: {"405 Method not allowed", "The method is not allowed"},
+	401: {"401 Unauthorized", "You are not authorized"},
 	400: {"400 Bad Request", "Your request cannot be processed due to malformed syntax."},
 	500: {"500 Internal Server Error", "The server encountered an unexpected condition."},
+	409: {"409 Conflict", "Username already taken"},
 }
 
 func (app *App) ErrorHandler(w http.ResponseWriter, r *http.Request, Status int) {

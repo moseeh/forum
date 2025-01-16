@@ -33,6 +33,7 @@ func (app *App) HandleGithubAuth(w http.ResponseWriter, r *http.Request) {
 		MaxAge:   3600,
 		HttpOnly: true,
 	})
+
 	// redirect to github
 	githubURL := fmt.Sprintf(
 		"https://github.com/login/oauth/authorize?client_id=%s&redirect_uri=%s&state=%s",
@@ -46,37 +47,32 @@ func (app *App) HandleGithubAuth(w http.ResponseWriter, r *http.Request) {
 func (app *App) HandleGithubCallback(w http.ResponseWriter, r *http.Request) {
 	stateCookie, err := r.Cookie("oauth_state")
 	if err != nil || stateCookie.Value != r.URL.Query().Get("state") {
-		http.Error(w, "Invalid state", http.StatusBadRequest)
+		app.ErrorHandler(w, r, http.StatusBadRequest)
 		return
 	}
 	code := r.URL.Query().Get("code")
 	token, err := app.getGithubAccessToken(code)
 	if err != nil {
-		http.Error(w, "Failed to get token", http.StatusInternalServerError)
+		app.ErrorHandler(w, r, http.StatusInternalServerError)
 		return
 	}
 
 	githubUser, err := app.getGithubUser(token)
 	if err != nil {
-		http.Error(w, "Failed to get user info", http.StatusInternalServerError)
+		app.ErrorHandler(w, r, http.StatusInternalServerError)
 		return
 	}
 
 	existingUser, err := app.users.GetUserbYUsername(githubUser.Login)
 	if err != nil {
-		http.Error(w, "Failed to get user", http.StatusInternalServerError)
+		app.ErrorHandler(w, r, http.StatusInternalServerError)
 		return
 	}
 	user_id := ""
 	if existingUser != nil {
-		user_id = internal.UUIDGen()
 		if existingUser.AuthProvider != "github" {
-			githubUser.Login = githubUser.Login + "1"
-			err = app.users.InsertUser(user_id, githubUser.Login, "", "", "github", githubUser.AvatarURL)
-			if err != nil {
-				http.Error(w, "Error adding user", http.StatusInternalServerError)
-				return
-			}
+			app.ErrorHandler(w, r, http.StatusConflict)
+			return
 		} else {
 			user_id = existingUser.UserID
 		}
@@ -84,14 +80,14 @@ func (app *App) HandleGithubCallback(w http.ResponseWriter, r *http.Request) {
 		user_id = internal.UUIDGen()
 		err = app.users.InsertUser(user_id, githubUser.Login, "", "", "github", githubUser.AvatarURL)
 		if err != nil {
-			http.Error(w, "Error adding user", http.StatusInternalServerError)
+			app.ErrorHandler(w, r, http.StatusInternalServerError)
 			return
 		}
 	}
 	err = app.AddSession(w, r, githubUser.Login, user_id)
 	if err != nil {
 		app.clearAuthCookies(w)
-		http.Error(w, "Error adding session", http.StatusInternalServerError)
+		app.ErrorHandler(w, r, http.StatusInternalServerError)
 		return
 	}
 	http.Redirect(w, r, "/home", http.StatusFound)

@@ -25,7 +25,7 @@ func (app *App) CommentLikeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	user_ID, err := app.users.GetUserID(usernameCookie.Value)
 	if err != nil {
-		http.Error(w, "Error getting user ID from the databse", http.StatusInternalServerError)
+		app.ErrorHandler(w,r, http.StatusInternalServerError)
 		return
 	}
 	dislike, err := app.users.UserDislikeOnCommentExists(commentID, user_ID)
