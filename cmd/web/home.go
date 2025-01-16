@@ -43,7 +43,6 @@ func (app *App) HomeHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-
 	// Get all categories
 	categories, err := app.users.GetAllCategories()
 	if err != nil {

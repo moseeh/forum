@@ -12,7 +12,7 @@ func (app *App) CommentsHandler(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
-	user_id,_, err := app.users.GetUserID(usernameCookie.Value)
+	user_id, _, err := app.users.GetUserID(usernameCookie.Value)
 	if err != nil {
 		app.ErrorHandler(w, r, 500)
 		return

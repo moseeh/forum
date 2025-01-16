@@ -26,7 +26,7 @@ func (app *App) register_get(w http.ResponseWriter, r *http.Request) {
 	}
 	tmpl, err := template.ParseFiles("./assets/templates/register.page.html")
 	if err != nil {
-		app.ErrorHandler(w,r, http.StatusInternalServerError)
+		app.ErrorHandler(w, r, http.StatusInternalServerError)
 
 		return
 	}

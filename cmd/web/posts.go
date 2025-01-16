@@ -12,27 +12,27 @@ import (
 
 func (app *App) PostsHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
-		app.ErrorHandler(w,r, http.StatusMethodNotAllowed)
+		app.ErrorHandler(w, r, http.StatusMethodNotAllowed)
 		return
 	}
 
 	// Check authentication
 	_, err := r.Cookie("session_token")
 	if err != nil {
-		app.ErrorHandler(w,r, http.StatusUnauthorized)
+		app.ErrorHandler(w, r, http.StatusUnauthorized)
 		return
 	}
 
 	usernameCookie, err := r.Cookie("username")
 	if err != nil {
-		app.ErrorHandler(w,r, http.StatusUnauthorized)
+		app.ErrorHandler(w, r, http.StatusUnauthorized)
 		return
 	}
 
 	// Parse the form to retrieve file and filename
 	err = r.ParseMultipartForm(20 << 20) // Max 20MB file size
 	if err != nil {
-		app.ErrorHandler(w,r, http.StatusBadRequest)
+		app.ErrorHandler(w, r, http.StatusBadRequest)
 		return
 	}
 
