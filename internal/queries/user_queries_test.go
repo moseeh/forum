@@ -19,7 +19,9 @@ func TestInsertUser(t *testing.T) {
 			user_id TEXT PRIMARY KEY,
 			username TEXT NOT NULL,
 			email TEXT NOT NULL,
-			password TEXT NOT NULL
+			password TEXT NOT NULL,
+			avatar_url TEXT,
+            auth_provider TEXT NOT NULL
 		);`
 	_, err = db.Exec(createTableQuery)
 	if err != nil {
@@ -33,8 +35,10 @@ func TestInsertUser(t *testing.T) {
 	username := "aaochieng"
 	email := "aaochieng@example.com"
 	password := "securepassword"
+	authProvider := "traditional"
+	avatarUrl := ""
 
-	err = userModel.InsertUser(id, username, email, password)
+	err = userModel.InsertUser(id, username, email, password, authProvider, avatarUrl)
 	if err != nil {
 		t.Errorf("unexpected error: %s", err)
 	}
@@ -244,12 +248,15 @@ func TestGetUserID(t *testing.T) {
 
 	// Create the USERS table
 	createTableQuery := `
-		CREATE TABLE USERS (
-			user_id TEXT PRIMARY KEY,
-			username TEXT NOT NULL UNIQUE,
-			email TEXT NOT NULL UNIQUE,
-			password TEXT NOT NULL
-		);`
+        CREATE TABLE IF NOT EXISTS USERS (
+            user_id VARCHAR(255) PRIMARY KEY NOT NULL UNIQUE,
+            username VARCHAR(20) NOT NULL UNIQUE,
+            email VARCHAR(255) UNIQUE,
+            password VARCHAR(255),
+            avatar_url VARCHAR(255),
+            auth_provider VARCHAR(50) NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );`
 	_, err = db.Exec(createTableQuery)
 	if err != nil {
 		t.Fatalf("failed to create table: %s", err)
@@ -258,10 +265,10 @@ func TestGetUserID(t *testing.T) {
 	// Initialize the UserModel
 	userModel := &UserModel{DB: db}
 
-	// Insert a test user
+	// Insert a test user with avatar_url
 	insertUserQuery := `
-		INSERT INTO USERS (user_id, username, email, password)
-		VALUES ('1', 'randomuser', 'randuser@example.com', 'hashedpassword123');`
+        INSERT INTO USERS (user_id, username, email, password, avatar_url, auth_provider)
+        VALUES ('1', 'randomuser', 'randuser@example.com', 'hashedpassword123', 'http://example.com/avatar.jpg', 'traditional');`
 	_, err = db.Exec(insertUserQuery)
 	if err != nil {
 		t.Fatalf("failed to insert test user: %s", err)
@@ -269,17 +276,20 @@ func TestGetUserID(t *testing.T) {
 
 	// Test GetUserID
 	t.Run("Valid username", func(t *testing.T) {
-		userID, err := userModel.GetUserID("randomuser")
+		userID, avatarURL, err := userModel.GetUserID("randomuser")
 		if err != nil {
 			t.Errorf("unexpected error: %s", err)
 		}
 		if userID != "1" {
 			t.Errorf("unexpected result: got %s, want 1", userID)
 		}
+		if avatarURL != "http://example.com/avatar.jpg" {
+			t.Errorf("unexpected avatar URL: got %s, want http://example.com/avatar.jpg", avatarURL)
+		}
 	})
 
 	t.Run("Nonexistent username", func(t *testing.T) {
-		_, err := userModel.GetUserID("nonexistent")
+		_, _, err := userModel.GetUserID("nonexistent")
 		if err == nil {
 			t.Error("expected an error but got none")
 		}
@@ -287,7 +297,6 @@ func TestGetUserID(t *testing.T) {
 }
 
 func TestInsertPostCategory(t *testing.T) {
-
 	db, err := dbConnection()
 	if err != nil {
 		t.Fatalf("failed to open database: %s", err)

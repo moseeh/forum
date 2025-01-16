@@ -10,12 +10,13 @@ import (
 func (app *App) PostDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	postID := r.URL.Query().Get("post_id")
 	user_ID := ""
-	username := "" // Initialize empty username
+	username := ""
+	avatar_url := ""
 
 	usernameCookie, err := r.Cookie("username")
 	if err == nil {
 		username = usernameCookie.Value // Set username only if cookie exists
-		user_ID, err = app.users.GetUserID(username)
+		user_ID, avatar_url, err = app.users.GetUserID(username)
 		if err != nil {
 			app.ErrorHandler(w, r, 500)
 			return
@@ -40,11 +41,13 @@ func (app *App) PostDetailsHandler(w http.ResponseWriter, r *http.Request) {
 		Comments   []db.Comment
 		IsLoggedIn bool
 		Username   string
+		AvatarURL  string
 	}{
 		Post:       post,
 		Comments:   comments,
 		IsLoggedIn: user_ID != "",
-		Username:   username, // Use the initialized username variable
+		Username:   username,
+		AvatarURL:  avatar_url,
 	}
 
 	tmpl, err := template.ParseFiles("./assets/templates/post.page.html")

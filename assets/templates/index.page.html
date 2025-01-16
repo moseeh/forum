@@ -24,6 +24,11 @@
       <div class="header-actions">
         {{if .IsLoggedIn}}
         <div class="user-menu">
+          {{if .AvatarURL}}
+          <img src="{{.AvatarURL}}" alt="Avatar" class="user-avatar" />
+          {{else}}
+          <img src="../static/svgs/default-avatar.png" alt="Default Avatar" class="user-avatar" />
+          {{end}}
           <span class="username">Welcome, {{.Username}}&nbsp;&nbsp;&nbsp;</span>
           <button class="btn" id="create-post-btn">Create Post</button>&nbsp;&nbsp;
           <a href="/logout">
@@ -41,6 +46,7 @@
       </div>
     </div>
   </header>
+  
   <div class="container">
     <!--------------------left bar---------------->
     <div class="sidebar ">

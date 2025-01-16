@@ -7,13 +7,14 @@ import (
 	"net/http"
 	"os"
 
-	internal "forum/internal/queries"
+	"forum/internal"
+	database "forum/internal/queries"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
 type App struct {
-	users *internal.UserModel
+	users *database.UserModel
 }
 
 func main() {
@@ -23,13 +24,27 @@ func main() {
 		return
 	}
 
+	err = internal.LoadEnvFile(".env")
+	if err != nil {
+		log.Fatalf("Error loading .env file: %v", err)
+		return
+	}
+
+	config = Config{
+		ClientID:     os.Getenv("GITHUB_CLIENT_ID"),
+		ClientSecret: os.Getenv("GITHUB_CLIENT_SECRET"),
+	}
+	googleConfig = GoogleConfig{
+		ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
+		ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
+	}
 	App := App{
-		users: &internal.UserModel{
+		users: &database.UserModel{
 			DB: db,
 		},
 	}
 	App.users.InitTables()
-	internal.InsertCategories(db)
+	database.InsertCategories(db)
 	server := http.Server{
 		Addr:    ":8000",
 		Handler: App.RouteChecker(App.routes()),
