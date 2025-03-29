@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"os"
 
-	"forum/internal"
+	// "forum/internal"
 	database "forum/internal/queries"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -24,11 +24,11 @@ func main() {
 		return
 	}
 
-	err = internal.LoadEnvFile(".env")
-	if err != nil {
-		log.Fatalf("Error loading .env file: %v", err)
-		return
-	}
+	// err = internal.LoadEnvFile(".env")
+	// if err != nil {
+	// 	log.Fatalf("Error loading .env file: %v", err)
+	// 	return
+	// }
 
 	config = Config{
 		ClientID:     os.Getenv("GITHUB_CLIENT_ID"),
